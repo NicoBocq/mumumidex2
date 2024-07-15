@@ -2,9 +2,7 @@ import type { Config } from 'tailwindcss'
 
 const config = {
   darkMode: ['class'],
-  content: [
-    './src/**/*.{ts,tsx}',
-  ],
+  content: ['./src/**/*.{ts,tsx}'],
   prefix: '',
   theme: {
     container: {
@@ -49,6 +47,26 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        humidex: {
+          DEFAULT: 'hsl(var(--humidex))',
+          foreground: 'hsl(var(--humidex-foreground))',
+          1: {
+            DEFAULT: 'hsl(var(--humidex-1))',
+            foreground: 'hsl(var(--humidex-1-foreground))',
+          },
+          2: {
+            DEFAULT: 'hsl(var(--humidex-2))',
+            foreground: 'hsl(var(--humidex-2-foreground))',
+          },
+          3: {
+            DEFAULT: 'hsl(var(--humidex-3))',
+            foreground: 'hsl(var(--humidex-3-foreground))',
+          },
+          4: {
+            DEFAULT: 'hsl(var(--humidex-4))',
+            foreground: 'hsl(var(--humidex-4-foreground))',
+          }
+        }
       },
       borderRadius: {
         lg: 'var(--radius)',
