@@ -11,7 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
+import { Skeleton } from '../ui/skeleton'
 import Kpi from './kpi'
+
+export function SkeletonForecastCard() {
+  return <Skeleton className="h-48" />
+}
 
 export default function ForecastCard({
   data,

@@ -1,21 +1,35 @@
-import { Location } from '@/types/location'
-
+import React from 'react'
 import { getForecast } from '@/actions/forecast'
 
-import ForecastCard from '@/components/forecast/card'
+import Grid from '@/components/custom-ui/grid'
+import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 
-export default async function Page() {
+function SkeletonForecastList() {
+  return (
+    <Grid>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <SkeletonForecastCard key={index} />
+      ))}
+    </Grid>
+  )
+}
+
+async function ForecastList() {
   const { data } = await getForecast()
-  console.log(JSON.stringify(data, null, 2))
-  if (!data) {
-    return null
-  }
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <Grid>
       {data.map((item) => (
         <ForecastCard key={item.location.id} data={item} />
       ))}
-    </div>
+    </Grid>
+  )
+}
+
+export default async function Page() {
+  return (
+    <React.Suspense fallback={<SkeletonForecastList />}>
+      <ForecastList />
+    </React.Suspense>
   )
 }

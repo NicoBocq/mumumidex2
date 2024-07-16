@@ -22,12 +22,15 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       current:
         'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m',
     })
-    const response = await fetch(`${process.env.API_URL}/forecast?${params}`, {
-      next: {
-        tags: ['forecast'],
-        revalidate: 3600,
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?${params}`,
+      {
+        next: {
+          tags: ['forecast'],
+          revalidate: 3600,
+        },
       },
-    })
+    )
     const data = await response.json()
     const result = data
       .map((item: Forecast, index: number) => ({
