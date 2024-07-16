@@ -65,8 +65,8 @@ const config = {
           4: {
             DEFAULT: 'hsl(var(--humidex-4))',
             foreground: 'hsl(var(--humidex-4-foreground))',
-          }
-        }
+          },
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

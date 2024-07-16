@@ -3,6 +3,11 @@ import { Rubik } from 'next/font/google'
 
 import './globals.css'
 
+import { cn } from '@/lib/utils'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import Footer from '@/components/layout/footer'
+import Header from '@/components/layout/header'
+
 const rubik = Rubik({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -12,12 +17,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode
+  modal: React.ReactNode
 }>) {
   return (
     <html lang="en">
-      <body className={rubik.className}>{children}</body>
+      <body
+        className={cn(
+          rubik.className,
+          'bg-gradient-to-b from-amber-50 to-white font-sans antialiased',
+        )}
+      >
+        <div className="container">
+          <Header />
+          <ScrollArea className="h-[calc(100vh-104px)]">{children}</ScrollArea>
+          <Footer />
+          {modal}
+        </div>
+      </body>
     </html>
   )
 }
