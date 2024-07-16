@@ -17,10 +17,8 @@ import {
   CommandList,
 } from '@/components/ui/command'
 
-import Icon from '../custom-ui/icon'
-import { Button } from '../ui/button'
 import { DialogHeader, DialogTitle } from '../ui/dialog'
-import { ScrollArea } from '../ui/scroll-area'
+import { Location } from '@/types/location'
 
 export default function LocationCommand() {
   const [open, setOpen] = React.useState(true)
@@ -31,29 +29,20 @@ export default function LocationCommand() {
       router.back()
     }
   }
-  const [search, setSearch] = React.useState('')
 
   const { execute, status, result } = useAction(getLocation)
 
-  React.useEffect(() => {
-    if (!search || search.length <= 3) return
-    execute(search)
-  }, [execute, search])
-
   const handleSearch = useDebouncedCallback((search: string) => {
-    setSearch(search)
+    execute(search)
   }, 500)
 
   const handleSelect = React.useCallback(
-    (location: any) => {
-      console.log('clicked', location)
+    (location: Location) => {
       setOpen(false)
       router.back()
     },
     [router],
   )
-
-  console.log(result?.data?.results)
 
   return (
     <CommandDialog open={open} onOpenChange={handleOpenChange}>
@@ -66,7 +55,7 @@ export default function LocationCommand() {
         onValueChange={handleSearch}
       />
       <CommandList>
-        {/* <CommandEmpty>No results found.</CommandEmpty> */}
+        <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup forceMount heading="Results">
           {result?.data?.results?.map((location: any) => (
             <CommandItem
