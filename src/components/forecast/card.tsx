@@ -53,9 +53,10 @@ export default function ForecastCard({
             {formatDateTime(data.current.time)}
           </CardDescription>
         </div>
-        <div className={cn('text-5xl font-extrabold tracking-tighter')}>
-          {data.current.humidex}
-        </div>
+        <figure className={cn('text-5xl font-extrabold tracking-tighter')}>
+          <data value={data.current.humidex}>{data.current.humidex}</data>
+          <figcaption className="sr-only">Current Humidex</figcaption>
+        </figure>
       </CardHeader>
       <CardContent>
         <Kpi data={data} />

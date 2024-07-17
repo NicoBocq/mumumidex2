@@ -3,12 +3,9 @@ type getHumidexProps = {
   humidity?: number
 }
 
-export const getHumidex = ({
-  temp,
-  humidity,
-}: getHumidexProps): number | null => {
+export const getHumidex = ({ temp, humidity }: getHumidexProps): number => {
   if (!temp || !humidity) {
-    return null
+    return 0
   }
 
   const e =

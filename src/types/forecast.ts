@@ -1,4 +1,4 @@
-import { Location } from './location'
+import { Location } from './city'
 
 export type Current = {
   time: string
@@ -28,3 +28,6 @@ export type Forecast = {
   location: Location
   current_units: CurrentUnits
 }
+
+export type APICurrent = Omit<Current, 'humidex'>
+export type APIForecast = Omit<Forecast, 'location'> & { current: APICurrent }
