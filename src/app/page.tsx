@@ -1,8 +1,5 @@
 import React from 'react'
-import { redirect } from 'next/navigation'
 import { getForecast } from '@/actions/forecast'
-import { getUser } from '@/actions/user'
-import { auth } from '@/auth'
 
 import Grid from '@/components/custom-ui/grid'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
@@ -19,10 +16,6 @@ function SkeletonForecastList() {
 
 async function ForecastList() {
   const { data } = await getForecast()
-
-  if (data.length === 0) {
-    redirect('/user/cities')
-  }
 
   return (
     <Grid>

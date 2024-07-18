@@ -29,15 +29,21 @@ async function returnCities(): Promise<City[] | DefaultCity[]> {
 }
 
 export const getForecast = async (): Promise<getForecastReturnType> => {
+  const cities = await returnCities()
+  if (!cities.length) {
+    return {
+      data: [],
+      error: '',
+    }
+  }
+  const params = new URLSearchParams({
+    latitude: cities.map((c) => c.latitude.toString()).join(','),
+    longitude: cities.map((c) => c.longitude.toString()).join(','),
+    timezone: 'auto',
+    current:
+      'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m',
+  })
   try {
-    const cities = await returnCities()
-    const params = new URLSearchParams({
-      latitude: cities.map((c) => c.latitude.toString()).join(','),
-      longitude: cities.map((c) => c.longitude.toString()).join(','),
-      timezone: 'auto',
-      current:
-        'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m',
-    })
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?${params}`,
       {

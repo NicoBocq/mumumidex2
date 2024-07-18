@@ -1,4 +1,4 @@
-import { Location } from './city'
+import { DefaultCity } from "./city"
 
 export type Current = {
   time: string
@@ -25,7 +25,7 @@ export type Forecast = {
   timezone: string
   utc_offset_seconds: number
   current: Current
-  location: Location
+  location: DefaultCity
   current_units: CurrentUnits
 }
 
