@@ -8,14 +8,24 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",
-    "ui:add": "pnpm dlx shadcn-ui@latest add"
+    "ui:add": "pnpm dlx shadcn-ui@latest add",
+    "db:migrate": "pnpm exec prisma migrate dev",
+    "db:generate": "pnpm exec prisma generate",
+    "db:studio": "pnpm exec prisma studio",
+    "db:push": "pnpm exec prisma db push",
+    "db:format": "pnpm exec prisma format",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.4.1",
     "@openmeteo/sdk": "^1.11.11",
+    "@prisma/client": "^5.16.2",
+    "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-collapsible": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-hover-card": "^1.1.1",
+    "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
@@ -23,7 +33,8 @@
     "cmdk": "^1.0.0",
     "lucide-react": "^0.407.0",
     "next": "14.2.5",
-    "next-safe-action": "^7.1.3",
+    "next-auth": "5.0.0-beta.19",
+    "next-safe-action": "7.1.4-experimental.1",
     "next-themes": "^0.3.0",
     "openmeteo": "^1.1.4",
     "react": "^18",
@@ -32,6 +43,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.1",
+    "vaul": "^0.9.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -44,6 +56,7 @@
     "postcss": "^8",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
+    "prisma": "^5.16.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

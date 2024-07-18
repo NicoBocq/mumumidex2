@@ -1,29 +1,26 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
+import { Button } from '../ui/button'
+import UserMenu from '../user/menu'
 
-import Icon from '../custom-ui/icon'
-import { Button, buttonVariants } from '../ui/button'
-
-export default function Header() {
+export default async function Header() {
+  const session = await auth()
   return (
-    <div className="flex h-[64px] items-center justify-between">
+    <div className="flex h-[64px] items-center justify-between gap-4">
       <Link href="/">
-        <h1 className="inline-flex items-center text-xl font-extrabold">
+        <h1 className="inline-flex items-center text-3xl font-extrabold">
           mumu
           <span className="text-primary">midex</span>
         </h1>
       </Link>
-      <div className="flex items-center gap-4 animate-in slide-in-from-top">
-        <Link
-          href="/add"
-          className={buttonVariants({ variant: 'ghostPrimary' })}
-          scroll={false}
-        >
-          add
-          <Icon name="Plus" />
-        </Link>
-        {/* <Button variant="outline" size="icon">
-          <Icon name="Settings" />
-        </Button> */}
+      <div>
+        {!session ? (
+          <Link href="/login">
+            <Button variant="outlinePrimary">Get Started</Button>
+          </Link>
+        ) : (
+          <UserMenu session={session} />
+        )}
       </div>
     </div>
   )

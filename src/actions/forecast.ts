@@ -1,20 +1,36 @@
 'use server'
 
-import { Forecast } from '@/types/forecast'
+import { DefaultCity } from '@/types/city'
+import { APIForecast, Forecast } from '@/types/forecast'
 
-import { DEFAULT_CITIES } from '@/config'
+import { auth } from '@/auth'
+import { City } from '@prisma/client'
 
+import { DEFAULT_LOCATIONS } from '@/config/city'
 import { getHumidex } from '@/lib/humidex'
+
+import { getUserCities } from './city'
 
 type getForecastReturnType = {
   data: Forecast[]
   error: string
 }
 
-export const getForecast = async (): Promise<getForecastReturnType> => {
-  const cities = DEFAULT_CITIES
+async function returnCities(): Promise<City[] | DefaultCity[]> {
+  const session = await auth()
+  if (!session) {
+    return DEFAULT_LOCATIONS
+  }
+  const { data: cities } = await getUserCities({
+    userId: session.user.id,
+    hideHidden: true,
+  })
+  return cities || []
+}
 
+export const getForecast = async (): Promise<getForecastReturnType> => {
   try {
+    const cities = await returnCities()
     const params = new URLSearchParams({
       latitude: cities.map((c) => c.latitude.toString()).join(','),
       longitude: cities.map((c) => c.longitude.toString()).join(','),
@@ -32,8 +48,12 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       },
     )
     const data = await response.json()
-    const result = data
-      .map((item: Forecast, index: number) => ({
+    if (!data) {
+      throw new Error('No data returned from OpenWeather API')
+    }
+    const result = Array.isArray(data) ? data : [data]
+    const processedResult: Forecast[] = result
+      .map((item: APIForecast, index: number) => ({
         ...item,
         location: {
           ...cities[index],
@@ -46,9 +66,9 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
           }),
         },
       }))
-      .sort((b: Forecast, a: Forecast) => a.current.humidex - b.current.humidex)
+      .sort((b, a) => a.current.humidex - b.current.humidex)
     return {
-      data: result,
+      data: processedResult,
       error: '',
     }
   } catch (error) {
