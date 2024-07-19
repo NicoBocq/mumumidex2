@@ -48,8 +48,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       `https://api.open-meteo.com/v1/forecast?${params}`,
       {
         next: {
-          tags: ['forecast'],
-          revalidate: 3600,
+          revalidate: 15 * 60,
         },
       },
     )
