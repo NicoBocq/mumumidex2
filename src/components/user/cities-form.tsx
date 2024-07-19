@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getUserCities } from '@/actions/city'
 import { auth } from '@/auth'
 
+import { Separator } from '../ui/separator'
 import { Skeleton } from '../ui/skeleton'
 import UserCitiesSettings from './cities-settings'
 import SearchCityPopover from './search-city-popover'
@@ -30,6 +31,7 @@ export default async function UserCitiesForm() {
   return (
     <div className="flex flex-col gap-4 text-sm">
       <SearchCityPopover />
+      <Separator />
       <UserCitiesSettings data={cities || []} />
     </div>
   )
