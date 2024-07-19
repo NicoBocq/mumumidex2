@@ -51,6 +51,7 @@ export default function ForecastCard({
             )}
           >
             {formatDateTime(data.current.time)}
+            {data.location.admin1 ? ` | ${data.location.admin1}` : ''}
           </CardDescription>
         </div>
         <figure className={cn('text-5xl font-extrabold tracking-tighter')}>

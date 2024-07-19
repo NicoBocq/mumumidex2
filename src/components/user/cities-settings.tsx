@@ -79,9 +79,9 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
               city.hidden ? 'text-muted-foreground' : '',
             )}
           >
-            {city.name}{' '}
+            {city.name}<br />
             <span className="text-xs text-muted-foreground">
-              {city.country_code}
+              {city.country}{city.admin1 ? ` | ${city.admin1}` : ''}
             </span>
           </p>
           <div className="flex gap-2">

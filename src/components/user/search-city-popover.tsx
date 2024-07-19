@@ -77,9 +77,13 @@ export default function SearchCityPopover() {
                 <CommandItem
                   key={location.id}
                   onSelect={() => handleSelect(location)}
-                  className="cursor-pointer"
                 >
-                  {location.name} ({location.country})
+                  <div className="flex flex-col">
+                    <div className="font-semibold">{location.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                    {location.country} | {location.admin1}
+                  </div>
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>

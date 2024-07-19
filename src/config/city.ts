@@ -12,6 +12,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country_code: 'US',
     country: 'United States',
     hidden: false,
+    admin1: 'California',
   },
   {
     id: nanoid(),
@@ -22,6 +23,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country: 'France',
     country_code: 'FR',
     hidden: false,
+    admin1: 'Île-de-France',
   },
   {
     id: nanoid(),
@@ -32,6 +34,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country: 'France',
     country_code: 'FR',
     hidden: false,
+    admin1: 'Provence-Alpes-Côte d\'Azur',
   },
   {
     id: nanoid(),
@@ -42,6 +45,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country: 'United States',
     country_code: 'US',
     hidden: false,
+    admin1: 'Florida',
   },
   {
     id: nanoid(),
@@ -52,6 +56,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country: 'France',
     country_code: 'FR',
     hidden: false,
+    admin1: 'Rhône-Alpes',
   },
   {
     id: nanoid(),
@@ -61,6 +66,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     longitude: 4.90956,
     country_code: 'FR',
     country: 'France',
+    admin1: 'Auvergne-Rhône-Alpes',
     hidden: false,
   },
   {
@@ -71,6 +77,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     longitude: 3.87635,
     country_code: 'FR',
     country: 'France',
+    admin1: 'Occitanie',
     hidden: false,
   },
   {
@@ -81,6 +88,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     longitude: 4.80205,
     country_code: 'FR',
     country: 'France',
+    admin1: 'Auvergne-Rhône-Alpes',
     hidden: false,
   },
 ]
