@@ -21,7 +21,12 @@ import {
 
 import Icon from '../custom-ui/icon'
 import { Button } from '../ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverContentNoPortal,
+  PopoverTrigger,
+} from '../ui/popover'
 
 export default function SearchCityPopover() {
   const [open, setOpen] = React.useState(false)
@@ -60,7 +65,7 @@ export default function SearchCityPopover() {
           Add city
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="PopoverContent p-0 min-h-60">
+      <PopoverContentNoPortal className="PopoverContent min-h-60 p-0">
         <Command>
           <CommandInput
             placeholder="Search for a city..."
@@ -77,15 +82,19 @@ export default function SearchCityPopover() {
                 <CommandItem
                   key={location.id}
                   onSelect={() => handleSelect(location)}
-                  className="cursor-pointer"
                 >
-                  {location.name} ({location.country})
+                  <div className="flex flex-col">
+                    <div className="font-semibold">{location.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {location.country} | {location.admin1}
+                    </div>
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
+      </PopoverContentNoPortal>
     </Popover>
   )
 }

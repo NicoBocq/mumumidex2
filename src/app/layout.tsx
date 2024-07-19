@@ -5,16 +5,22 @@ import './globals.css'
 
 import { app } from '@/config/app'
 import { cn } from '@/lib/utils'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Toaster } from '@/components/ui/sonner'
 import Footer from '@/components/layout/footer'
 import Header from '@/components/layout/header'
 
-const rubik = Rubik({ subsets: ['latin'] })
+export const rubik = Rubik({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(app.url),
   title: app.name,
   description: app.description,
+  openGraph: {
+    title: app.name,
+    description: app.description,
+    images: '/og-image.png',
+  },
   verification: {
     google: 'SoTUK0J0yOG_ZDjwJrAWCUANoSOSzEMu3zSvqrwkZr0',
   },
@@ -32,18 +38,17 @@ export default function RootLayout({
       <body
         className={cn(
           rubik.className,
-          'bg-gradient-to-b from-amber-100 to-amber-50 font-sans antialiased',
+          'flex min-h-screen flex-col bg-gradient-to-b from-amber-100 to-amber-50 font-sans antialiased',
         )}
       >
-        <div className="container">
-          <Header />
-          <ScrollArea className="h-[calc(100vh-104px)]">
-            <ScrollBar />
+        <Header />
+        <main className="flex flex-auto flex-col">
+          <div className="mx-auto w-full max-w-7xl flex-1 items-center justify-between p-6 lg:px-8">
             {children}
-          </ScrollArea>
-          <Footer />
-          {modal}
-        </div>
+          </div>
+        </main>
+        <Footer />
+        {modal}
         <Toaster />
       </body>
     </html>

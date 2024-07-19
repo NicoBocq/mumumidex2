@@ -11,6 +11,7 @@ export const citySchema = z.object({
   longitude: z.number(),
   country: z.string(),
   country_code: z.string(),
+  admin1: z.string(),
 })
 
 export const cityVisibilitySchema = z.object({

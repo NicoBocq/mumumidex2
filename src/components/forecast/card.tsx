@@ -33,7 +33,7 @@ export default function ForecastCard({
         className,
       )}
     >
-      <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
+      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
         <div>
           <CardTitle className={cn('font-bold')}>
             {data.location.name}{' '}
@@ -47,10 +47,12 @@ export default function ForecastCard({
           </CardTitle>
           <CardDescription
             className={cn(
+              'leading-tight',
               getHumidexClass(data.current.humidex, 'foreground/50'),
             )}
           >
             {formatDateTime(data.current.time)}
+            {data.location.admin1 ? ` | ${data.location.admin1}` : ''}
           </CardDescription>
         </div>
         <figure className={cn('text-5xl font-extrabold tracking-tighter')}>

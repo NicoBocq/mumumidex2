@@ -65,57 +65,62 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
   if (!data.length) return null
 
   return (
-  <div className="w-full rounded-md border px-4 py-3">
-    <p className="text-sm font-medium leading-none">Remove cities</p>
-    <div className="mt-4 divide-y">
-      {data.map((city) => (
-        <div
-          key={city.id}
-          className="flex items-center justify-between py-1"
-        >
-          <p
-            className={cn(
-              'text-sm font-medium leading-none',
-              city.hidden ? 'text-muted-foreground' : '',
-            )}
+    <div className="w-full">
+      <p className="text-sm font-medium leading-none">Remove or hide cities</p>
+      <div className="mt-4 divide-y">
+        {data.map((city) => (
+          <div
+            key={city.id}
+            className="flex items-center justify-between gap-2 py-2"
           >
-            {city.name}{' '}
-            <span className="text-xs text-muted-foreground">
-              {city.country_code}
-            </span>
-          </p>
-          <div className="flex gap-2">
-            <Button
-              onClick={() =>
-                handleUpdate({ id: city.id, hidden: !city.hidden })
-              }
-              variant="ghost"
-              size="icon"
-              disabled={
-                statusUpdate === 'executing' && actionId === city.id
-              }
-            >
-              {actionId === city.id && statusUpdate === 'executing' ? (
-                <Icon name="Loader" className="animate-spin" />
-              ) : (
-                <Icon name={city.hidden ? 'EyeOff' : 'Eye'} />
+            <p
+              className={cn(
+                'text-sm font-medium leading-none',
+                city.hidden ? 'text-muted-foreground' : '',
               )}
-            </Button>
-            <Button
-              onClick={() => handleDelete(city.id)}
-              variant="ghost"
-              size="icon"
-              disabled={status === 'executing' && actionId === city.id}
             >
-              {actionId === city.id && status === 'executing' ? (
-                <Icon name="Loader" className="animate-spin" />
-              ) : (
-                <Icon name="Trash" />
-              )}
-            </Button>
+              {city.name}
+              <br />
+              <span className="text-xs text-muted-foreground">
+                {city.country}
+                {city.admin1 ? ` | ${city.admin1}` : ''}
+              </span>
+            </p>
+            <div className="flex items-center gap-0">
+              <Button
+                onClick={() =>
+                  handleUpdate({ id: city.id, hidden: !city.hidden })
+                }
+                variant="ghost"
+                size="icon"
+                title={
+                  city.hidden ? `Unhide ${city.name}` : `Hide ${city.name}`
+                }
+                disabled={statusUpdate === 'executing' && actionId === city.id}
+              >
+                {actionId === city.id && statusUpdate === 'executing' ? (
+                  <Icon name="Loader" className="animate-spin" />
+                ) : (
+                  <Icon name={city.hidden ? 'EyeOff' : 'Eye'} />
+                )}
+              </Button>
+              <Button
+                onClick={() => handleDelete(city.id)}
+                variant="ghost"
+                size="icon"
+                title={`Delete ${city.name}`}
+                disabled={status === 'executing' && actionId === city.id}
+              >
+                {actionId === city.id && status === 'executing' ? (
+                  <Icon name="Loader" className="animate-spin" />
+                ) : (
+                  <Icon name="Trash" />
+                )}
+              </Button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-    </div>
-  )}
+  )
+}

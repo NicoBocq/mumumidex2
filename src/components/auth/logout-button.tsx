@@ -4,14 +4,17 @@ import { signOut } from 'next-auth/react'
 
 import Icon from '@/components/custom-ui/icon'
 
+import { Button } from '../ui/button'
+
 export default function LogoutButton() {
   return (
-    <button
+    <Button
       onClick={() => signOut()}
-      className="flex w-full items-center text-left"
+      className="w-full"
+      variant="outlinePrimary"
     >
-      <Icon name="LogOut" margin="right" />
+      {/* <Icon name="LogOut" margin="right" /> */}
       Log out
-    </button>
+    </Button>
   )
 }
