@@ -1,21 +1,22 @@
 import { ImageResponse } from 'next/og'
+
 import { app } from '@/config/app'
 
 export const runtime = 'edge'
- 
+
 export const alt = app.name
 export const size = {
   width: 1200,
   height: 630,
 }
- 
+
 export const contentType = 'image/png'
 
 export default async function Image() {
   const rubikBold = fetch(
-    new URL('/public/fonts/Rubik-Bold.ttf', import.meta.url)
+    new URL('/public/fonts/Rubik-Bold.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer())
- 
+
   return new ImageResponse(
     (
       <div
@@ -28,7 +29,7 @@ export default async function Image() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white'
+          color: 'white',
         }}
       >
         <span>{app.shortName}</span>
@@ -44,6 +45,6 @@ export default async function Image() {
           style: 'normal',
         },
       ],
-    }
+    },
   )
 }

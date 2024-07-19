@@ -34,7 +34,7 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
     country: 'France',
     country_code: 'FR',
     hidden: false,
-    admin1: 'Provence-Alpes-Côte d\'Azur',
+    admin1: "Provence-Alpes-Côte d'Azur",
   },
   {
     id: nanoid(),

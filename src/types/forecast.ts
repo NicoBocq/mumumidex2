@@ -1,4 +1,4 @@
-import { DefaultCity } from "./city"
+import { DefaultCity } from './city'
 
 export type Current = {
   time: string

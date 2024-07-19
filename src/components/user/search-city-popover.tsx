@@ -60,7 +60,7 @@ export default function SearchCityPopover() {
           Add city
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="PopoverContent p-0 min-h-60">
+      <PopoverContent className="PopoverContent min-h-60 p-0">
         <Command>
           <CommandInput
             placeholder="Search for a city..."
@@ -81,8 +81,8 @@ export default function SearchCityPopover() {
                   <div className="flex flex-col">
                     <div className="font-semibold">{location.name}</div>
                     <div className="text-sm text-muted-foreground">
-                    {location.country} | {location.admin1}
-                  </div>
+                      {location.country} | {location.admin1}
+                    </div>
                   </div>
                 </CommandItem>
               ))}

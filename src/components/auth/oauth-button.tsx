@@ -27,9 +27,9 @@ const handleSignIn = async () => {
   }
 }
 
-export default function SignInButton() {
+export default function OAuthButton() {
   return (
-    <Button onClick={handleSignIn}>
+    <Button onClick={handleSignIn} className="w-full">
       <GoogleIcon className="mr-2 h-4 w-4 text-primary-foreground" />
       Connect with Google
     </Button>

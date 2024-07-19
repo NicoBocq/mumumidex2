@@ -38,17 +38,17 @@ export default function RootLayout({
       <body
         className={cn(
           rubik.className,
-          'bg-gradient-to-b from-amber-100 to-amber-50 font-sans antialiased',
+          'flex min-h-screen flex-col bg-gradient-to-b from-amber-100 to-amber-50 font-sans antialiased',
         )}
       >
-        <div className="container">
-          <Header />
-          <ScrollArea className="h-[calc(100vh-104px)]">
+        <Header />
+        <main className="flex flex-auto flex-col">
+          <div className="mx-auto w-full max-w-7xl flex-1 items-center justify-between p-6 lg:px-8">
             {children}
-          </ScrollArea>
-          <Footer />
-          {modal}
-        </div>
+          </div>
+        </main>
+        <Footer />
+        {modal}
         <Toaster />
       </body>
     </html>
