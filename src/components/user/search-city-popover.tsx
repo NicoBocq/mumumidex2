@@ -60,7 +60,7 @@ export default function SearchCityPopover() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className="m-2">
+        <Button className="w-full">
           <Icon name="Plus" margin="right" />
           Add city
         </Button>
