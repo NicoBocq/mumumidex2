@@ -50,6 +50,8 @@ async function ForecastList() {
   )
 }
 
+export const revalidate = 60 * 15
+
 export default async function Page() {
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
