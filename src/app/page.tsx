@@ -50,8 +50,6 @@ async function ForecastList() {
   )
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function Page() {
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
