@@ -19,6 +19,7 @@ model City {
   longitude    Float
   admin1       String?
   hidden       Boolean @default(false)
+  pinned       Boolean @default(false)
   user         User    @relation(fields: [userId], references: [id])
   userId       String
 
