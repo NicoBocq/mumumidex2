@@ -12,7 +12,7 @@ export default function Footer() {
           <Link
             href="https://open-meteo.com/"
             target="_blank"
-            className={buttonVariants({ variant: 'link' })}
+            className={buttonVariants({ variant: 'inline-link', size: 'inline-link' })}
           >
             Open Meteo
           </Link>
@@ -20,7 +20,7 @@ export default function Footer() {
         <Link
           href="https://github.com/nicobocq"
           target="_blank"
-          className={buttonVariants({ variant: 'link' })}
+          className={buttonVariants({ variant: 'inline-link', size: 'inline-link' })}
         >
           <Icon name="Github" margin="right" />
           nicobocq

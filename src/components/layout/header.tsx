@@ -24,9 +24,9 @@ export default async function Header() {
             <Link
               href="https://en.wikipedia.org/wiki/Humidex"
               target="_blank"
-              className={buttonVariants({ variant: 'link' })}
+              className={buttonVariants({ variant: 'inline-link', size: 'inline-link' })}
             >
-              humidex
+              Humidex
             </Link>
           </p>
         </div>
