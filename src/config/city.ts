@@ -49,17 +49,6 @@ export const DEFAULT_LOCATIONS: DefaultCity[] = [
   },
   {
     id: nanoid(),
-    latitude: 45.74846,
-    longitude: 4.84671,
-    name: 'Lyon',
-    externalId: 2996944,
-    country: 'France',
-    country_code: 'FR',
-    hidden: false,
-    admin1: 'Rhône-Alpes',
-  },
-  {
-    id: nanoid(),
     externalId: 2971053,
     name: 'Valence',
     latitude: 44.9256,
