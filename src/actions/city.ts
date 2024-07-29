@@ -3,6 +3,7 @@
 import { revalidateTag, unstable_cache } from 'next/cache'
 import { nanoidSchema } from '@/validation'
 import {
+  apiCitySchema,
   citySchema,
   cityVisibilitySchema,
   searchCitySchema,
@@ -81,7 +82,7 @@ export async function getUserCities({
 
 export const addCity = authActionClient
   .metadata({ actionName: 'addCity' })
-  .schema(citySchema)
+  .schema(apiCitySchema)
   .action(async ({ parsedInput, ctx: { id: userId } }) => {
     const { id: externalId, ...rest } = parsedInput
     try {
@@ -112,9 +113,9 @@ export const addCity = authActionClient
     }
   })
 
-export const updateCityVisibility = authActionClient
-  .metadata({ actionName: 'updateCityVisibility' })
-  .schema(cityVisibilitySchema)
+export const updateCity = authActionClient
+  .metadata({ actionName: 'updateCity' })
+  .schema(citySchema.partial())
   .action(async ({ parsedInput, ctx: { id: userId } }) => {
     const { id, ...rest } = parsedInput
     try {
