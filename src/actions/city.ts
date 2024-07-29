@@ -5,7 +5,6 @@ import { nanoidSchema } from '@/validation'
 import {
   apiCitySchema,
   citySchema,
-  cityVisibilitySchema,
   searchCitySchema,
 } from '@/validation/city'
 import { Prisma } from '@prisma/client'

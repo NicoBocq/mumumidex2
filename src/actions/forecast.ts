@@ -16,7 +16,7 @@ type getForecastReturnType = {
   error: string
 }
 
-async function returnCities(): Promise<City[] | DefaultCity[]> {
+async function returnCities(): Promise<City[]> {
   const session = await auth()
   if (!session) {
     return DEFAULT_LOCATIONS
