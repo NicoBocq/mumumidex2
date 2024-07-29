@@ -24,41 +24,9 @@ import UserLocationForm from '@/components/user/cities-form'
 
 import { ScrollArea } from '../ui/scroll-area'
 import { UserCitiesFormSkeleton } from './cities-form'
-import SearchCityPopover from './search-city-popover'
 
 export default function UserMenu({ session }: { session: Session }) {
   return (
-    // <DropdownMenu>
-    //   <DropdownMenuTrigger asChild>
-    //     <Avatar>
-    //       <AvatarImage src={session.user.image || ''} />
-    //       <AvatarFallback className="bg-primary text-primary-foreground">
-    //         {session.user.name?.charAt(0)}
-    //       </AvatarFallback>
-    //     </Avatar>
-    //   </DropdownMenuTrigger>
-    //   <DropdownMenuContent className="w-[200px]">
-    //     <DropdownMenuItem asChild>
-    //       <Link
-    //         href="/user/cities"
-    //         className="flex items-center gap-2"
-    //         scroll={false}
-    //       >
-    //         <Icon name="MapPin" />
-    //         Cities
-    //       </Link>
-    //     </DropdownMenuItem>
-    //     <DropdownMenuItem disabled>
-    //       <Icon name="Hammer" margin="right" />
-    //       To do
-    //     </DropdownMenuItem>
-    //     <DropdownMenuSeparator />
-    //     <DropdownMenuItem>
-    //       <LogoutButton />
-    //     </DropdownMenuItem>
-    //   </DropdownMenuContent>
-    // </DropdownMenu>
-
     <Sheet>
       <SheetTrigger asChild>
         <Avatar>
@@ -83,7 +51,6 @@ export default function UserMenu({ session }: { session: Session }) {
         <SheetFooter className="shrink-0">
           <LogoutButton />
         </SheetFooter>
-        {/* </ScrollArea> */}
       </SheetContent>
     </Sheet>
   )

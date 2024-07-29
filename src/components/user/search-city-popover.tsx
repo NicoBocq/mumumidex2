@@ -78,15 +78,12 @@ export default function SearchCityPopover() {
               </CommandLoading>
             )}
             <CommandGroup forceMount>
-              {result?.data?.results?.map((location: SearchCity) => (
-                <CommandItem
-                  key={location.id}
-                  onSelect={() => handleSelect(location)}
-                >
+              {result?.data?.results?.map((city: SearchCity) => (
+                <CommandItem key={city.id} onSelect={() => handleSelect(city)}>
                   <div className="flex flex-col">
-                    <div className="font-semibold">{location.name}</div>
+                    <div className="font-semibold">{city.name}</div>
                     <div className="text-sm text-muted-foreground">
-                      {location.country} | {location.admin1}
+                      {city.country} | {city.admin1}
                     </div>
                   </div>
                 </CommandItem>

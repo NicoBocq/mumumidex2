@@ -5,7 +5,6 @@ import './globals.css'
 
 import { app } from '@/config/app'
 import { cn } from '@/lib/utils'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Toaster } from '@/components/ui/sonner'
 import Footer from '@/components/layout/footer'
 import Header from '@/components/layout/header'
@@ -43,7 +42,7 @@ export default function RootLayout({
       >
         <Header />
         <main className="flex flex-auto flex-col">
-          <div className="mx-auto w-full max-w-7xl flex-1 items-center justify-between p-6 lg:px-8">
+          <div className="mx-auto w-full max-w-5xl items-center justify-between px-6 lg:px-8">
             {children}
           </div>
         </main>

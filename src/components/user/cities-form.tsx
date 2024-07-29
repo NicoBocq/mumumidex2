@@ -1,5 +1,4 @@
 import React from 'react'
-import { notFound } from 'next/navigation'
 import { getUserCities } from '@/actions/city'
 import { auth } from '@/auth'
 
@@ -12,7 +11,7 @@ export const UserCitiesFormSkeleton = () => {
   return (
     <div className="flex flex-col gap-4">
       <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-20 w-full" />
+      <Skeleton className="h-40 w-full" />
     </div>
   )
 }
@@ -21,7 +20,7 @@ export default async function UserCitiesForm() {
   const session = await auth()
 
   if (!session) {
-    return notFound()
+    return null
   }
   const { data: cities } = await getUserCities({
     userId: session?.user.id,

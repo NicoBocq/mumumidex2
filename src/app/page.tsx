@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Grid from '@/components/custom-ui/grid'
+import Icon from '@/components/custom-ui/icon'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 import SearchCityPopover from '@/components/user/search-city-popover'
 
@@ -43,9 +44,21 @@ async function ForecastList() {
     )
   }
 
+  const pinnedCities = data?.filter((item) => item.city.pinned)
+  const unpinnedCities = data?.filter((item) => !item.city.pinned)
+
   return (
     <Grid>
-      {data?.map((item) => <ForecastCard key={item.location.id} data={item} />)}
+      {pinnedCities?.length > 0 && (
+        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50">
+          {pinnedCities?.map((item) => (
+            <ForecastCard key={item.city.id} data={item} />
+          ))}
+        </div>
+      )}
+      {unpinnedCities?.map((item) => (
+        <ForecastCard key={item.city.id} data={item} />
+      ))}
     </Grid>
   )
 }
