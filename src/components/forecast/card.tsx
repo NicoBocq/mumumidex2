@@ -31,7 +31,7 @@ export default function ForecastCard({
       <ContextMenuTrigger asChild>
         <Card
           className={cn(
-            'relative border-0 shadow-none',
+            'relative border-0 shadow-none select-none md:select-auto',
             getHumidexClass(data.current.humidex),
             className,
           )}
