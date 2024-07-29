@@ -29,6 +29,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    /* Amber color palette from: https://ui.shadcn.com/colors */
     --humidex: 201.3 96.3% 32.2%;
     --humidex-foreground: 0 0% 100%;
     --humidex-1: 201.3 96.3% 32.2%;
@@ -37,8 +38,10 @@
     --humidex-2-foreground: 20.9 91.7% 14.1%;
     --humidex-3: 26 90.5% 37.1%;
     --humidex-3-foreground: 0 0% 100%;
-    --humidex-4: 20.9 91.7% 14.1%;
+    --humidex-4: 21.7 77.8% 26.5%;
     --humidex-4-foreground: 0 0% 100%;
+    --humidex-5: 20.9 91.7% 14.1%;
+    --humidex-5-foreground: 0 0% 100%;
   }
 
   .dark {
