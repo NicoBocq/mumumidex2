@@ -20,11 +20,14 @@ export default async function Header() {
             </h1>
           </Link>
           <p className="text-sm text-primary/70">
-            Your cities ranked by{' '}
+            Cities ranked by{' '}
             <Link
               href="https://en.wikipedia.org/wiki/Humidex"
               target="_blank"
-              className={buttonVariants({ variant: 'inline-link', size: 'inline-link' })}
+              className={buttonVariants({
+                variant: 'inline-link',
+                size: 'inline-link',
+              })}
             >
               Humidex
             </Link>
