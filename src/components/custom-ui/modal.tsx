@@ -44,7 +44,7 @@ export default function Modal(props: ModalProps) {
               <DrawerDescription>{description}</DrawerDescription>
             )}
           </DrawerHeader>
-          <div className="p-4 pb-0">{children}</div>
+          {children && <div className="p-6">{children}</div>}
           <DrawerFooter>{footer && footer}</DrawerFooter>
         </div>
       </DrawerContent>
