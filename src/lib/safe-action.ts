@@ -8,8 +8,8 @@ import { z } from 'zod'
 class ActionError extends Error {}
 
 export const actionClient = createSafeActionClient({
+  defaultValidationErrorsShape: 'flattened',
   handleReturnedServerError(e) {
-    console.log(e)
     if (e instanceof ActionError) {
       return e.message
     }
@@ -25,7 +25,7 @@ export const actionClient = createSafeActionClient({
 export const authActionClient = actionClient.use(async ({ next }) => {
   const session = await auth()
   if (!session) {
-    throw new Error('Unauthorized')
+    throw new ActionError('You need to be logged in to perform this action')
   }
   return next({ ctx: { id: session.user.id } })
 })

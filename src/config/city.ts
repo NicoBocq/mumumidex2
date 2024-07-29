@@ -1,5 +1,4 @@
 import { City } from '@prisma/client'
-
 import { nanoid } from 'nanoid'
 
 export const DEFAULT_LOCATIONS: City[] = [
@@ -14,7 +13,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     hidden: false,
     admin1: 'California',
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -27,7 +26,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     hidden: false,
     admin1: 'Île-de-France',
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -40,7 +39,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     hidden: false,
     admin1: "Provence-Alpes-Côte d'Azur",
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -53,7 +52,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     hidden: false,
     admin1: 'Florida',
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -66,7 +65,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     admin1: 'Auvergne-Rhône-Alpes',
     hidden: false,
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -79,7 +78,7 @@ export const DEFAULT_LOCATIONS: City[] = [
     admin1: 'Occitanie',
     hidden: false,
     pinned: false,
-    userId: ''
+    userId: '',
   },
   {
     id: nanoid(),
@@ -92,6 +91,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     admin1: 'Auvergne-Rhône-Alpes',
     hidden: false,
     pinned: false,
-    userId: ''
+    userId: '',
   },
 ]
