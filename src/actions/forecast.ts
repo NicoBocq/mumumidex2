@@ -16,7 +16,7 @@ type getForecastReturnType = {
   error: string
 }
 
-async function returnCities(): Promise<City[] | DefaultCity[]> {
+async function returnCities(): Promise<City[]> {
   const session = await auth()
   if (!session) {
     return DEFAULT_LOCATIONS
@@ -41,7 +41,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
     longitude: cities.map((c) => c.longitude.toString()).join(','),
     timezone: 'auto',
     current:
-      'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m',
+      'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,is_day',
   })
   try {
     const response = await fetch(
@@ -58,7 +58,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
     const processedResult: Forecast[] = result
       .map((item: APIForecast, index: number) => ({
         ...item,
-        location: {
+        city: {
           ...cities[index],
         },
         current: {

@@ -21,5 +21,5 @@ export default middleware((req: NextRequest & { auth: Session | null }) => {
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|login|$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icon|login|$).*)'],
 }

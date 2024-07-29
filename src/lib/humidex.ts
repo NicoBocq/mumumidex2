@@ -27,31 +27,35 @@ export const getHumidexClass = (
       'bg-gradient-to-b from-humidex-2 to-humidex-2/90 text-humidex-2-foreground',
       'bg-gradient-to-b from-humidex-3 to-humidex-3/90 text-humidex-3-foreground',
       'bg-gradient-to-b from-humidex-4 to-humidex-4/90 text-humidex-4-foreground',
+      'bg-gradient-to-b from-humidex-5 to-humidex-5/90 text-humidex-5-foreground',
     ],
     'foreground/50': [
       'text-humidex-1-foreground/50',
       'text-humidex-2-foreground/50',
       'text-humidex-3-foreground/50',
       'text-humidex-4-foreground/50',
+      'text-humidex-5-foreground/50',
     ],
     'foreground/10': [
       'text-humidex-1-foreground/10',
       'text-humidex-2-foreground/10',
       'text-humidex-3-foreground/10',
       'text-humidex-4-foreground/10',
+      'text-humidex-5-foreground/10',
     ],
     text: [
       'text-humidex-1',
       'text-humidex-2-foreground',
       'text-humidex-3-foreground',
       'text-humidex-4-foreground',
+      'text-humidex-5-foreground',
     ],
   }
 
-  const thresholds = [29, 39, 45]
+  const thresholds = [30, 39, 45, 54]
 
   for (let i = 0; i < thresholds.length; i++) {
-    if (value <= thresholds[i]) {
+    if (value < thresholds[i]) {
       return classes[type][i]
     }
   }

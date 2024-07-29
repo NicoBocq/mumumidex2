@@ -1,3 +1,5 @@
+import { City } from '@prisma/client'
+
 import { DefaultCity } from './city'
 
 export type Current = {
@@ -8,6 +10,7 @@ export type Current = {
   apparent_temperature: number
   humidex: number
   wind_speed_10m: number
+  is_day: boolean
 }
 
 export type CurrentUnits = {
@@ -17,6 +20,7 @@ export type CurrentUnits = {
   relative_humidity_2m: string
   apparent_temperature: string
   wind_speed_10m: string
+  is_day: string
 }
 
 export type Forecast = {
@@ -25,7 +29,7 @@ export type Forecast = {
   timezone: string
   utc_offset_seconds: number
   current: Current
-  location: DefaultCity
+  city: City
   current_units: CurrentUnits
 }
 
