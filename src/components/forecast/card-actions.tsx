@@ -26,33 +26,69 @@ type CardActionsProps = {
 }
 
 const copyImageToClipboard = async (data: Forecast) => {
-  const exportCard = document.querySelector(`#export-card-${data.city.id}`) as HTMLElement
-  if (!exportCard) return
+  const exportCard = document.querySelector(
+    `#export-card-${data.city.id}`,
+  ) as HTMLElement
+  if (!exportCard) {
+    toast.error('Export card not found')
+    return
+  }
 
   try {
-    const canvas = await html2canvas(exportCard, {
-      scale: window.devicePixelRatio,
-    })
+    const scale = window.devicePixelRatio || 1
+    const canvas = await html2canvas(exportCard, { scale })
 
-    canvas.toBlob(async (blob) => {
-      if (blob) {
-        if (navigator.clipboard) {
-          const item = new ClipboardItem({ 'image/png': blob })
-          await navigator.clipboard.write([item])
-          toast.success('Image copied to clipboard')
-        }
-        if (navigator.share) {
-          const file = new File([blob], `${data.city.name}-${data.current.time}.png`, { type: "image/png" })
-          await navigator.share({
-            files: [file],
-            title: `MumuMidex: ${data.city.name}`,
-          })
-          toast.success('Image shared successfully')
-        }
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve),
+    )
+    if (!blob) {
+      toast.error('Failed to create image')
+      return
+    }
+
+    if (navigator.clipboard) {
+      try {
+        const item = new ClipboardItem({ 'image/png': blob })
+        await navigator.clipboard.write([item])
+        toast.success('Image copied to clipboard')
+        return
+      } catch (err) {
+        console.error('Clipboard error:', err)
+        toast.error('Failed to copy image to clipboard')
       }
-    })
+    }
+
+    const file = new File(
+      [blob],
+      `${data.city.name}-${data.current.time}.png`,
+      { type: 'image/png' },
+    )
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: `MumuMidex: ${data.city.name}`,
+        })
+        toast.success('Image shared successfully')
+      } catch (err) {
+        console.error('Share error:', err)
+        toast.error('Failed to share image')
+      }
+    } else {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = file.name
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      toast.success('Image downloaded')
+    }
   } catch (err) {
-    toast.error('Failed to copy image')
+    console.error('Image creation error:', err)
+    toast.error('Failed to create image')
   }
 }
 
