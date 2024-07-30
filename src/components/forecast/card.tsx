@@ -1,5 +1,7 @@
 import { Forecast } from '@/types/forecast'
 
+import React from 'react'
+
 import { getHumidexClass } from '@/lib/humidex'
 import { cn, formatDateTime } from '@/lib/utils'
 
@@ -13,7 +15,6 @@ import {
 import { Skeleton } from '../ui/skeleton'
 import CardActions from './card-actions'
 import Kpi from './kpi'
-import React from 'react'
 
 export function SkeletonForecastCard() {
   return <Skeleton className="h-60" />
@@ -22,13 +23,19 @@ export function SkeletonForecastCard() {
 export default function ForecastCard({
   data,
   className,
+  showCardActions = false,
+  id,
+  forceMobile = false,
 }: {
   data: Forecast
+  id: string
   className?: string
+  showCardActions?: boolean
+  forceMobile?: boolean
 }) {
   return (
     <Card
-      id={`card-${data.city.id}`}
+      id={id}
       className={cn(
         'relative border-0 shadow-none',
         getHumidexClass(data.current.humidex),
@@ -37,7 +44,7 @@ export default function ForecastCard({
           'ring-2 ring-primary/10 ring-offset-4 ring-offset-amber-100/50',
       )}
     >
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+      <CardHeader className="flex flex-row items-end justify-between gap-4 space-y-0">
         <div>
           <CardTitle className={cn('inline-flex items-center gap-1 font-bold')}>
             {data.city.name}
@@ -64,9 +71,9 @@ export default function ForecastCard({
         </figure>
       </CardHeader>
       <CardContent>
-        <Kpi data={data} />
+        <Kpi data={data} forceMobile={forceMobile} />
       </CardContent>
-      <CardActions data={data} />
+      {showCardActions && <CardActions data={data} />}
     </Card>
   )
 }
