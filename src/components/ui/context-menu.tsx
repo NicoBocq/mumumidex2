@@ -8,7 +8,23 @@ import { cn } from '@/lib/utils'
 
 const ContextMenu = ContextMenuPrimitive.Root
 
-const ContextMenuTrigger = ContextMenuPrimitive.Trigger
+const ContextMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof ContextMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <ContextMenuPrimitive.Trigger
+    ref={ref}
+    className={cn(className)}
+    onTouchStart={(e) => {
+      e.preventDefault()
+      // Add any additional click handling logic here
+    }}
+    {...props}
+  >
+    {children}
+  </ContextMenuPrimitive.Trigger>
+))
+ContextMenuTrigger.displayName = ContextMenuPrimitive.Trigger.displayName
 
 const ContextMenuGroup = ContextMenuPrimitive.Group
 

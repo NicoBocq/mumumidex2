@@ -49,13 +49,13 @@ async function ForecastList() {
 
   return (
     <Grid>
-      {pinnedCities?.length > 0 && (
-        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50">
-          {pinnedCities?.map((item) => (
-            <ForecastCard key={item.city.id} data={item} />
-          ))}
-        </div>
-      )}
+      {/* {pinnedCities?.length > 0 && (
+        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50"> */}
+      {pinnedCities?.map((item) => (
+        <ForecastCard key={item.city.id} data={item} />
+      ))}
+      {/* </div>
+      )} */}
       {unpinnedCities?.map((item) => (
         <ForecastCard key={item.city.id} data={item} />
       ))}
