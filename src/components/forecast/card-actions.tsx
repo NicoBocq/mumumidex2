@@ -46,17 +46,17 @@ const copyImageToClipboard = async (data: Forecast) => {
       return
     }
 
-    if (navigator.clipboard) {
-      try {
-        const item = new ClipboardItem({ 'image/png': blob })
-        await navigator.clipboard.write([item])
-        toast.success('Image copied to clipboard')
-        return
-      } catch (err) {
-        console.error('Clipboard error:', err)
-        toast.error(JSON.stringify(err))
-      }
-    }
+    // if (navigator.clipboard) {
+    //   try {
+    //     const item = new ClipboardItem({ 'image/png': blob })
+    //     await navigator.clipboard.write([item])
+    //     toast.success('Image copied to clipboard')
+    //     return
+    //   } catch (err) {
+    //     console.error('Clipboard error:', err)
+    //     toast.error(JSON.stringify(err))
+    //   }
+    // }
 
     const file = new File(
       [blob],
@@ -64,18 +64,18 @@ const copyImageToClipboard = async (data: Forecast) => {
       { type: 'image/png' },
     )
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: `MumuMidex: ${data.city.name}`,
-        })
-        toast.success('Image shared successfully')
-      } catch (err) {
-        console.error('Share error:', err)
-        toast.error('Failed to share image')
-      }
-    } else {
+    // if (navigator.share) {
+    //   try {
+    //     await navigator.share({
+    //       files: [file],
+    //       title: `MumuMidex: ${data.city.name}`,
+    //     })
+    //     toast.success('Image shared successfully')
+    //   } catch (err) {
+    //     console.error('Share error:', err)
+    //     toast.error('Failed to share image')
+    //   }
+    // } else {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
@@ -85,7 +85,7 @@ const copyImageToClipboard = async (data: Forecast) => {
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
       toast.success('Image downloaded')
-    }
+  //   }
   } catch (err) {
     console.error('Image creation error:', err)
     toast.error('Failed to create image')
