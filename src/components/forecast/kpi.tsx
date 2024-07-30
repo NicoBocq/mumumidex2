@@ -35,9 +35,20 @@ const KpiItem = ({ icon, label, value, unit, humidex }: KpiItemProps) => {
   )
 }
 
-export default function ForecastKpi({ data }: { data: Forecast }) {
+export default function ForecastKpi({
+  data,
+  forceMobile,
+}: {
+  data: Forecast
+  forceMobile?: boolean
+}) {
   return (
-    <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+    <dl
+      className={cn(
+        'grid grid-cols-2 gap-2 sm:grid-cols-4',
+        forceMobile && 'sm:grid-cols-2',
+      )}
+    >
       <KpiItem
         icon={<Icon name="Thermometer" />}
         label="Temperature"

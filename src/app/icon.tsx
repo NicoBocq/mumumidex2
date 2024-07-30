@@ -29,6 +29,7 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#f59e0b',
+          fontFamily: 'cursive',
         }}
       >
         <svg

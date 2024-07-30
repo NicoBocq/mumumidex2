@@ -1,5 +1,6 @@
 import React from 'react'
 import { getForecast } from '@/actions/forecast'
+import { auth } from '@/auth'
 
 import {
   Card,
@@ -9,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Grid from '@/components/custom-ui/grid'
-import Icon from '@/components/custom-ui/icon'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 import SearchCityPopover from '@/components/user/search-city-popover'
 
@@ -25,6 +25,7 @@ function SkeletonForecastList() {
 
 async function ForecastList() {
   const { data } = await getForecast()
+  const session = await auth()
 
   if (data.length === 0) {
     return (
@@ -49,15 +50,23 @@ async function ForecastList() {
 
   return (
     <Grid>
-      {pinnedCities?.length > 0 && (
-        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50">
-          {pinnedCities?.map((item) => (
-            <ForecastCard key={item.city.id} data={item} />
-          ))}
-        </div>
-      )}
+      {/* {pinnedCities?.length > 0 && (
+        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50"> */}
+      {pinnedCities?.map((item) => (
+        <ForecastCard
+          key={item.city.id}
+          data={item}
+          showCardActions={!!session}
+        />
+      ))}
+      {/* </div>
+      )} */}
       {unpinnedCities?.map((item) => (
-        <ForecastCard key={item.city.id} data={item} />
+        <ForecastCard
+          key={item.city.id}
+          data={item}
+          showCardActions={!!session}
+        />
       ))}
     </Grid>
   )
