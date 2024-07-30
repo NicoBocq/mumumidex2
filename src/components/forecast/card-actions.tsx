@@ -25,8 +25,8 @@ type CardActionsProps = {
   data: Forecast
 }
 
-const copyImageToClipboard = async (id: string) => {
-  const exportCard = document.querySelector(`#export-card-${id}`) as HTMLElement
+const copyImageToClipboard = async (data: Forecast) => {
+  const exportCard = document.querySelector(`#export-card-${data.city.id}`) as HTMLElement
   if (!exportCard) return
 
   try {
@@ -36,9 +36,19 @@ const copyImageToClipboard = async (id: string) => {
 
     canvas.toBlob(async (blob) => {
       if (blob) {
-        const item = new ClipboardItem({ 'image/png': blob })
-        await navigator.clipboard.write([item])
-        toast.success('Image copied to clipboard')
+        if (navigator.clipboard) {
+          const item = new ClipboardItem({ 'image/png': blob })
+          await navigator.clipboard.write([item])
+          toast.success('Image copied to clipboard')
+        }
+        if (navigator.share) {
+          const file = new File([blob], `${data.city.name}-${data.current.time}.png`, { type: "image/png" })
+          await navigator.share({
+            files: [file],
+            title: `MumuMidex: ${data.city.name}`,
+          })
+          toast.success('Image shared successfully')
+        }
       }
     })
   } catch (err) {
@@ -109,8 +119,8 @@ export default function CardActions({ data }: CardActionsProps) {
   }, [execDeleteCity, data.city.id])
 
   const handleDownload = React.useCallback(() => {
-    copyImageToClipboard(data.city.id)
-  }, [data.city.id])
+    copyImageToClipboard(data)
+  }, [data])
 
   return (
     <div className="relative">
