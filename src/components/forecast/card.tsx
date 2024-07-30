@@ -28,7 +28,7 @@ export default function ForecastCard({
   forceMobile = false,
 }: {
   data: Forecast
-  id: string
+  id?: string
   className?: string
   showCardActions?: boolean
   forceMobile?: boolean
