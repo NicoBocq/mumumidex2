@@ -28,7 +28,7 @@ export default function ForecastCard({
   forceMobile = false,
 }: {
   data: Forecast
-  id?: string
+  id: string
   className?: string
   showCardActions?: boolean
   forceMobile?: boolean
@@ -41,10 +41,10 @@ export default function ForecastCard({
         getHumidexClass(data.current.humidex),
         className,
         data.city.pinned &&
-          'ring-2 ring-primary/10 ring-offset-4 ring-offset-amber-100/50',
+          'ring-2 ring-primary/20 ring-offset-4 ring-offset-amber-100/50',
       )}
     >
-      <CardHeader className="flex flex-row items-end justify-between gap-4 space-y-0">
+      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
         <div>
           <CardTitle className={cn('inline-flex items-center gap-1 font-bold')}>
             {data.city.name}

@@ -54,7 +54,7 @@ const copyImageToClipboard = async (data: Forecast) => {
         return
       } catch (err) {
         console.error('Clipboard error:', err)
-        toast.error('Failed to copy image to clipboard')
+        toast.error(JSON.stringify(err))
       }
     }
 
