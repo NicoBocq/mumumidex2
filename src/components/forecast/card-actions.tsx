@@ -25,7 +25,7 @@ type CardActionsProps = {
   data: Forecast
 }
 
-const copyImageToClipboard = async (data: Forecast) => {
+const exportImage = async (data: Forecast) => {
   const exportCard = document.querySelector(
     `#export-card-${data.city.id}`,
   ) as HTMLElement
@@ -131,7 +131,7 @@ export default function CardActions({ data }: CardActionsProps) {
   }, [execDeleteCity, data.city.id])
 
   const handleDownload = React.useCallback(() => {
-    copyImageToClipboard(data)
+    exportImage(data)
   }, [data])
 
   return (
@@ -150,7 +150,11 @@ export default function CardActions({ data }: CardActionsProps) {
         <CollapsibleTrigger
           className={cn('flex w-full items-center justify-end px-4 py-2')}
         >
-          <Icon name={open ? 'ChevronUp' : 'ChevronDown'} />
+          <Icon
+            name="ChevronDown"
+            className="transition-transform duration-150 ease-in-out"
+            style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          />
         </CollapsibleTrigger>
         <CollapsibleContent className="rounded-b-lg">
           <CardFooter className="flex items-center justify-between gap-2 p-2">

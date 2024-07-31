@@ -39,7 +39,7 @@ export default function ForecastCard({
       className={cn(
         'border-0 shadow-none',
         isExport
-          ? 'absolute left-[-9999px] top-[-9999px] w-[400px] rounded-none'
+          ? 'absolute left-[-9999px] top-[-9999px] w-[350px] rounded-none'
           : '',
         getHumidexClass(data.current.humidex),
         data.city.pinned &&
