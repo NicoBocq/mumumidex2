@@ -15,7 +15,7 @@ export const getHumidex = ({ temp, humidity }: getHumidexProps): number => {
 
 export const getHumidexClass = (
   value: number,
-  type: 'card' | 'text' | 'foreground/50' | 'foreground/10' = 'card',
+  type: 'card' | 'text' | 'foreground/50' | 'foreground/10' | 'ring' = 'card',
 ) => {
   if (!value) {
     return ''
@@ -49,6 +49,13 @@ export const getHumidexClass = (
       'text-humidex-3-foreground',
       'text-humidex-4-foreground',
       'text-humidex-5-foreground',
+    ],
+    ring: [
+      'ring-2 ring-humidex-1-darker ring-offset-2 ring-offset-humidex-1-darker',
+      'ring-2 ring-humidex-2-darker ring-offset-2 ring-offset-humidex-2-darker',
+      'ring-2 ring-humidex-3-darker ring-offset-2 ring-offset-humidex-3-darker',
+      'ring-2 ring-humidex-4-darker ring-offset-2 ring-offset-humidex-4-darker',
+      'ring-2 ring-humidex-5-darker ring-offset-2 ring-offset-humidex-5-darker',
     ],
   }
 

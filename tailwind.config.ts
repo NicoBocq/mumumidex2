@@ -53,18 +53,28 @@ const config = {
           1: {
             DEFAULT: 'hsl(var(--humidex-1))',
             foreground: 'hsl(var(--humidex-1-foreground))',
+            darker: 'hsl(var(--humidex-1-darker))',
           },
+
           2: {
             DEFAULT: 'hsl(var(--humidex-2))',
             foreground: 'hsl(var(--humidex-2-foreground))',
+            darker: 'hsl(var(--humidex-2-darker))',
           },
           3: {
             DEFAULT: 'hsl(var(--humidex-3))',
             foreground: 'hsl(var(--humidex-3-foreground))',
+            darker: 'hsl(var(--humidex-3-darker))',
           },
           4: {
             DEFAULT: 'hsl(var(--humidex-4))',
             foreground: 'hsl(var(--humidex-4-foreground))',
+            darker: 'hsl(var(--humidex-4-darker))',
+          },
+          5: {
+            DEFAULT: 'hsl(var(--humidex-5))',
+            foreground: 'hsl(var(--humidex-5-foreground))',
+            darker: 'hsl(var(--humidex-5-darker))',
           },
         },
       },

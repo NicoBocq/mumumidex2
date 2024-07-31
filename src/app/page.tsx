@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Grid from '@/components/custom-ui/grid'
+import Icon from '@/components/custom-ui/icon'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 import SearchCityPopover from '@/components/user/search-city-popover'
 
@@ -24,8 +25,17 @@ function SkeletonForecastList() {
 }
 
 async function ForecastList() {
-  const { data } = await getForecast()
+  const { data, error } = await getForecast()
   const session = await auth()
+
+  if (!!error) {
+    return (
+      <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 text-primary">
+        <Icon name="Frown" size="xl" />
+        <p>Sad noise</p>
+      </div>
+    )
+  }
 
   if (data.length === 0) {
     return (
@@ -50,21 +60,19 @@ async function ForecastList() {
 
   return (
     <Grid>
-      {/* {pinnedCities?.length > 0 && (
-        <div className="relative -mx-4 grid gap-4 rounded-lg p-4 ring-2 ring-primary/10 ring-offset-2 ring-offset-amber-100/50"> */}
       {pinnedCities?.map((item) => (
         <ForecastCard
           key={item.city.id}
           data={item}
+          id={`card-${item.city.id}`}
           showCardActions={!!session}
         />
       ))}
-      {/* </div>
-      )} */}
       {unpinnedCities?.map((item) => (
         <ForecastCard
           key={item.city.id}
           data={item}
+          id={`card-${item.city.id}`}
           showCardActions={!!session}
         />
       ))}

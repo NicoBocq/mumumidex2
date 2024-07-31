@@ -37,16 +37,16 @@ const KpiItem = ({ icon, label, value, unit, humidex }: KpiItemProps) => {
 
 export default function ForecastKpi({
   data,
-  forceMobile,
+  isExport,
 }: {
   data: Forecast
-  forceMobile?: boolean
+  isExport?: boolean
 }) {
   return (
     <dl
       className={cn(
         'grid grid-cols-2 gap-2 sm:grid-cols-4',
-        forceMobile && 'sm:grid-cols-2',
+        isExport && 'sm:grid-cols-2',
       )}
     >
       <KpiItem
