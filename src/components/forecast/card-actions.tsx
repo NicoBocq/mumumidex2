@@ -19,7 +19,7 @@ import Icon from '@/components/custom-ui/icon'
 
 import { Button } from '../ui/button'
 import { CardFooter } from '../ui/card'
-import ForecastCard from './card'
+import ExportableCard from './card'
 
 type CardActionsProps = {
   data: Forecast
@@ -46,46 +46,22 @@ const copyImageToClipboard = async (data: Forecast) => {
       return
     }
 
-    // if (navigator.clipboard) {
-    //   try {
-    //     const item = new ClipboardItem({ 'image/png': blob })
-    //     await navigator.clipboard.write([item])
-    //     toast.success('Image copied to clipboard')
-    //     return
-    //   } catch (err) {
-    //     console.error('Clipboard error:', err)
-    //     toast.error(JSON.stringify(err))
-    //   }
-    // }
-
     const file = new File(
       [blob],
-      `${data.city.name}-${data.current.time}.png`,
-      { type: 'image/png' },
+      `${data.city.name}-${data.current.time}.jpeg`,
+      { type: 'image/jpeg' },
     )
 
-    // if (navigator.share) {
-    //   try {
-    //     await navigator.share({
-    //       files: [file],
-    //       title: `MumuMidex: ${data.city.name}`,
-    //     })
-    //     toast.success('Image shared successfully')
-    //   } catch (err) {
-    //     console.error('Share error:', err)
-    //     toast.error('Failed to share image')
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = file.name
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    toast.success('Image downloaded')
     //   }
-    // } else {
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = file.name
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-      toast.success('Image downloaded')
-  //   }
   } catch (err) {
     console.error('Image creation error:', err)
     toast.error('Failed to create image')
@@ -160,12 +136,11 @@ export default function CardActions({ data }: CardActionsProps) {
 
   return (
     <div className="relative">
-      <ForecastCard
+      <ExportableCard
         data={data}
         showCardActions={false}
         id={`export-card-${data.city.id}`}
-        forceMobile
-        className="absolute left-[-9999px] top-[-9999px] w-[400px]"
+        isExport
       />
       <Collapsible
         id={`card-actions-${data.city.id}`}
@@ -196,9 +171,7 @@ export default function CardActions({ data }: CardActionsProps) {
                 variant="ghostTransparent"
                 size="icon"
               >
-                <Icon
-                  name={optimisticState.data.city.hidden ? 'EyeOff' : 'Eye'}
-                />
+                <Icon name="EyeOff" />
               </Button>
               <Button
                 className="flex items-center gap-2"

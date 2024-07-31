@@ -25,21 +25,26 @@ export default function ForecastCard({
   className,
   showCardActions = false,
   id,
-  forceMobile = false,
+  isExport = false,
 }: {
   data: Forecast
   id?: string
   className?: string
   showCardActions?: boolean
-  forceMobile?: boolean
+  isExport?: boolean
 }) {
   return (
     <Card
       id={id}
       className={cn(
-        'relative border-0 shadow-none',
+        'border-0 shadow-none',
+        isExport
+          ? 'absolute left-[-9999px] top-[-9999px] w-[400px] rounded-none'
+          : '',
         getHumidexClass(data.current.humidex),
-        data.city.pinned && getHumidexClass(data.current.humidex, 'ring'),
+        data.city.pinned &&
+          !isExport &&
+          getHumidexClass(data.current.humidex, 'ring'),
         className,
       )}
     >
@@ -70,7 +75,7 @@ export default function ForecastCard({
         </figure>
       </CardHeader>
       <CardContent>
-        <Kpi data={data} forceMobile={forceMobile} />
+        <Kpi data={data} isExport={isExport} />
       </CardContent>
       {showCardActions && <CardActions data={data} />}
     </Card>

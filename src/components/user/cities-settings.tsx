@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 
 import Icon from '../custom-ui/icon'
 import { Button } from '../ui/button'
+import { Toggle } from '../ui/toggle'
 
 export default function UserCitiesSettings({ data }: { data: City[] }) {
   const { execute: executeDelete } = useOptimisticAction(deleteCity, {
@@ -77,7 +78,7 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
         {data.map((city) => (
           <div
             key={city.id}
-            className="flex items-center justify-between gap-2 py-2"
+            className="flex items-center justify-between gap-4 py-2"
           >
             <p
               className={cn(
@@ -92,29 +93,31 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
                 {city.admin1 ? ` | ${city.admin1}` : ''}
               </span>
             </p>
-            <div className="flex items-center gap-0">
-              <Button
-                onClick={() =>
-                  handleUpdate({ id: city.id, pinned: !city.pinned })
-                }
-                variant="ghost"
-                size="icon"
-                title={city.pinned ? `Unpin ${city.name}` : `Pin ${city.name}`}
-              >
-                <Icon name={city.pinned ? 'PinOff' : 'Pin'} />
-              </Button>
-              <Button
-                onClick={() =>
-                  handleUpdate({ id: city.id, hidden: !city.hidden })
-                }
-                variant="ghost"
-                size="icon"
-                title={
-                  city.hidden ? `Unhide ${city.name}` : `Hide ${city.name}`
+            <div className="flex items-center gap-2">
+              <Toggle
+                aria-label="Toggle pinned"
+                pressed={city.pinned}
+                title={city.pinned ? 'Unpin' : 'Pin'}
+                onPressedChange={(pressed) =>
+                  handleUpdate({ id: city.id, pinned: pressed })
                 }
               >
-                <Icon name={city.hidden ? 'Eye' : 'EyeOff'} />
-              </Button>
+                <Icon name="Pin" />
+              </Toggle>
+              <Toggle
+                aria-label="Toggle hidden"
+                pressed={city.hidden}
+                title={city.hidden ? 'Unhide' : 'Hide'}
+                onPressedChange={(pressed) =>
+                  handleUpdate({
+                    id: city.id,
+                    hidden: pressed,
+                    ...(pressed ? { pinned: false } : {}),
+                  })
+                }
+              >
+                <Icon name="EyeOff" />
+              </Toggle>
               <Button
                 onClick={() => handleDelete(city.id)}
                 variant="ghost-destructive"
