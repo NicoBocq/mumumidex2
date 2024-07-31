@@ -64,7 +64,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
         current: {
           ...item.current,
           humidex: getHumidex({
-            temp: item.current.temperature_2m,
+            temperature: item.current.temperature_2m,
             humidity: item.current.relative_humidity_2m,
           }),
         },
