@@ -39,9 +39,8 @@ export default function ForecastCard({
       className={cn(
         'relative border-0 shadow-none',
         getHumidexClass(data.current.humidex),
+        data.city.pinned && getHumidexClass(data.current.humidex, 'ring'),
         className,
-        data.city.pinned &&
-          'ring-2 ring-primary/20 ring-offset-4 ring-offset-amber-100/50',
       )}
     >
       <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
