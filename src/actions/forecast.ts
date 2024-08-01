@@ -41,7 +41,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
     longitude: cities.map((c) => c.longitude.toString()).join(','),
     timezone: 'auto',
     current:
-      'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,is_day',
+      'temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,wind_speed_10m,is_day',
   })
   try {
     const response = await fetch(
@@ -55,6 +55,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       throw new Error('No data returned from OpenWeather API')
     }
     const result = Array.isArray(data) ? data : [data]
+
     const processedResult: Forecast[] = result
       .map((item: APIForecast, index: number) => ({
         ...item,
@@ -66,6 +67,7 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
           humidex: getHumidex({
             temperature: item.current.temperature_2m,
             humidity: item.current.relative_humidity_2m,
+            dewPoint: item.current.dew_point_2m,
           }),
         },
       }))
