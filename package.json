@@ -15,7 +15,7 @@
     "db:push": "pnpm exec prisma db push",
     "db:format": "pnpm exec prisma format",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
