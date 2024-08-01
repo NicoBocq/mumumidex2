@@ -178,8 +178,7 @@ export default function CardActions({ data }: CardActionsProps) {
               >
                 Hide
                 <Icon name="Eye" />
-              </Button>
-              <Button
+              </Button>              <Button
                 className="flex items-center gap-2"
                 onClick={() => handleUpdate('pinned')}
                 title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
