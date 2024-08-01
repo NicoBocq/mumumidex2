@@ -164,8 +164,9 @@ export default function CardActions({ data }: CardActionsProps) {
                 onClick={handleDelete}
                 variant="ghostTransparent"
                 title="Delete"
-                size="icon"
+                size="sm"
               >
+                Delete
                 <Icon name="Trash" />
               </Button>
               <Button
@@ -173,29 +174,33 @@ export default function CardActions({ data }: CardActionsProps) {
                 onClick={() => handleUpdate('hidden')}
                 title="Hide"
                 variant="ghostTransparent"
-                size="icon"
+                size="sm"
               >
-                <Icon name="EyeOff" />
+                Hide
+                <Icon name="Eye" />
               </Button>
               <Button
                 className="flex items-center gap-2"
                 onClick={() => handleUpdate('pinned')}
                 title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
                 variant="ghostTransparent"
-                size="icon"
+                size="sm"
               >
+                {optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
                 <Icon
-                  name={optimisticState.data.city.pinned ? 'PinOff' : 'Pin'}
+                  name="Pin"
                 />
               </Button>
             </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="ghostTransparent"
-                size="icon"
+                size="sm"
                 title="Download"
                 onClick={handleDownload}
+                className="gap-2"
               >
+                Download
                 <Icon name="ImageDown" />
               </Button>
             </div>
