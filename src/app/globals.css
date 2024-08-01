@@ -45,15 +45,15 @@
     /* amber-600 */
     --humidex-3: 32.1 94.6% 43.7%;
     --humidex-3-darker: 22.7 82.5% 31.4%;
-    --humidex-3-foreground: 48 100% 96.1%;
+    --humidex-3-foreground: 0 0% 100%;
     /* amber-700 */
     --humidex-4: 26 90.5% 37.1%;
     --humidex-4-darker: 21.7 77.8% 26.5%;
-    --humidex-4-foreground: 48 100% 96.1%;
+    --humidex-4-foreground: 0 0% 100%;
     /* amber-900 */
     --humidex-5: 21.7 77.8% 26.5%;
     --humidex-5-darker: 20.9 91.7% 14.1%;
-    --humidex-5-foreground: 48 100% 96.1%;
+    --humidex-5-foreground: 0 0% 100%;
   }
 
   .dark {
