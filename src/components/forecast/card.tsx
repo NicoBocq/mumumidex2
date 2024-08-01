@@ -5,6 +5,7 @@ import React from 'react'
 import { getHumidexClass } from '@/lib/humidex'
 import { cn, formatDateTime } from '@/lib/utils'
 
+import Icon from '../custom-ui/icon'
 import {
   Card,
   CardContent,
@@ -49,7 +50,7 @@ export default function ForecastCard({
       )}
     >
       <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
-        <div>
+        <div className="flex flex-col gap-2">
           <CardTitle className={cn('inline-flex items-center gap-1 font-bold')}>
             {data.city.name}
             <span
@@ -62,10 +63,11 @@ export default function ForecastCard({
           </CardTitle>
           <CardDescription
             className={cn(
-              'leading-tight',
+              'inline-flex items-center gap-2 leading-tight',
               getHumidexClass(data.current.humidex, 'foreground/50'),
             )}
           >
+            <Icon name={data.current.is_day ? 'Sun' : 'Moon'} />
             {formatDateTime(data.current.time)}
           </CardDescription>
         </div>
