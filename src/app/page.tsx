@@ -1,8 +1,9 @@
 import React from 'react'
-import { getForecast } from '@/actions/forecast'
+import { getForecast, reload } from '@/actions/forecast'
 import { auth } from '@/auth'
 
 import { app } from '@/config/app'
+import { ButtonFormSubmit } from '@/components/custom-ui/button-form-submit'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
@@ -19,7 +20,7 @@ function SkeletonForecastList() {
   )
 }
 
-async function ForecastList() {
+async function ForecastList({ standAlone }: { standAlone: boolean }) {
   const { data, error } = await getForecast()
   const session = await auth()
 
@@ -47,31 +48,48 @@ async function ForecastList() {
   const unpinnedCities = data?.filter((item) => !item.city.pinned)
 
   return (
-    <Grid>
-      {pinnedCities?.map((item) => (
-        <ForecastCard
-          key={item.city.id}
-          data={item}
-          id={`card-${item.city.id}`}
-          showCardActions={!!session}
-        />
-      ))}
-      {unpinnedCities?.map((item) => (
-        <ForecastCard
-          key={item.city.id}
-          data={item}
-          id={`card-${item.city.id}`}
-          showCardActions={!!session}
-        />
-      ))}
-    </Grid>
+    <>
+      {standAlone && (
+        <form action={reload} className="mb-4 flex w-full">
+          <ButtonFormSubmit
+            size="icon"
+            icon="RefreshCw"
+            variant="ghostPrimary"
+            label="Refresh"
+            className="w-full"
+          />
+        </form>
+      )}
+      <Grid>
+        {pinnedCities?.map((item) => (
+          <ForecastCard
+            key={item.city.id}
+            data={item}
+            id={`card-${item.city.id}`}
+            showCardActions={!!session}
+          />
+        ))}
+        {unpinnedCities?.map((item) => (
+          <ForecastCard
+            key={item.city.id}
+            data={item}
+            id={`card-${item.city.id}`}
+            showCardActions={!!session}
+          />
+        ))}
+      </Grid>
+    </>
   )
 }
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { standalone: string }
+}) {
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
-      <ForecastList />
+      <ForecastList standAlone={searchParams.standalone === 'true'} />
     </React.Suspense>
   )
 }

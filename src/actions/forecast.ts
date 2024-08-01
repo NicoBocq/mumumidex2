@@ -3,6 +3,7 @@
 import { DefaultCity } from '@/types/city'
 import { APIForecast, Forecast } from '@/types/forecast'
 
+import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
 import { City } from '@prisma/client'
 
@@ -83,4 +84,8 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       error: 'Error fetching forecast',
     }
   }
+}
+
+export async function reload() {
+  revalidatePath('/')
 }
