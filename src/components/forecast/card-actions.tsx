@@ -186,6 +186,7 @@ export default function CardActions({ data }: CardActionsProps) {
                 variant="ghostTransparent"
                 size="sm"
               >
+
                 {optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
                 <Icon
                   name="Pin"
@@ -200,8 +201,7 @@ export default function CardActions({ data }: CardActionsProps) {
                 onClick={handleDownload}
                 className="gap-2"
               >
-                Download
-                <Icon name="ImageDown" />
+                Download                 <Icon name="ImageDown" />
               </Button>
             </div>
           </CardFooter>
