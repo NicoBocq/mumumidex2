@@ -61,7 +61,6 @@ const exportImage = async (data: Forecast) => {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
     toast.success('Image downloaded')
-    //   }
   } catch (err) {
     console.error('Image creation error:', err)
     toast.error('Failed to create image')

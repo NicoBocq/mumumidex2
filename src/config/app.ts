@@ -8,4 +8,8 @@ export const app = {
     title: 'Login',
     description: 'Login to save your cities',
   },
+  emptyState: {
+    title: 'Add your first city',
+    description: 'Click on your picture if you want to add more',
+  },
 }

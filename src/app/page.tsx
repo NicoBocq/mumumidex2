@@ -2,15 +2,10 @@ import React from 'react'
 import { getForecast } from '@/actions/forecast'
 import { auth } from '@/auth'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { app } from '@/config/app'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
+import Section from '@/components/custom-ui/section'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 import SearchCityPopover from '@/components/user/search-city-popover'
 
@@ -30,28 +25,21 @@ async function ForecastList() {
 
   if (!!error) {
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 text-primary">
+      <Section withoutCard className="text-muted-foreground">
         <Icon name="Frown" size="xl" />
         <p>Sad noise</p>
-      </div>
+      </Section>
     )
   }
 
   if (data.length === 0) {
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center gap-4">
-        <Card className="w-full max-w-sm border-0 bg-primary/5">
-          <CardHeader>
-            <CardTitle className="text-primary">Add your first city</CardTitle>
-            <CardDescription>
-              You could add more cities by clicking on your picture
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <SearchCityPopover />
-          </CardContent>
-        </Card>
-      </div>
+      <Section
+        title={app.emptyState.title}
+        description={app.emptyState.description}
+      >
+        <SearchCityPopover />
+      </Section>
     )
   }
 
