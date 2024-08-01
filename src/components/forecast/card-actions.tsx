@@ -176,20 +176,17 @@ export default function CardActions({ data }: CardActionsProps) {
                 variant="ghostTransparent"
                 size="sm"
               >
-                Hide
-                <Icon name="Eye" />
-              </Button>              <Button
+                Hide <Icon name="Eye" />
+              </Button>{' '}
+              <Button
                 className="flex items-center gap-2"
                 onClick={() => handleUpdate('pinned')}
                 title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
                 variant="ghostTransparent"
                 size="sm"
               >
-
                 {optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
-                <Icon
-                  name="Pin"
-                />
+                <Icon name="Pin" />
               </Button>
             </div>
             <div className="flex items-center gap-2">
@@ -200,7 +197,7 @@ export default function CardActions({ data }: CardActionsProps) {
                 onClick={handleDownload}
                 className="gap-2"
               >
-                Download                 <Icon name="ImageDown" />
+                Download <Icon name="ImageDown" />
               </Button>
             </div>
           </CardFooter>
