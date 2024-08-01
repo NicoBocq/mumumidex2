@@ -3,7 +3,7 @@
 import { Forecast } from '@/types/forecast'
 
 import React from 'react'
-import { deleteCity, updateCity } from '@/actions/city'
+import { updateCity } from '@/actions/city'
 import html2canvas from 'html2canvas'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { toast } from 'sonner'
@@ -61,7 +61,6 @@ const exportImage = async (data: Forecast) => {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
     toast.success('Image downloaded')
-    //   }
   } catch (err) {
     console.error('Image creation error:', err)
     toast.error('Failed to create image')
@@ -98,24 +97,6 @@ export default function CardActions({ data }: CardActionsProps) {
     },
   )
 
-  const { execute: execDeleteCity } = useOptimisticAction(deleteCity, {
-    currentState: { data },
-    updateFn: (state) => {
-      return {
-        data: {
-          ...state.data,
-        },
-      }
-    },
-    onSuccess: ({ data }) => {
-      if (data?.error) {
-        toast.error(data.error)
-      } else if (data?.success) {
-        toast.success(data.success)
-      }
-    },
-  })
-
   const handleUpdate = React.useCallback(
     (context: 'pinned' | 'hidden') => {
       execUpdateCity({
@@ -125,10 +106,6 @@ export default function CardActions({ data }: CardActionsProps) {
     },
     [execUpdateCity, data.city],
   )
-
-  const handleDelete = React.useCallback(() => {
-    execDeleteCity(data.city.id)
-  }, [execDeleteCity, data.city.id])
 
   const handleDownload = React.useCallback(() => {
     exportImage(data)
@@ -157,48 +134,26 @@ export default function CardActions({ data }: CardActionsProps) {
           />
         </CollapsibleTrigger>
         <CollapsibleContent className="rounded-b-lg">
-          <CardFooter className="flex items-center justify-between gap-2 p-2">
-            <div className="flex items-center gap-2">
-              <Button
-                className="flex items-center gap-2"
-                onClick={handleDelete}
-                variant="ghostTransparent"
-                title="Delete"
-                size="icon"
-              >
-                <Icon name="Trash" />
-              </Button>
-              <Button
-                className="flex items-center gap-2"
-                onClick={() => handleUpdate('hidden')}
-                title="Hide"
-                variant="ghostTransparent"
-                size="icon"
-              >
-                <Icon name="EyeOff" />
-              </Button>
-              <Button
-                className="flex items-center gap-2"
-                onClick={() => handleUpdate('pinned')}
-                title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
-                variant="ghostTransparent"
-                size="icon"
-              >
-                <Icon
-                  name={optimisticState.data.city.pinned ? 'PinOff' : 'Pin'}
-                />
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghostTransparent"
-                size="icon"
-                title="Download"
-                onClick={handleDownload}
-              >
-                <Icon name="ImageDown" />
-              </Button>
-            </div>
+          <CardFooter className="flex items-center justify-end gap-2 p-2">
+            <Button
+              className="flex items-center gap-2"
+              onClick={() => handleUpdate('pinned')}
+              title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
+              variant="ghostTransparent"
+              size="sm"
+            >
+              {optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
+              <Icon name="Pin" />
+            </Button>
+            <Button
+              variant="ghostTransparent"
+              size="sm"
+              title="Download"
+              onClick={handleDownload}
+              className="gap-2"
+            >
+              Download <Icon name="ImageDown" />
+            </Button>
           </CardFooter>
         </CollapsibleContent>
       </Collapsible>
