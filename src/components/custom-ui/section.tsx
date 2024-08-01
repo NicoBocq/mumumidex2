@@ -27,7 +27,7 @@ export default function Section({
   return (
     <div
       className={cn(
-        'flex min-h-[calc(100svh-140px)] flex-col items-center justify-center gap-4',
+        'flex min-h-[var(--available-height)] flex-col items-center justify-center gap-4',
         className,
       )}
     >

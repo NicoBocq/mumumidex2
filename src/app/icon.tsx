@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og'
 
+import { app } from '@/config/app'
+
 export const runtime = 'edge'
 
 export const size = {
@@ -28,8 +30,7 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#f59e0b',
-          fontFamily: 'cursive',
+          color: app.color.primary,
         }}
       >
         <svg
@@ -37,8 +38,8 @@ export default function Icon() {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          fill="#f59e0b"
-          stroke="#78350f"
+          fill={app.color.primary}
+          stroke={app.color.primaryDarker}
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
