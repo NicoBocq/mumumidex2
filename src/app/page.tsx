@@ -1,20 +1,20 @@
-import React from 'react'
 import { getForecast, reload } from '@/actions/forecast'
 import { auth } from '@/auth'
+import React from 'react'
 
-import { app } from '@/config/app'
 import { ButtonFormSubmit } from '@/components/custom-ui/button-form-submit'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
 import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
 import SearchCityPopover from '@/components/user/search-city-popover'
+import { app } from '@/config/app'
 
 function SkeletonForecastList() {
   return (
     <Grid>
-      {Array.from({ length: 5 }).map((_, index) => (
-        <SkeletonForecastCard key={index} />
+      {['s1', 's2', 's3', 's4', 's5'].map((id) => (
+        <SkeletonForecastCard key={id} />
       ))}
     </Grid>
   )
@@ -24,7 +24,7 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
   const { data, error } = await getForecast()
   const session = await auth()
 
-  if (!!error) {
+  if (error) {
     return (
       <Section withoutCard className="text-muted-foreground">
         <Icon name="Frown" size="xl" />
@@ -35,10 +35,7 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
 
   if (data.length === 0) {
     return (
-      <Section
-        title={app.emptyState.title}
-        description={app.emptyState.description}
-      >
+      <Section title={app.emptyState.title} description={app.emptyState.description}>
         <SearchCityPopover />
       </Section>
     )
@@ -82,11 +79,10 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
   )
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { standalone: string }
+export default async function Page(props: {
+  searchParams: Promise<{ standalone: string }>
 }) {
+  const searchParams = await props.searchParams
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
       <ForecastList standAlone={searchParams.standalone === 'true'} />

@@ -1,7 +1,7 @@
 'use client'
 
+import type * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
-import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
   Drawer,
@@ -12,8 +12,7 @@ import {
   DrawerTitle,
 } from '../ui/drawer'
 
-interface ModalProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {
+interface ModalProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {
   children?: React.ReactNode
   title: string
   description?: string
@@ -40,9 +39,7 @@ export default function Modal(props: ModalProps) {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
-            {description && (
-              <DrawerDescription>{description}</DrawerDescription>
-            )}
+            {description && <DrawerDescription>{description}</DrawerDescription>}
           </DrawerHeader>
           {children && <div className="p-6">{children}</div>}
           <DrawerFooter>{footer && footer}</DrawerFooter>

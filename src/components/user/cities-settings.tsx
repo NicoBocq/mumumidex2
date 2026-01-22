@@ -1,10 +1,10 @@
 'use client'
 
-import React from 'react'
 import { deleteCity, updateCity } from '@/actions/city'
-import { CitySchemaType } from '@/validation/city'
-import { City } from '@prisma/client'
+import type { CitySchemaType } from '@/validation/city'
+import type { City } from '@prisma/client'
 import { useOptimisticAction } from 'next-safe-action/hooks'
+import React from 'react'
 import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
@@ -59,14 +59,14 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
     (id: string) => {
       executeDelete(id)
     },
-    [executeDelete],
+    [executeDelete]
   )
 
   const handleUpdate = React.useCallback(
     ({ id, ...rest }: CitySchemaType) => {
       executeUpdate({ id, ...rest })
     },
-    [executeUpdate],
+    [executeUpdate]
   )
 
   if (!data.length) return null
@@ -76,14 +76,11 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
       <p className="text-sm font-medium leading-none">Remove or hide cities</p>
       <div className="mt-4 divide-y">
         {data.map((city) => (
-          <div
-            key={city.id}
-            className="flex items-center justify-between gap-4 py-2"
-          >
+          <div key={city.id} className="flex items-center justify-between gap-4 py-2">
             <p
               className={cn(
                 'text-sm font-medium leading-none',
-                city.hidden ? 'text-muted-foreground' : '',
+                city.hidden ? 'text-muted-foreground' : ''
               )}
             >
               {city.name}
@@ -98,9 +95,7 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
                 aria-label="Toggle pinned"
                 pressed={city.pinned}
                 title={city.pinned ? 'Unpin' : 'Pin'}
-                onPressedChange={(pressed) =>
-                  handleUpdate({ id: city.id, pinned: pressed })
-                }
+                onPressedChange={(pressed) => handleUpdate({ id: city.id, pinned: pressed })}
               >
                 <Icon name="Pin" />
               </Toggle>

@@ -1,13 +1,7 @@
-import React from 'react'
+import type React from 'react'
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 type SectionProps = {
   title?: string
@@ -28,7 +22,7 @@ export default function Section({
     <div
       className={cn(
         'flex min-h-[var(--available-height)] flex-col items-center justify-center gap-4',
-        className,
+        className
       )}
     >
       {!withoutCard ? (

@@ -1,31 +1,28 @@
 'use server'
 
-import { revalidateTag, unstable_cache } from 'next/cache'
 import { nanoidSchema } from '@/validation'
 import { apiCitySchema, citySchema, searchCitySchema } from '@/validation/city'
 import { Prisma } from '@prisma/client'
+import { unstable_cache, updateTag } from 'next/cache'
 
 import prisma from '@/config/db'
 import { actionClient, authActionClient } from '@/lib/safe-action'
 
 export const searchCity = actionClient
   .metadata({ actionName: 'searchCity' })
-  .schema(searchCitySchema)
+  .inputSchema(searchCitySchema)
   .action(async ({ parsedInput: search }) => {
     try {
       const params = new URLSearchParams({
         name: search,
         limit: '10',
       })
-      const response = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?${params}`,
-        {
-          next: {
-            revalidate: 60 * 60 * 24 * 7,
-            tags: [`search-city-${search}`],
-          },
+      const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?${params}`, {
+        next: {
+          revalidate: 60 * 60 * 24 * 7,
+          tags: [`search-city-${search}`],
         },
-      )
+      })
       const data = await response.json()
       return data
     } catch (error) {
@@ -40,10 +37,7 @@ type getUserCitiesType = {
   hideHidden?: boolean
 }
 
-export async function getUserCities({
-  userId,
-  hideHidden = false,
-}: getUserCitiesType) {
+export async function getUserCities({ userId, hideHidden = false }: getUserCitiesType) {
   const cachedUserCities = unstable_cache(
     async () => {
       try {
@@ -70,14 +64,14 @@ export async function getUserCities({
     {
       tags: [`user-cities-${userId}`],
       revalidate: 60 * 60 * 24 * 7,
-    },
+    }
   )()
   return cachedUserCities
 }
 
 export const addCity = authActionClient
   .metadata({ actionName: 'addCity' })
-  .schema(apiCitySchema)
+  .inputSchema(apiCitySchema)
   .action(async ({ parsedInput, ctx: { id: userId } }) => {
     const { id: externalId, ...rest } = parsedInput
     try {
@@ -88,16 +82,13 @@ export const addCity = authActionClient
           userId,
         },
       })
-      revalidateTag(`user-cities-${userId}`)
+      updateTag(`user-cities-${userId}`)
       return {
         success: 'City added',
       }
     } catch (error) {
       console.error(error)
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         return {
           error: 'City already exists',
         }
@@ -110,7 +101,7 @@ export const addCity = authActionClient
 
 export const updateCity = authActionClient
   .metadata({ actionName: 'updateCity' })
-  .schema(citySchema.partial())
+  .inputSchema(citySchema.partial())
   .action(async ({ parsedInput, ctx: { id: userId } }) => {
     const { id, ...rest } = parsedInput
     try {
@@ -120,7 +111,7 @@ export const updateCity = authActionClient
         },
         data: rest,
       })
-      revalidateTag(`user-cities-${userId}`)
+      updateTag(`user-cities-${userId}`)
       return {
         success: 'City updated',
       }
@@ -134,7 +125,7 @@ export const updateCity = authActionClient
 
 export const deleteCity = authActionClient
   .metadata({ actionName: 'deleteCity' })
-  .schema(nanoidSchema)
+  .inputSchema(nanoidSchema)
   .action(async ({ parsedInput: id, ctx: { id: userId } }) => {
     try {
       await prisma.city.delete({
@@ -142,7 +133,7 @@ export const deleteCity = authActionClient
           id,
         },
       })
-      revalidateTag(`user-cities-${userId}`)
+      updateTag(`user-cities-${userId}`)
       return {
         success: 'City removed',
       }

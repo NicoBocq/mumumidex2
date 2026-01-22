@@ -1,25 +1,22 @@
 import { auth } from '@/auth'
-import {
-  createSafeActionClient,
-  DEFAULT_SERVER_ERROR_MESSAGE,
-} from 'next-safe-action'
+import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action'
 import { z } from 'zod'
 
 class ActionError extends Error {}
 
+const metadataSchema = z.object({
+  actionName: z.string(),
+})
+
 export const actionClient = createSafeActionClient({
   defaultValidationErrorsShape: 'flattened',
-  handleReturnedServerError(e) {
+  handleServerError: (e) => {
     if (e instanceof ActionError) {
       return e.message
     }
     return DEFAULT_SERVER_ERROR_MESSAGE
   },
-  defineMetadataSchema() {
-    return z.object({
-      actionName: z.string(),
-    })
-  },
+  defineMetadataSchema: () => metadataSchema,
 })
 
 export const authActionClient = actionClient.use(async ({ next }) => {

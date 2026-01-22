@@ -1,6 +1,5 @@
-import NextAuth from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { toast } from 'sonner'
+import NextAuth from 'next-auth'
 
 import { linkOAuthAccount } from './actions/auth'
 import authConfig from './config/auth'

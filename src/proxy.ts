@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import NextAuth, { Session } from 'next-auth'
+import NextAuth, { type Session } from 'next-auth'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import authConfig from '@/config/auth'
 

@@ -1,9 +1,7 @@
 import React from 'react'
 
 import Modal from '@/components/custom-ui/modal'
-import UserLocationForm, {
-  UserCitiesFormSkeleton,
-} from '@/components/user/cities-form'
+import UserLocationForm, { UserCitiesFormSkeleton } from '@/components/user/cities-form'
 
 export default async function Page() {
   return (

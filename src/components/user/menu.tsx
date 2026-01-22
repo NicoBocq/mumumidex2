@@ -1,15 +1,8 @@
+import type { Session } from 'next-auth'
 import React from 'react'
-import Link from 'next/link'
-import { Session } from 'next-auth'
 
+import LogoutButton from '@/components/auth/logout-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
   Sheet,
   SheetContent,
@@ -19,7 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import LogoutButton from '@/components/auth/logout-button'
 import UserLocationForm from '@/components/user/cities-form'
 
 import { ScrollArea } from '../ui/scroll-area'

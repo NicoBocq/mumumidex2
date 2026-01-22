@@ -1,4 +1,4 @@
-import { City } from '@prisma/client'
+import type { City } from '@prisma/client'
 
 export type Current = {
   time: string
@@ -7,9 +7,13 @@ export type Current = {
   relative_humidity_2m: number
   dew_point_2m: number
   apparent_temperature: number
-  humidex: number
   wind_speed_10m: number
+  wind_direction_10m: number
   is_day: number
+  precipitation: number
+  cloud_cover: number
+  weather_code: number
+  miseryIndex: number
 }
 
 export type CurrentUnits = {
@@ -20,7 +24,23 @@ export type CurrentUnits = {
   dew_point_2m: string
   apparent_temperature: string
   wind_speed_10m: string
+  wind_direction_10m: string
   is_day: string
+  precipitation: string
+  cloud_cover: string
+  weather_code: string
+}
+
+export type Hourly = {
+  time: string[]
+  temperature_2m: number[]
+  precipitation: number[]
+}
+
+export type HourlyUnits = {
+  time: string
+  temperature_2m: string
+  precipitation: string
 }
 
 export type Forecast = {
@@ -29,9 +49,11 @@ export type Forecast = {
   timezone: string
   utc_offset_seconds: number
   current: Current
-  city: City
   current_units: CurrentUnits
+  hourly: Hourly
+  hourly_units: HourlyUnits
+  city: City
 }
 
-export type APICurrent = Omit<Current, 'humidex'>
-export type APIForecast = Omit<Forecast, 'location'> & { current: APICurrent }
+export type APICurrent = Omit<Current, 'miseryIndex'>
+export type APIForecast = Omit<Forecast, 'city' | 'current'> & { current: APICurrent }

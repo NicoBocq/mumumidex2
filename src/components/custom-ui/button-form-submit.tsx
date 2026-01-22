@@ -1,11 +1,11 @@
 'use client'
 
-import { VariantProps } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 import { useFormStatus } from 'react-dom'
 
 import { cn } from '@/lib/utils'
 
-import { Button, buttonVariants } from '../ui/button'
+import { Button, type buttonVariants } from '../ui/button'
 import Icon, { type IconProps } from './icon'
 
 interface FormSubmitProps
@@ -43,27 +43,20 @@ export function ButtonFormSubmit({
           className={cn(
             'mr-2',
             isLoading ? 'opacity-0' : 'opacity-100',
-            'transition-opacity duration-100',
+            'transition-opacity duration-100'
           )}
         />
       )}
       {label && (
         <span
-          className={cn(
-            isLoading ? 'opacity-0' : 'opacity-100',
-            'transition-opacity duration-100',
-          )}
+          className={cn(isLoading ? 'opacity-0' : 'opacity-100', 'transition-opacity duration-100')}
         >
           {label}
         </span>
       )}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <Icon
-            name="LoaderCircle"
-            className="animate-spin"
-            aria-hidden="true"
-          />
+          <Icon name="LoaderCircle" className="animate-spin" aria-hidden="true" />
         </div>
       )}
       <span className="sr-only">{isLoading ? 'Submiting' : 'Submit'}</span>

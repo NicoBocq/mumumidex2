@@ -1,15 +1,9 @@
-import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
 
-import { app } from '@/config/app'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import OAuthButton from '@/components/auth/oauth-button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { app } from '@/config/app'
 
 export default async function Page() {
   const session = await auth()

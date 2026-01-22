@@ -1,21 +1,17 @@
 'use client'
 
-import { Forecast } from '@/types/forecast'
+import type { Forecast } from '@/types/forecast'
 
-import React from 'react'
 import { updateCity } from '@/actions/city'
 import html2canvas from 'html2canvas'
 import { useOptimisticAction } from 'next-safe-action/hooks'
+import React from 'react'
 import { toast } from 'sonner'
 
-import { getHumidexClass } from '@/lib/humidex'
-import { cn } from '@/lib/utils'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
 import Icon from '@/components/custom-ui/icon'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { getMiseryClass, getMiseryEmoji } from '@/lib/misery-index'
+import { cn } from '@/lib/utils'
 
 import { Button } from '../ui/button'
 import { CardFooter } from '../ui/card'
@@ -26,9 +22,7 @@ type CardActionsProps = {
 }
 
 const exportImage = async (data: Forecast) => {
-  const exportCard = document.querySelector(
-    `#export-card-${data.city.id}`,
-  ) as HTMLElement
+  const exportCard = document.querySelector(`#export-card-${data.city.id}`) as HTMLElement
   if (!exportCard) {
     toast.error('Export card not found')
     return
@@ -38,19 +32,15 @@ const exportImage = async (data: Forecast) => {
     const scale = window.devicePixelRatio || 1
     const canvas = await html2canvas(exportCard, { scale })
 
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve),
-    )
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve))
     if (!blob) {
       toast.error('Failed to create image')
       return
     }
 
-    const file = new File(
-      [blob],
-      `${data.city.name}-${data.current.time}.jpeg`,
-      { type: 'image/jpeg' },
-    )
+    const file = new File([blob], `${data.city.name}-${data.current.time}.jpeg`, {
+      type: 'image/jpeg',
+    })
 
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -69,33 +59,30 @@ const exportImage = async (data: Forecast) => {
 
 export default function CardActions({ data }: CardActionsProps) {
   const [open, setOpen] = React.useState(false)
-  const { execute: execUpdateCity, optimisticState } = useOptimisticAction(
-    updateCity,
-    {
-      currentState: { data },
-      updateFn: (state, newState) => {
-        return {
-          data: {
-            ...state.data,
-            city: {
-              ...state.data.city,
-              ...newState,
-            },
+  const { execute: execUpdateCity, optimisticState } = useOptimisticAction(updateCity, {
+    currentState: { data },
+    updateFn: (state, newState) => {
+      return {
+        data: {
+          ...state.data,
+          city: {
+            ...state.data.city,
+            ...newState,
           },
-        }
-      },
-      onSuccess: ({ data }) => {
-        if (data?.error) {
-          toast.error(data.error)
-        } else if (data?.success) {
-          toast.success(data.success)
-        }
-      },
-      onError: () => {
-        toast.error('Something went wrong')
-      },
+        },
+      }
     },
-  )
+    onSuccess: ({ data }) => {
+      if (data?.error) {
+        toast.error(data.error)
+      } else if (data?.success) {
+        toast.success(data.success)
+      }
+    },
+    onError: () => {
+      toast.error('Something went wrong')
+    },
+  })
 
   const handleUpdate = React.useCallback(
     (context: 'pinned' | 'hidden') => {
@@ -104,12 +91,31 @@ export default function CardActions({ data }: CardActionsProps) {
         [context]: !data.city[context],
       })
     },
-    [execUpdateCity, data.city],
+    [execUpdateCity, data.city]
   )
 
   const handleDownload = React.useCallback(() => {
     exportImage(data)
   }, [data])
+
+  const handleShare = React.useCallback(async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Météo de l'enfer à ${data.city.name}`,
+          text: `Le Misery Index est de ${data.current.miseryIndex} ! ${getMiseryEmoji(data.current.miseryIndex)}`,
+          url: window.location.href,
+        })
+        toast.success('Shared successfully')
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          toast.error('Failed to share')
+        }
+      }
+    } else {
+      handleDownload()
+    }
+  }, [data, handleDownload])
 
   return (
     <div className="relative">
@@ -122,11 +128,9 @@ export default function CardActions({ data }: CardActionsProps) {
       <Collapsible
         id={`card-actions-${data.city.id}`}
         onOpenChange={setOpen}
-        className={cn('rounded-b-lg', getHumidexClass(data.current.humidex))}
+        className={cn('rounded-b-lg', getMiseryClass(data.current.miseryIndex))}
       >
-        <CollapsibleTrigger
-          className={cn('flex w-full items-center justify-end px-4 py-2')}
-        >
+        <CollapsibleTrigger className={cn('flex w-full items-center justify-end px-4 py-2')}>
           <Icon
             name="ChevronDown"
             className="transition-transform duration-150 ease-in-out"
@@ -148,11 +152,20 @@ export default function CardActions({ data }: CardActionsProps) {
             <Button
               variant="ghostTransparent"
               size="sm"
+              title="Share"
+              onClick={handleShare}
+              className="gap-2"
+            >
+              Share <Icon name="Share" />
+            </Button>
+            <Button
+              variant="ghostTransparent"
+              size="sm"
               title="Download"
               onClick={handleDownload}
               className="gap-2"
             >
-              Download <Icon name="ImageDown" />
+              <Icon name="ImageDown" />
             </Button>
           </CardFooter>
         </CollapsibleContent>

@@ -1,4 +1,4 @@
-import { City } from '@prisma/client'
+import type { City } from '@prisma/client'
 import { nanoid } from 'nanoid'
 
 export const DEFAULT_LOCATIONS: City[] = [

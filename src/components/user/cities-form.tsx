@@ -1,4 +1,3 @@
-import React from 'react'
 import { getUserCities } from '@/actions/city'
 import { auth } from '@/auth'
 

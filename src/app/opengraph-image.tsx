@@ -13,29 +13,27 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function Image() {
-  const rubikBold = fetch(
-    new URL('/public/fonts/Rubik-Bold.ttf', import.meta.url),
-  ).then((res) => res.arrayBuffer())
+  const rubikBold = fetch(new URL('../../public/fonts/Rubik-Bold.ttf', import.meta.url)).then(
+    (res) => res.arrayBuffer()
+  )
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          fontSize: 128,
-          background: '#f59e0b',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-        }}
-      >
-        <span>{app.shortName}</span>
-        <span style={{ fontSize: 64 }}>{app.tagline}</span>
-      </div>
-    ),
+    <div
+      style={{
+        fontSize: 128,
+        background: '#f59e0b',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+      }}
+    >
+      <span>{app.shortName}</span>
+      <span style={{ fontSize: 64 }}>{app.tagline}</span>
+    </div>,
     {
       ...size,
       fonts: [
@@ -45,6 +43,6 @@ export default async function Image() {
           style: 'normal',
         },
       ],
-    },
+    }
   )
 }

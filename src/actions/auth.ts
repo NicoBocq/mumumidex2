@@ -1,10 +1,6 @@
-import {
-  LinkOAuthAccountInput,
-  linkOAuthAccountSchema,
-} from '@/validation/auth'
+import { type LinkOAuthAccountInput, linkOAuthAccountSchema } from '@/validation/auth'
 
 import prisma from '@/config/db'
-import { actionClient } from '@/lib/safe-action'
 
 // export const linkOAuthAccount = actionClient
 // .schema(linkOAuthAccountSchema)
@@ -23,9 +19,7 @@ import { actionClient } from '@/lib/safe-action'
 //     throw new Error("Error linking OAuth account")
 //   }
 // })
-export async function linkOAuthAccount(
-  rawInput: LinkOAuthAccountInput,
-): Promise<void> {
+export async function linkOAuthAccount(rawInput: LinkOAuthAccountInput): Promise<void> {
   try {
     const validatedInput = linkOAuthAccountSchema.safeParse(rawInput)
     if (!validatedInput.success) return
