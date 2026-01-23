@@ -29,7 +29,7 @@ export async function linkOAuthAccount(rawInput: LinkOAuthAccountInput): Promise
         id: validatedInput.data.userId,
       },
       data: {
-        emailVerified: new Date(),
+        emailVerified: true,
       },
     })
   } catch (error) {

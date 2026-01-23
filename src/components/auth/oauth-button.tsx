@@ -1,10 +1,10 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
 import type React from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { signIn } from '@/lib/auth-client'
 
 function GoogleIcon({ ...props }: React.HTMLAttributes<SVGElement>) {
   return (
@@ -20,9 +20,7 @@ function GoogleIcon({ ...props }: React.HTMLAttributes<SVGElement>) {
 
 const handleSignIn = async () => {
   try {
-    await signIn('google', {
-      callbackUrl: '/',
-    })
+    await signIn.social({ provider: 'google', callbackURL: '/' })
   } catch (_error) {
     toast.error('Failed to sign in')
   }

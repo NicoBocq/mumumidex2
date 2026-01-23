@@ -15,7 +15,7 @@ bun run lint      # Biome check
 bun run lint:fix  # Biome check + fix
 bun run format    # Biome format
 
-# Database (Prisma + PostgreSQL)
+# Database (Prisma 7 + PostgreSQL)
 bun run db:migrate   # Run migrations locally
 bun run db:generate  # Regenerate Prisma client
 bun run db:studio    # Open Prisma Studio
@@ -24,6 +24,10 @@ bun run db:format    # Format schema file
 
 # UI Components
 bun run ui:add       # Add shadcn/ui component
+
+# Storybook
+bun run storybook        # Start Storybook dev server (port 6006)
+bun run build-storybook  # Build static Storybook
 ```
 
 ## Architecture
@@ -34,10 +38,12 @@ bun run ui:add       # Add shadcn/ui component
 3. **City management** (`src/actions/city.ts`): CRUD operations using `next-safe-action` with Zod validation; city search via Open-Meteo geocoding API
 
 ### Authentication
-- NextAuth v5 (beta) with Google OAuth provider
-- JWT session strategy with Prisma adapter
-- Middleware protects all routes except `/`, `/login`, and API routes
-- Two action clients in `src/lib/safe-action.ts`: `actionClient` (public) and `authActionClient` (authenticated)
+- Better Auth with Google OAuth provider
+- Database sessions with Prisma adapter (`@prisma/adapter-pg`)
+- Server config in `src/lib/auth.ts`, client hooks in `src/lib/auth-client.ts`
+- API route handler at `src/app/api/auth/[...all]/route.ts`
+- Middleware (`src/proxy.ts`) protects all routes except `/`, `/login`, and API routes using `getSessionCookie`
+- Two action clients in `src/lib/safe-action.ts`: `actionClient` (public) and `authActionClient` (authenticated via `auth.api.getSession`)
 
 ### Routing
 - Uses Next.js parallel routes for modals: `@modal` slot with intercepting routes `(.)login` and `(.)user/cities`
@@ -59,17 +65,19 @@ bun run ui:add       # Add shadcn/ui component
 
 - **Runtime**: Bun
 - **Framework**: Next.js 16 (Turbopack)
+- **Auth**: Better Auth with Prisma adapter
 - **UI**: React 19, Tailwind CSS 4, shadcn/ui
 - **Validation**: Zod 4, next-safe-action 8
-- **Linting/Formatting**: Biome
-- **Database**: PostgreSQL + Prisma
+- **Database**: PostgreSQL + Prisma 7 (`@prisma/adapter-pg`)
+- **Testing**: Vitest, Playwright
+- **Linting/Formatting**: Biome, Husky + lint-staged
+- **Documentation**: Storybook
 
 ## Environment Variables Required
 
 ```
 POSTGRES_PRISMA_URL      # Prisma connection (pooled)
 POSTGRES_URL_NON_POOLING # Direct connection for migrations
-AUTH_SECRET              # NextAuth secret
 AUTH_GOOGLE_ID           # Google OAuth client ID
 AUTH_GOOGLE_SECRET       # Google OAuth client secret
 ```

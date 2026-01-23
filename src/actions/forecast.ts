@@ -1,9 +1,10 @@
 'use server'
 import type { APIForecast, Forecast } from '@/types/forecast'
 
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 import type { City } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
 
 import { DEFAULT_LOCATIONS } from '@/config/city'
 import { getMiseryIndex } from '@/lib/misery-index'
@@ -16,7 +17,7 @@ type getForecastReturnType = {
 }
 
 async function returnCities(): Promise<City[]> {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
   if (!session) {
     return DEFAULT_LOCATIONS
   }

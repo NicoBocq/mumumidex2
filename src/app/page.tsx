@@ -1,5 +1,6 @@
 import { getForecast, reload } from '@/actions/forecast'
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 import React from 'react'
 
 import { ButtonFormSubmit } from '@/components/custom-ui/button-form-submit'
@@ -22,7 +23,7 @@ function SkeletonForecastList() {
 
 async function ForecastList({ standAlone }: { standAlone: boolean }) {
   const { data, error } = await getForecast()
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
 
   if (error) {
     return (

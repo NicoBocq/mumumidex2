@@ -1,5 +1,6 @@
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action'
+import { headers } from 'next/headers'
 import { z } from 'zod'
 
 class ActionError extends Error {}
@@ -20,7 +21,7 @@ export const actionClient = createSafeActionClient({
 })
 
 export const authActionClient = actionClient.use(async ({ next }) => {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
   if (!session) {
     throw new ActionError('You need to be logged in to perform this action')
   }

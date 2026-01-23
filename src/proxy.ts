@@ -1,24 +1,22 @@
-import NextAuth, { type Session } from 'next-auth'
-import { type NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-import authConfig from '@/config/auth'
+import { getSessionCookie } from 'better-auth/cookies'
 
-const { auth: middleware } = NextAuth(authConfig)
-
-export default middleware((req: NextRequest & { auth: Session | null }) => {
-  const session = req.auth
-  const pathname = req.nextUrl.pathname
+export async function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
 
   if (pathname === '/' || pathname === '/login') {
     return NextResponse.next()
   }
 
-  if (!session) {
-    return NextResponse.redirect(new URL('/', req.url))
+  const sessionCookie = getSessionCookie(request)
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icon|login|$).*)'],

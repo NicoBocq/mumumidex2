@@ -1,5 +1,6 @@
 import { getUserCities } from '@/actions/city'
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 
 import { Separator } from '../ui/separator'
 import { Skeleton } from '../ui/skeleton'
@@ -16,13 +17,13 @@ export const UserCitiesFormSkeleton = () => {
 }
 
 export default async function UserCitiesForm() {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
 
   if (!session) {
     return null
   }
   const { data: cities } = await getUserCities({
-    userId: session?.user.id,
+    userId: session.user.id,
     hideHidden: false,
   })
 

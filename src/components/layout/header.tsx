@@ -1,4 +1,5 @@
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 
 import { Button, buttonVariants } from '../ui/button'
@@ -6,7 +7,7 @@ import UserMenu from '../user/menu'
 import { ThemeToggle } from './theme-toggle'
 
 export default async function Header() {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
   return (
     <header className="w-full">
       <nav

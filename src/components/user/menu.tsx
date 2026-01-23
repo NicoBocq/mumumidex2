@@ -1,4 +1,3 @@
-import type { Session } from 'next-auth'
 import React from 'react'
 
 import LogoutButton from '@/components/auth/logout-button'
@@ -13,6 +12,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import UserLocationForm from '@/components/user/cities-form'
+import type { Session } from '@/lib/auth'
 
 import { ScrollArea } from '../ui/scroll-area'
 import { UserCitiesFormSkeleton } from './cities-form'

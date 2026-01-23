@@ -1,4 +1,5 @@
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import OAuthButton from '@/components/auth/oauth-button'
@@ -6,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { app } from '@/config/app'
 
 export default async function Page() {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
   if (session) redirect('/')
   return (
     <div className="flex min-h-[300px] items-center justify-center">
