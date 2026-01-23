@@ -1,6 +1,4 @@
 'use client'
-
-import type * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
 
 import {
@@ -11,8 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '../ui/drawer'
-
-interface ModalProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {
+interface ModalProps extends React.ComponentPropsWithoutRef<typeof Drawer> {
   children?: React.ReactNode
   title: string
   description?: string

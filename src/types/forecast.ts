@@ -13,7 +13,8 @@ export type Current = {
   precipitation: number
   cloud_cover: number
   weather_code: number
-  miseryIndex: number
+  humidex: number
+  windChill: number
 }
 
 export type CurrentUnits = {
@@ -55,5 +56,5 @@ export type Forecast = {
   city: City
 }
 
-export type APICurrent = Omit<Current, 'miseryIndex'>
+export type APICurrent = Omit<Current, 'humidex' | 'windChill'>
 export type APIForecast = Omit<Forecast, 'city' | 'current'> & { current: APICurrent }

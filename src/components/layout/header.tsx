@@ -2,8 +2,9 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 
-import { Button, buttonVariants } from '../ui/button'
+import { Button } from '../ui/button'
 import UserMenu from '../user/menu'
+import { HeaderMetricSelector } from './header-metric-selector'
 import { ThemeToggle } from './theme-toggle'
 
 export default async function Header() {
@@ -12,30 +13,25 @@ export default async function Header() {
     <header className="w-full">
       <nav
         aria-label="Global"
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8"
+        className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8"
       >
-        <div>
+        <div className="shrink-0">
           <Link href="/">
             <h1 className="inline-flex items-center text-2xl font-extrabold hover-scale hover:text-primary">
               mumu
               <span className="text-primary">midex</span>
             </h1>
           </Link>
-          <p className="hidden text-xs text-primary/70 sm:block">
-            Your cities ranked by{' '}
-            <Link
-              href="https://en.wikipedia.org/wiki/Humidex"
-              target="_blank"
-              className={buttonVariants({
-                variant: 'inline-link',
-                size: 'inline-link',
-              })}
-            >
-              Humidex
-            </Link>
-          </p>
         </div>
+
+        <div className="hidden sm:flex flex-1 justify-center">
+          <HeaderMetricSelector />
+        </div>
+
         <div className="flex items-center gap-2">
+          <div className="sm:hidden">
+            <HeaderMetricSelector />
+          </div>
           <ThemeToggle />
           {!session ? (
             <Link href="/login">

@@ -1,70 +1,82 @@
-import { getForecast } from '@/actions/forecast'
+'use client'
 
-// Define color palettes based on Misery Level (0-4)
-const THEMES = [
-  // Level 0: Tranquille (Cool Blue/Teal)
-  {
-    bg: 'bg-teal-50 dark:bg-slate-950',
-    blobs: [
-      'bg-teal-300 dark:bg-emerald-900',
-      'bg-cyan-300 dark:bg-cyan-900',
-      'bg-emerald-300 dark:bg-teal-900',
-    ],
-  },
-  // Level 1: Bof (Yellow/Amber)
-  {
-    bg: 'bg-amber-50 dark:bg-slate-950',
-    blobs: [
-      'bg-amber-300 dark:bg-yellow-900',
-      'bg-yellow-300 dark:bg-amber-900',
-      'bg-orange-300 dark:bg-orange-900',
-    ],
-  },
-  // Level 2: Galère (Orange/Red)
-  {
+import { useLocalWeatherContext } from '@/contexts/local-weather-context'
+
+// Define color palettes based on weather conditions
+const WEATHER_THEMES = {
+  // Hot weather (humidex > 30)
+  hot: {
     bg: 'bg-orange-50 dark:bg-slate-950',
     blobs: [
-      'bg-orange-400 dark:bg-orange-900',
-      'bg-amber-500 dark:bg-red-900',
-      'bg-red-300 dark:bg-amber-800',
+      'bg-orange-300 dark:bg-orange-900',
+      'bg-amber-300 dark:bg-amber-900',
+      'bg-red-300 dark:bg-red-900',
     ],
   },
-  // Level 3: Enfer (Red/Purple)
-  {
-    bg: 'bg-rose-50 dark:bg-slate-950',
+  // Warm weather (20-30°C)
+  warm: {
+    bg: 'bg-amber-50 dark:bg-slate-950',
     blobs: [
-      'bg-red-500 dark:bg-red-900',
-      'bg-rose-500 dark:bg-rose-900',
-      'bg-orange-500 dark:bg-orange-900',
+      'bg-amber-200 dark:bg-yellow-900',
+      'bg-yellow-200 dark:bg-amber-900',
+      'bg-orange-200 dark:bg-orange-900',
     ],
   },
-  // Level 4: Apocalypse (Purple/Black)
-  {
-    bg: 'bg-slate-900 dark:bg-black',
+  // Mild weather (10-20°C)
+  mild: {
+    bg: 'bg-emerald-50 dark:bg-slate-950',
     blobs: [
-      'bg-purple-600 dark:bg-purple-900',
-      'bg-indigo-600 dark:bg-indigo-900',
-      'bg-violet-600 dark:bg-violet-900',
+      'bg-emerald-200 dark:bg-emerald-900',
+      'bg-teal-200 dark:bg-teal-900',
+      'bg-green-200 dark:bg-green-900',
     ],
   },
-]
-
-function getMiseryLevel(score: number): number {
-  if (score < 10) return 0
-  if (score < 25) return 1
-  if (score < 40) return 2
-  if (score < 60) return 3
-  return 4
+  // Cool weather (0-10°C)
+  cool: {
+    bg: 'bg-cyan-50 dark:bg-slate-950',
+    blobs: [
+      'bg-cyan-300 dark:bg-cyan-900',
+      'bg-sky-300 dark:bg-sky-900',
+      'bg-blue-300 dark:bg-blue-900',
+    ],
+  },
+  // Cold weather (<0°C)
+  cold: {
+    bg: 'bg-blue-50 dark:bg-slate-950',
+    blobs: [
+      'bg-blue-300 dark:bg-blue-900',
+      'bg-indigo-300 dark:bg-indigo-900',
+      'bg-violet-300 dark:bg-violet-900',
+    ],
+  },
+  // Default/neutral (no location data)
+  neutral: {
+    bg: 'bg-slate-50 dark:bg-slate-950',
+    blobs: [
+      'bg-slate-200 dark:bg-slate-800',
+      'bg-slate-300 dark:bg-slate-700',
+      'bg-slate-200 dark:bg-slate-800',
+    ],
+  },
 }
 
-export default async function Background() {
-  const { data } = await getForecast()
+function getWeatherTheme(temperature: number | undefined, humidex: number | undefined) {
+  if (temperature === undefined) return WEATHER_THEMES.neutral
 
-  // Find the worst misery index to determine the theme
-  const worstMisery = data.length > 0 ? Math.max(...data.map((f) => f.current.miseryIndex)) : 0 // Default to 0 if no cities
+  // Use humidex if available and temperature is warm enough
+  const effectiveTemp = humidex !== undefined && temperature > 20 ? humidex : temperature
 
-  const level = getMiseryLevel(worstMisery)
-  const theme = THEMES[level]
+  if (effectiveTemp > 30) return WEATHER_THEMES.hot
+  if (effectiveTemp > 20) return WEATHER_THEMES.warm
+  if (effectiveTemp > 10) return WEATHER_THEMES.mild
+  if (effectiveTemp > 0) return WEATHER_THEMES.cool
+  return WEATHER_THEMES.cold
+}
+
+export default function Background() {
+  const { weather } = useLocalWeatherContext()
+
+  const theme = getWeatherTheme(weather?.temperature, weather?.humidex)
 
   return (
     <div

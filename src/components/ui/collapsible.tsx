@@ -1,11 +1,27 @@
 'use client'
 
-import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
+import { Collapsible as BaseCollapsible } from '@base-ui/react'
 
-const Collapsible = CollapsiblePrimitive.Root
+import * as React from 'react'
 
-const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger
+const Collapsible = BaseCollapsible.Root
 
-const CollapsibleContent = CollapsiblePrimitive.CollapsibleContent
+const CollapsibleTrigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<typeof BaseCollapsible.Trigger> & {
+    asChild?: boolean
+  }
+>(({ asChild, children, ...props }, ref) => (
+  <BaseCollapsible.Trigger
+    ref={ref}
+    {...props}
+    render={asChild ? (children as React.ReactElement) : undefined}
+  >
+    {!asChild && children}
+  </BaseCollapsible.Trigger>
+))
+CollapsibleTrigger.displayName = 'CollapsibleTrigger'
+
+const CollapsibleContent = BaseCollapsible.Panel
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent }

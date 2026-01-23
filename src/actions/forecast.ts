@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 
 import { DEFAULT_LOCATIONS } from '@/config/city'
-import { getMiseryIndex } from '@/lib/misery-index'
+import { calculateHumidex, calculateWindChill } from '@/lib/weather-metrics'
 
 import { getUserCities } from './city'
 
@@ -55,24 +55,17 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
     }
     const result = Array.isArray(data) ? data : [data]
 
-    const processedResult: Forecast[] = result
-      .map((item: APIForecast, index: number) => ({
-        ...item,
-        city: {
-          ...cities[index],
-        },
-        current: {
-          ...item.current,
-          miseryIndex: getMiseryIndex({
-            temperature: item.current.temperature_2m,
-            dewPoint: item.current.dew_point_2m,
-            humidity: item.current.relative_humidity_2m,
-            windSpeed: item.current.wind_speed_10m,
-            precipitation: item.current.precipitation,
-          }),
-        },
-      }))
-      .sort((b, a) => a.current.miseryIndex - b.current.miseryIndex)
+    const processedResult: Forecast[] = result.map((item: APIForecast, index: number) => ({
+      ...item,
+      city: {
+        ...cities[index],
+      },
+      current: {
+        ...item.current,
+        humidex: calculateHumidex(item.current.temperature_2m, item.current.dew_point_2m),
+        windChill: calculateWindChill(item.current.temperature_2m, item.current.wind_speed_10m),
+      },
+    }))
     return {
       data: processedResult,
       error: '',

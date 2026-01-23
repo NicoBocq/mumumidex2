@@ -3,13 +3,14 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import React from 'react'
 
+import AddCityFab from '@/components/city/add-city-fab'
 import { ButtonFormSubmit } from '@/components/custom-ui/button-form-submit'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
-import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
-import SearchCityPopover from '@/components/user/search-city-popover'
-import { app } from '@/config/app'
+import { SkeletonForecastCard } from '@/components/forecast/card'
+import ForecastListClient from '@/components/forecast/forecast-list'
+import { OnboardingWizard } from '@/components/onboarding/onboarding-wizard'
 
 function SkeletonForecastList() {
   return (
@@ -36,14 +37,11 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
 
   if (data.length === 0) {
     return (
-      <Section title={app.emptyState.title} description={app.emptyState.description}>
-        <SearchCityPopover />
-      </Section>
+      <div className="flex min-h-[50vh] flex-col items-center justify-center p-4">
+        <OnboardingWizard reload={reload} />
+      </div>
     )
   }
-
-  const pinnedCities = data?.filter((item) => item.city.pinned)
-  const unpinnedCities = data?.filter((item) => !item.city.pinned)
 
   return (
     <>
@@ -58,24 +56,8 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
           />
         </form>
       )}
-      <Grid>
-        {pinnedCities?.map((item) => (
-          <ForecastCard
-            key={item.city.id}
-            data={item}
-            id={`card-${item.city.id}`}
-            showCardActions={!!session}
-          />
-        ))}
-        {unpinnedCities?.map((item) => (
-          <ForecastCard
-            key={item.city.id}
-            data={item}
-            id={`card-${item.city.id}`}
-            showCardActions={!!session}
-          />
-        ))}
-      </Grid>
+      <ForecastListClient data={data} isAuthenticated={!!session} />
+      {session && <AddCityFab />}
     </>
   )
 }

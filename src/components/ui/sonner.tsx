@@ -43,6 +43,7 @@
 'use client'
 
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Toaster as Sonner } from 'sonner'
 
@@ -52,6 +53,11 @@ type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toasterContent = (
     <Sonner
@@ -76,8 +82,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
     />
   )
 
-  // Only render in the browser
-  if (typeof window === 'undefined') return null
+  if (!mounted) return null
 
   return createPortal(toasterContent, document.body)
 }

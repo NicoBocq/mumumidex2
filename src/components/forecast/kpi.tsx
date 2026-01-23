@@ -1,8 +1,9 @@
+import type { SortMetric } from '@/lib/weather-metrics'
 import type { Forecast } from '@/types/forecast'
 import { ArrowUp } from 'lucide-react'
 
-import { getMiseryClass } from '@/lib/misery-index'
 import { cn } from '@/lib/utils'
+import { getDisplayValue, getMetricClass } from '@/lib/weather-metrics'
 
 import Gauge from '../custom-ui/gauge'
 import Sparkline from '../custom-ui/sparkline'
@@ -10,11 +11,16 @@ import Sparkline from '../custom-ui/sparkline'
 export default function ForecastKpi({
   data,
   isExport,
+  sortMetric = 'apparent',
 }: {
   data: Forecast
   isExport?: boolean
+  sortMetric?: SortMetric
 }) {
   const next24hTemps = data.hourly.temperature_2m.slice(0, 24)
+  const displayValue = getDisplayValue(data.current, sortMetric)
+  const strokeClass = getMetricClass(displayValue, sortMetric, 'stroke')
+  const textClass = getMetricClass(displayValue, sortMetric, 'text')
 
   return (
     <div className={cn('grid grid-cols-4 gap-2 py-2', isExport && 'grid-cols-2')}>
@@ -22,7 +28,7 @@ export default function ForecastKpi({
       <div className="flex flex-col items-center justify-end gap-2">
         <Sparkline
           data={next24hTemps}
-          color={cn(getMiseryClass(data.current.miseryIndex, 'stroke'), 'opacity-90 stroke-2')}
+          color={cn(strokeClass, 'opacity-90 stroke-2')}
           className="h-8 w-16"
         />
         <div className="text-center">
@@ -54,7 +60,7 @@ export default function ForecastKpi({
         <Gauge
           value={data.current.relative_humidity_2m}
           className="scale-90"
-          colorClass={getMiseryClass(data.current.miseryIndex, 'text')}
+          colorClass={textClass}
         />
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.relative_humidity_2m}%</div>

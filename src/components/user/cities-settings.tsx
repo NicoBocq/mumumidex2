@@ -7,11 +7,7 @@ import { useOptimisticAction } from 'next-safe-action/hooks'
 import React from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib/utils'
-
-import Icon from '../custom-ui/icon'
-import { Button } from '../ui/button'
-import { Toggle } from '../ui/toggle'
+import { CityCard } from '../city/city-card'
 
 export default function UserCitiesSettings({ data }: { data: City[] }) {
   const { execute: executeDelete } = useOptimisticAction(deleteCity, {
@@ -73,56 +69,10 @@ export default function UserCitiesSettings({ data }: { data: City[] }) {
 
   return (
     <div className="w-full">
-      <p className="text-sm font-medium leading-none">Remove or hide cities</p>
-      <div className="mt-4 divide-y">
+      <p className="text-sm font-medium leading-none mb-4">Remove or hide cities</p>
+      <div className="grid gap-3 sm:grid-cols-2">
         {data.map((city) => (
-          <div key={city.id} className="flex items-center justify-between gap-4 py-2">
-            <p
-              className={cn(
-                'text-sm font-medium leading-none',
-                city.hidden ? 'text-muted-foreground' : ''
-              )}
-            >
-              {city.name}
-              <br />
-              <span className="text-xs text-muted-foreground">
-                {city.country}
-                {city.admin1 ? ` | ${city.admin1}` : ''}
-              </span>
-            </p>
-            <div className="flex items-center gap-2">
-              <Toggle
-                aria-label="Toggle pinned"
-                pressed={city.pinned}
-                title={city.pinned ? 'Unpin' : 'Pin'}
-                onPressedChange={(pressed) => handleUpdate({ id: city.id, pinned: pressed })}
-              >
-                <Icon name="Pin" />
-              </Toggle>
-              <Toggle
-                aria-label="Toggle hidden"
-                pressed={city.hidden}
-                title={city.hidden ? 'Unhide' : 'Hide'}
-                onPressedChange={(pressed) =>
-                  handleUpdate({
-                    id: city.id,
-                    hidden: pressed,
-                    ...(pressed ? { pinned: false } : {}),
-                  })
-                }
-              >
-                <Icon name="EyeOff" />
-              </Toggle>
-              <Button
-                onClick={() => handleDelete(city.id)}
-                variant="ghost-destructive"
-                size="icon"
-                title={`Delete ${city.name}`}
-              >
-                <Icon name="Trash2" />
-              </Button>
-            </div>
-          </div>
+          <CityCard key={city.id} city={city} onDelete={handleDelete} onUpdate={handleUpdate} />
         ))}
       </div>
     </div>

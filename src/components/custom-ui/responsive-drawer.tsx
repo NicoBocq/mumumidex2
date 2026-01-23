@@ -1,11 +1,7 @@
 'use client'
 
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
-import {
-  Popover,
-  PopoverContentNoPortal, // Assuming this is preferred based on existing usage
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface ResponsiveDrawerProps {
@@ -22,7 +18,7 @@ export function ResponsiveDrawer({ children, trigger, open, onOpenChange }: Resp
     return (
       <Popover open={open} onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-        <PopoverContentNoPortal className="w-80 p-0">{children}</PopoverContentNoPortal>
+        <PopoverContent className="w-80 p-0">{children}</PopoverContent>
       </Popover>
     )
   }

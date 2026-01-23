@@ -1,14 +1,11 @@
 import SignInButton from '@/components/auth/oauth-button'
-import Modal from '@/components/custom-ui/modal'
-import { app } from '@/config/app'
+import { ResponsiveDrawer } from '@/components/custom-ui/responsive-drawer'
+import { Button } from '@/components/ui/button'
 
 export default function Page() {
   return (
-    <Modal
-      title={app.login.title}
-      description={app.login.description}
-      open
-      footer={<SignInButton />}
-    />
+    <ResponsiveDrawer open trigger={<Button>Login</Button>}>
+      <SignInButton />
+    </ResponsiveDrawer>
   )
 }

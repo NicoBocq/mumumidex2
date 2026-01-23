@@ -19,9 +19,8 @@ import {
 
 import Icon from '../custom-ui/icon'
 import { ResponsiveDrawer } from '../custom-ui/responsive-drawer'
-import { Button } from '../ui/button'
 
-export default function SearchCityPopover() {
+export default function AddCityFab() {
   const [open, setOpen] = React.useState(false)
 
   const { execute, status, result } = useAction(searchCity)
@@ -55,10 +54,13 @@ export default function SearchCityPopover() {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <Button className="w-full">
-          <Icon name="Plus" margin="right" />
-          Add city
-        </Button>
+        <button
+          type="button"
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 hover-scale transition-all duration-300 animate-in fade-in slide-in-from-bottom-4"
+          aria-label="Add city"
+        >
+          <Icon name="Plus" size="lg" />
+        </button>
       }
     >
       <Command>
