@@ -5,17 +5,24 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { type ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'mumumidex-sort-preference'
+const USER_CHOICE_KEY = 'mumumidex-sort-user-choice'
 const DEFAULT_METRIC: SortMetric = 'apparent'
 
 type SortMetricContextValue = {
   sortMetric: SortMetric
   setSortMetric: (metric: SortMetric) => void
+  setAutoMetric: (metric: SortMetric) => void
 }
 
 const SortMetricContext = createContext<SortMetricContextValue | null>(null)
 
 function isValidMetric(value: string): value is SortMetric {
   return ['apparent', 'humidex', 'windchill'].includes(value)
+}
+
+function hasUserChoice(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem(USER_CHOICE_KEY) === 'true'
 }
 
 export function SortMetricProvider({ children }: { children: ReactNode }) {
@@ -46,16 +53,8 @@ export function SortMetricProvider({ children }: { children: ReactNode }) {
     }
   }, [searchParams])
 
-  const setSortMetric = useCallback(
+  const updateUrl = useCallback(
     (metric: SortMetric) => {
-      setSortMetricState(metric)
-
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEY, metric)
-      }
-
-      // Update URL
       const params = new URLSearchParams(searchParams.toString())
       if (metric === DEFAULT_METRIC) {
         params.delete('sort')
@@ -68,8 +67,34 @@ export function SortMetricProvider({ children }: { children: ReactNode }) {
     [pathname, router, searchParams]
   )
 
+  // User explicitly chooses a metric
+  const setSortMetric = useCallback(
+    (metric: SortMetric) => {
+      setSortMetricState(metric)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY, metric)
+        localStorage.setItem(USER_CHOICE_KEY, 'true')
+      }
+      updateUrl(metric)
+    },
+    [updateUrl]
+  )
+
+  // Auto-select based on weather (only if user hasn't chosen)
+  // Does NOT update URL to avoid re-render loops
+  const setAutoMetric = useCallback((metric: SortMetric) => {
+    if (hasUserChoice()) return
+    setSortMetricState((prev) => {
+      if (prev === metric) return prev
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY, metric)
+      }
+      return metric
+    })
+  }, [])
+
   return (
-    <SortMetricContext.Provider value={{ sortMetric, setSortMetric }}>
+    <SortMetricContext.Provider value={{ sortMetric, setSortMetric, setAutoMetric }}>
       {children}
     </SortMetricContext.Provider>
   )

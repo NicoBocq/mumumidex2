@@ -31,7 +31,7 @@ export default function Gauge({
           fill="none"
           stroke="currentColor"
           strokeWidth="3"
-          className="text-white/10"
+          className="text-muted-foreground/30"
         />
         {/* Progress Circle */}
         <circle
@@ -47,7 +47,7 @@ export default function Gauge({
           className={cn('transition-all duration-1000 ease-out', colorClass)}
         />
       </svg>
-      {icon && <div className="absolute text-white/50">{icon}</div>}
+      {icon && <div className="absolute text-foreground/70">{icon}</div>}
     </div>
   )
 }

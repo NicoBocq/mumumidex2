@@ -21,6 +21,7 @@ export default function ForecastKpi({
   const displayValue = getDisplayValue(data.current, sortMetric)
   const strokeClass = getMetricClass(displayValue, sortMetric, 'stroke')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
+  const bgClass = getMetricClass(displayValue, sortMetric, 'bg')
 
   return (
     <div className={cn('grid grid-cols-4 gap-2 py-2', isExport && 'grid-cols-2')}>
@@ -32,23 +33,37 @@ export default function ForecastKpi({
           className="h-8 w-16"
         />
         <div className="text-center">
-          <div className="text-sm font-bold leading-none">
-            {Math.round(data.current.temperature_2m)}°
+          <div className="flex items-center justify-center gap-1">
+            <span className="text-sm font-bold leading-none">
+              {Math.round(data.current.temperature_2m)}°
+            </span>
+            <span
+              className={cn(
+                'rounded-sm flex items-center justify-center px-2 py-0.5 text-xs font-medium backdrop-blur-sm',
+                bgClass
+              )}
+            >
+              {Math.round(data.current.apparent_temperature)}°
+            </span>
           </div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-            Ressenti {Math.round(data.current.apparent_temperature)}°
+            Température
           </div>
         </div>
       </div>
 
       {/* 2. Wind */}
       <div className="flex flex-col items-center justify-end gap-2">
-        <div
-          className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-sm"
-          style={{ transform: `rotate(${data.current.wind_direction_10m}deg)` }}
-        >
-          <ArrowUp className="h-4 w-4 text-foreground/80" />
-        </div>
+        <Gauge
+          value={Math.min(data.current.wind_speed_10m, 100)}
+          colorClass={textClass}
+          icon={
+            <ArrowUp
+              className="h-4 w-4 text-foreground/80"
+              style={{ transform: `rotate(${data.current.wind_direction_10m}deg)` }}
+            />
+          }
+        />
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.wind_speed_10m}</div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">km/h</div>
@@ -57,11 +72,7 @@ export default function ForecastKpi({
 
       {/* 3. Humidity */}
       <div className="flex flex-col items-center justify-end gap-2">
-        <Gauge
-          value={data.current.relative_humidity_2m}
-          className="scale-90"
-          colorClass={textClass}
-        />
+        <Gauge value={data.current.relative_humidity_2m} colorClass={textClass} />
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.relative_humidity_2m}%</div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
@@ -72,11 +83,7 @@ export default function ForecastKpi({
 
       {/* 4. Clouds */}
       <div className="flex flex-col items-center justify-end gap-2">
-        <Gauge
-          value={data.current.cloud_cover}
-          className="scale-90"
-          colorClass="text-slate-200 dark:text-slate-400"
-        />
+        <Gauge value={data.current.cloud_cover} className="scale-90" colorClass={textClass} />
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.cloud_cover}%</div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Nuages</div>

@@ -108,10 +108,13 @@ export function useGeolocation() {
     // Check permission status
     if (navigator.permissions) {
       navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        setState((prev) => ({
-          ...prev,
-          permission: result.state as GeolocationState['permission'],
-        }))
+        setState((prev) => {
+          if (prev.permission === result.state && !prev.loading) return prev
+          return {
+            ...prev,
+            permission: result.state as GeolocationState['permission'],
+          }
+        })
         if (result.state === 'granted') {
           requestLocation()
         } else {

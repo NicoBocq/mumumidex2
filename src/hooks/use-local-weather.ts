@@ -61,7 +61,10 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
     // Check cache first
     const cached = getStoredWeather()
     if (cached) {
-      setState({ weather: cached, loading: false, error: null })
+      setState((prev) => {
+        if (prev.weather && prev.weather.temperature === cached.temperature) return prev
+        return { weather: cached, loading: false, error: null }
+      })
       return
     }
 
@@ -103,24 +106,8 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
   return state
 }
 
-/**
- * Determine the best sort metric based on local weather conditions
- */
-export function getSuggestedMetric(weather: LocalWeather | null): SortMetric {
-  if (!weather) return 'apparent'
-
-  const temp = weather.temperature
-
-  // If it's hot (>25°C), suggest humidex
-  if (temp > 25) {
-    return 'humidex'
-  }
-
-  // If it's cold (<=5°C), suggest wind chill
-  if (temp <= 5) {
-    return 'windchill'
-  }
-
-  // Otherwise, apparent temperature is most relevant
+export function getSuggestedMetric(temperature: number): SortMetric {
+  if (temperature > 25) return 'humidex'
+  if (temperature <= 5) return 'windchill'
   return 'apparent'
 }

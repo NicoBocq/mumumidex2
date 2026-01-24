@@ -2,46 +2,40 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 
+import Icon from '../custom-ui/icon'
 import { Button } from '../ui/button'
 import UserMenu from '../user/menu'
 import { HeaderMetricSelector } from './header-metric-selector'
-import { ThemeToggle } from './theme-toggle'
+import { Logo } from './logo'
 
 export default async function Header() {
   const session = await auth.api.getSession({ headers: await headers() })
+
   return (
     <header className="w-full">
-      <nav
-        aria-label="Global"
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8"
-      >
-        <div className="shrink-0">
-          <Link href="/">
-            <h1 className="inline-flex items-center text-2xl font-extrabold hover-scale hover:text-primary">
-              mumu
-              <span className="text-primary">midex</span>
-            </h1>
-          </Link>
-        </div>
+      <nav aria-label="Global" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-2 sm:gap-4">
+          {/* Logo */}
+          <Logo className="shrink-0" />
 
-        <div className="hidden sm:flex flex-1 justify-center">
-          <HeaderMetricSelector />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="sm:hidden">
+          {/* Right section: Metric selector + User */}
+          <div className="flex shrink-0 items-center gap-2 overflow-visible">
             <HeaderMetricSelector />
+            {!session ? (
+              <Link href="/login">
+                <Button
+                  variant="default"
+                  size="icon"
+                  className="h-10 w-10 rounded-full transition-transform active:scale-95"
+                  aria-label="Se connecter"
+                >
+                  <Icon name="LogIn" size="sm" />
+                </Button>
+              </Link>
+            ) : (
+              <UserMenu session={session} />
+            )}
           </div>
-          <ThemeToggle />
-          {!session ? (
-            <Link href="/login">
-              <Button variant="outlinePrimary" size="sm" className="hover-scale">
-                Get Started
-              </Button>
-            </Link>
-          ) : (
-            <UserMenu session={session} />
-          )}
         </div>
       </nav>
     </header>

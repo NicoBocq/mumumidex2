@@ -20,7 +20,7 @@ export default function UserMenu({ session }: { session: Session }) {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="hover-scale rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+          className="rounded-full transition-transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
         >
           <Avatar>
             <AvatarImage src={session.user.image || ''} />

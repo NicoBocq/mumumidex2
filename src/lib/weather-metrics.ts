@@ -93,18 +93,18 @@ export function getMetricLevel(value: number, metric: SortMetric): number {
 export function getMetricClass(
   value: number,
   metric: SortMetric,
-  type: 'card' | 'text' | 'ring' | 'stroke' = 'card'
+  type: 'card' | 'text' | 'ring' | 'stroke' | 'bg' = 'card'
 ): string {
   const level = getMetricLevel(value, metric)
 
   const classes = {
     card: [
       '',
-      'border-humidex-1 shadow-[0_0_15px_-5px_hsl(var(--humidex-1))] hover:shadow-[0_0_20px_-3px_hsl(var(--humidex-1))]',
-      'border-humidex-2 shadow-[0_0_15px_-5px_hsl(var(--humidex-2))] hover:shadow-[0_0_20px_-3px_hsl(var(--humidex-2))]',
-      'border-humidex-3 shadow-[0_0_15px_-5px_hsl(var(--humidex-3))] hover:shadow-[0_0_20px_-3px_hsl(var(--humidex-3))]',
-      'border-humidex-4 shadow-[0_0_15px_-5px_hsl(var(--humidex-4))] hover:shadow-[0_0_20px_-3px_hsl(var(--humidex-4))]',
-      'border-humidex-5 shadow-[0_0_15px_-5px_hsl(var(--humidex-5))] hover:shadow-[0_0_20px_-3px_hsl(var(--humidex-5))]',
+      'border-humidex-1/30 hover:border-humidex-1 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-1))]',
+      'border-humidex-2/30 hover:border-humidex-2 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-2))]',
+      'border-humidex-3/30 hover:border-humidex-3 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-3))]',
+      'border-humidex-4/30 hover:border-humidex-4 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-4))]',
+      'border-humidex-5/30 hover:border-humidex-5 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-5))]',
     ],
     text: [
       '',
@@ -129,6 +129,14 @@ export function getMetricClass(
       'stroke-humidex-3',
       'stroke-humidex-4',
       'stroke-humidex-5',
+    ],
+    bg: [
+      '',
+      'bg-humidex-1/30',
+      'bg-humidex-2/30',
+      'bg-humidex-3/30',
+      'bg-humidex-4/30',
+      'bg-humidex-5/30',
     ],
   }
 
