@@ -98,14 +98,7 @@ export function getMetricClass(
   const level = getMetricLevel(value, metric)
 
   const classes = {
-    card: [
-      '',
-      'border-humidex-1/30 hover:border-humidex-1 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-1))]',
-      'border-humidex-2/30 hover:border-humidex-2 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-2))]',
-      'border-humidex-3/30 hover:border-humidex-3 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-3))]',
-      'border-humidex-4/30 hover:border-humidex-4 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-4))]',
-      'border-humidex-5/30 hover:border-humidex-5 hover:shadow-[0_0_30px_-5px_hsl(var(--humidex-5))]',
-    ],
+    card: ['', 'metric-card-1', 'metric-card-2', 'metric-card-3', 'metric-card-4', 'metric-card-5'],
     text: [
       '',
       'text-humidex-1',
@@ -116,11 +109,11 @@ export function getMetricClass(
     ],
     ring: [
       '',
-      'ring-2 ring-humidex-1 ring-offset-2 ring-offset-background',
-      'ring-2 ring-humidex-2 ring-offset-2 ring-offset-background',
-      'ring-2 ring-humidex-3 ring-offset-2 ring-offset-background',
-      'ring-2 ring-humidex-4 ring-offset-2 ring-offset-background',
-      'ring-2 ring-humidex-5 ring-offset-2 ring-offset-background',
+      'ring-4 ring-humidex-1 ring-offset-2 ring-offset-background',
+      'ring-4 ring-humidex-2 ring-offset-2 ring-offset-background',
+      'ring-4 ring-humidex-3 ring-offset-2 ring-offset-background',
+      'ring-4 ring-humidex-4 ring-offset-2 ring-offset-background',
+      'ring-4 ring-humidex-5 ring-offset-2 ring-offset-background',
     ],
     stroke: [
       '',

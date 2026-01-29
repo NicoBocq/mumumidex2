@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import { Rubik } from 'next/font/google'
+import { Suspense } from 'react'
 
 import './globals.css'
 
+import { AutoGeolocate } from '@/components/layout/auto-geolocate'
+import { AutoRefresh } from '@/components/layout/auto-refresh'
 import Background from '@/components/layout/background'
 import Footer from '@/components/layout/footer'
 import Header from '@/components/layout/header'
@@ -32,10 +35,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode
-  modal: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressContentEditableWarning suppressHydrationWarning>
@@ -47,18 +48,21 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LocalWeatherProvider>
-            <SortMetricProvider>
-              <Background />
-              <Header />
-              <main className="flex flex-auto flex-col">
-                <div className="mx-auto w-full max-w-5xl items-center justify-between px-6 lg:px-8">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-              {modal}
-              <Toaster />
-            </SortMetricProvider>
+            <AutoGeolocate />
+            <AutoRefresh />
+            <Suspense>
+              <SortMetricProvider>
+                <Background />
+                <Header />
+                <main className="flex flex-auto flex-col">
+                  <div className="mx-auto w-full max-w-5xl items-center justify-between px-6 lg:px-8">
+                    {children}
+                  </div>
+                </main>
+                <Footer />
+                <Toaster />
+              </SortMetricProvider>
+            </Suspense>
           </LocalWeatherProvider>
         </ThemeProvider>
       </body>

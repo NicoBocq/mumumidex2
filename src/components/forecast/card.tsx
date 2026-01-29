@@ -37,7 +37,6 @@ export default function ForecastCard({
 }: ForecastCardProps) {
   const displayValue = getDisplayValue(data.current, sortMetric)
   const cardClass = getMetricClass(displayValue, sortMetric, 'card')
-  const ringClass = getMetricClass(displayValue, sortMetric, 'ring')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
 
   const { execute: execUpdateCity, optimisticState } = useOptimisticAction(updateCity, {
@@ -90,28 +89,62 @@ export default function ForecastCard({
   }, [execDeleteCity, data.city.id])
 
   return (
-    <Card
-      id={id}
-      className={cn(
-        'group relative overflow-hidden border bg-white/10 backdrop-blur-md rounded-xl transition-all duration-500 active:scale-[0.98]',
-        'dark:bg-black/20',
-        cardClass,
-        optimisticState.data.city.pinned && ringClass,
-        className
-      )}
-    >
-      {/* Desktop hover actions */}
+    <div className="group flex items-stretch gap-2">
+      <Card
+        id={id}
+        className={cn(
+          'glass relative flex-1 overflow-hidden rounded-xl active:scale-[0.98]',
+          cardClass,
+          className
+        )}
+      >
+        {/* Pinned indicator */}
+        {optimisticState.data.city.pinned && (
+          <Icon
+            name="Bookmark"
+            size="xs"
+            className="absolute bottom-2 left-2 fill-current text-muted-foreground/30"
+          />
+        )}
+        {/* Metadata: country + time */}
+        <span className="absolute bottom-2 right-3 text-[10px] text-muted-foreground/70">
+          {data.city.country_code} • {formatDateTime(data.current.time)}
+        </span>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className={cn('text-2xl font-bold tracking-tighter md:text-3xl', textClass)}>
+            {data.city.name}
+          </CardTitle>
+          <div className="flex items-center gap-4">
+            <WeatherIcon
+              code={data.current.weather_code}
+              isDay={data.current.is_day}
+              className="h-8 w-8 md:h-10 md:w-10"
+            />
+            <div>
+              <span className={cn('text-4xl font-black tracking-tighter md:text-5xl', textClass)}>
+                {displayValue}
+                {sortMetric === 'apparent' && '°'}
+              </span>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <Kpi data={data} sortMetric={sortMetric} />
+        </CardContent>
+      </Card>
+
+      {/* Actions outside card */}
       {showActions && (
-        <div className="absolute right-2 top-2 z-10 hidden gap-1 opacity-0 transition-opacity group-hover:opacity-100 md:flex">
+        <div className="hidden w-0 flex-col justify-center gap-1 overflow-hidden opacity-0 transition-all duration-200 group-hover:w-10 group-hover:opacity-100 md:flex">
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background"
+            className="h-9 w-9 rounded-full bg-muted/80 backdrop-blur-sm hover:bg-muted"
             onClick={handlePin}
             title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
           >
             <Icon
-              name="Pin"
+              name="Bookmark"
               size="sm"
               className={cn(optimisticState.data.city.pinned && 'fill-current')}
             />
@@ -119,7 +152,7 @@ export default function ForecastCard({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 bg-background/80 text-destructive backdrop-blur-sm hover:bg-background hover:text-destructive"
+            className="h-9 w-9 rounded-full bg-muted/80 text-destructive backdrop-blur-sm hover:bg-destructive/10"
             onClick={handleDelete}
             title="Delete"
           >
@@ -127,33 +160,6 @@ export default function ForecastCard({
           </Button>
         </div>
       )}
-
-      {/* Metadata: country + time */}
-      <span className="absolute bottom-2 right-3 text-[10px] text-muted-foreground/70">
-        {data.city.country_code} • {formatDateTime(data.current.time)}
-      </span>
-
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className={cn('text-xl font-bold tracking-tight md:text-2xl', textClass)}>
-          {data.city.name}
-        </CardTitle>
-        <div className="flex items-center gap-4">
-          <WeatherIcon
-            code={data.current.weather_code}
-            isDay={data.current.is_day}
-            className="h-8 w-8 md:h-10 md:w-10"
-          />
-          <div>
-            <span className={cn('text-4xl font-black tracking-tighter md:text-5xl', textClass)}>
-              {displayValue}
-              {sortMetric === 'apparent' && '°'}
-            </span>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <Kpi data={data} sortMetric={sortMetric} />
-      </CardContent>
-    </Card>
+    </div>
   )
 }

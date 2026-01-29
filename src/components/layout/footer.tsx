@@ -5,14 +5,13 @@ import { useTheme } from 'next-themes'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import Icon from '../custom-ui/icon'
 import { Button, buttonVariants } from '../ui/button'
 
 export default function Footer() {
   const { resolvedTheme, setTheme } = useTheme()
 
   return (
-    <footer className="mt-auto w-full glass">
+    <footer className="mt-auto w-full">
       <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-4 py-2 lg:px-8">
         <p className="text-xs text-muted-foreground">
           Powered by{' '}
@@ -35,13 +34,12 @@ export default function Footer() {
             onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
             className="h-8 w-8 p-0"
           >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            {resolvedTheme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             <span className="sr-only">Toggle theme</span>
           </Button>
 
           <Link
-            href="https://github.com/nicobocq"
+            href="https://1h12.com"
             target="_blank"
             className={cn(
               buttonVariants({
@@ -51,8 +49,7 @@ export default function Footer() {
               'text-xs'
             )}
           >
-            <Icon name="Github" margin="right" className="h-3 w-3" />
-            nicobocq
+            1h12
           </Link>
         </div>
       </div>

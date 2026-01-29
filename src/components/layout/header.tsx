@@ -26,10 +26,10 @@ export default async function Header() {
                 <Button
                   variant="default"
                   size="icon"
-                  className="h-10 w-10 rounded-full transition-transform active:scale-95"
-                  aria-label="Se connecter"
+                  className="h-10 w-10 rounded-full transition-transform active:scale-[0.98]"
+                  aria-label="Sign in"
                 >
-                  <Icon name="LogIn" size="sm" />
+                  <Icon name="User" size="sm" />
                 </Button>
               </Link>
             ) : (

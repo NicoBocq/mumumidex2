@@ -85,7 +85,7 @@ export default function SwipeableCard({ data, sortMetric = 'apparent' }: Swipeab
   }, [close])
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden rounded-lg">
+    <div ref={containerRef} className="relative overflow-hidden rounded-xl">
       {/* Action buttons behind the card - only visible during swipe */}
       <div
         className="absolute inset-y-0 right-0 flex items-stretch transition-opacity duration-150"

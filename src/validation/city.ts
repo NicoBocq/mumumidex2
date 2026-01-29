@@ -16,7 +16,6 @@ export const apiCitySchema = z.object({
 
 export const citySchema = z.object({
   id: nanoidSchema,
-  hidden: z.boolean().optional(),
   pinned: z.boolean().optional(),
 })
 

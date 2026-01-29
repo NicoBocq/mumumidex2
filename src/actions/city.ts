@@ -3,7 +3,7 @@
 import { nanoidSchema } from '@/validation'
 import { apiCitySchema, citySchema, searchCitySchema } from '@/validation/city'
 import { Prisma } from '@prisma/client'
-import { unstable_cache, updateTag } from 'next/cache'
+import { cacheLife, cacheTag, revalidateTag } from 'next/cache'
 
 import prisma from '@/config/db'
 import { actionClient, authActionClient } from '@/lib/safe-action'
@@ -34,39 +34,31 @@ export const searchCity = actionClient
 
 type getUserCitiesType = {
   userId: string
-  hideHidden?: boolean
 }
 
-export async function getUserCities({ userId, hideHidden = false }: getUserCitiesType) {
-  const cachedUserCities = unstable_cache(
-    async () => {
-      try {
-        const cities = await prisma.city.findMany({
-          where: {
-            userId,
-            ...(hideHidden ? { hidden: false } : {}),
-          },
-          orderBy: {
-            name: 'asc',
-          },
-        })
-        return {
-          data: cities,
-        }
-      } catch (error) {
-        console.error(error)
-        return {
-          error: 'Error fetching cities',
-        }
-      }
-    },
-    [`user-cities-${userId}-${hideHidden}`],
-    {
-      tags: [`user-cities-${userId}`],
-      revalidate: 60 * 60 * 24 * 7,
+export async function getUserCities({ userId }: getUserCitiesType) {
+  'use cache'
+  cacheTag(`user-cities-${userId}`)
+  cacheLife('days')
+
+  try {
+    const cities = await prisma.city.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    })
+    return {
+      data: cities,
     }
-  )()
-  return cachedUserCities
+  } catch (error) {
+    console.error(error)
+    return {
+      error: 'Error fetching cities',
+    }
+  }
 }
 
 export const addCity = authActionClient
@@ -82,7 +74,7 @@ export const addCity = authActionClient
           userId,
         },
       })
-      updateTag(`user-cities-${userId}`)
+      revalidateTag(`user-cities-${userId}`, 'max')
       return {
         success: 'City added',
       }
@@ -111,7 +103,7 @@ export const updateCity = authActionClient
         },
         data: rest,
       })
-      updateTag(`user-cities-${userId}`)
+      revalidateTag(`user-cities-${userId}`, 'max')
       return {
         success: 'City updated',
       }
@@ -133,7 +125,7 @@ export const deleteCity = authActionClient
           id,
         },
       })
-      updateTag(`user-cities-${userId}`)
+      revalidateTag(`user-cities-${userId}`, 'max')
       return {
         success: 'City removed',
       }

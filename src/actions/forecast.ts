@@ -3,7 +3,6 @@ import type { APIForecast, Forecast } from '@/types/forecast'
 
 import { auth } from '@/lib/auth'
 import type { City } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 
 import { DEFAULT_LOCATIONS } from '@/config/city'
@@ -23,7 +22,6 @@ async function returnCities(): Promise<City[]> {
   }
   const { data: cities } = await getUserCities({
     userId: session.user.id,
-    hideHidden: true,
   })
   return cities || []
 }
@@ -77,8 +75,4 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       error: 'Error fetching forecast',
     }
   }
-}
-
-export async function reload() {
-  revalidatePath('/')
 }

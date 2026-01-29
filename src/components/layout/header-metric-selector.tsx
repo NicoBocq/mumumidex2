@@ -104,8 +104,6 @@ export function HeaderMetricSelector() {
     [isExpanded, sortMetric, setSortMetric]
   )
 
-  const showLocationButton = permission !== 'granted'
-
   // Reorder metrics to put active one first
   const orderedMetrics = [
     METRICS.find((m) => m.key === sortMetric)!,
@@ -174,40 +172,6 @@ export function HeaderMetricSelector() {
           </button>
         )
       })}
-
-      {showLocationButton && (
-        <>
-          <div
-            className={cn(
-              'h-6 w-px bg-foreground/10 transition-all duration-200',
-              isExpanded ? 'mx-1 opacity-100' : 'mx-0 w-0 opacity-0'
-            )}
-          />
-          <button
-            type="button"
-            onClick={requestLocation}
-            disabled={loading}
-            className={cn(
-              'flex h-10 items-center justify-center rounded-full transition-all duration-200 ease-out',
-              'bg-white/10 text-foreground/70 hover:bg-white/20 hover:text-foreground',
-              loading && 'animate-pulse',
-              !isExpanded && 'w-0 opacity-0 overflow-hidden',
-              isExpanded && 'w-10 opacity-100 ml-1'
-            )}
-            style={{
-              transitionDelay: isExpanded ? '100ms' : '0ms',
-            }}
-            title={permission === 'denied' ? 'Localisation refusée' : 'Activer la géolocalisation'}
-            aria-label="Géolocalisation"
-          >
-            <Icon
-              name={permission === 'denied' ? 'MapPinOff' : 'MapPin'}
-              size="sm"
-              className={permission === 'denied' ? 'opacity-50' : ''}
-            />
-          </button>
-        </>
-      )}
     </div>
   )
 }

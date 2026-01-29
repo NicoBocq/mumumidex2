@@ -1,6 +1,6 @@
 import type { City } from '@prisma/client'
 
-export type SearchCity = Omit<City, 'userId' | 'id' | 'hidden'> & {
+export type SearchCity = Omit<City, 'userId' | 'id'> & {
   id: number
   admin1: string
   admin2: string

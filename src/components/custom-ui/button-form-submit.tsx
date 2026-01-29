@@ -59,7 +59,7 @@ export function ButtonFormSubmit({
           <Icon name="LoaderCircle" className="animate-spin" aria-hidden="true" />
         </div>
       )}
-      <span className="sr-only">{isLoading ? 'Submiting' : 'Submit'}</span>
+      <span className="sr-only">{isLoading ? 'Submitting' : 'Submit'}</span>
     </Button>
   )
 }
