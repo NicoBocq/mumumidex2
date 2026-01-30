@@ -3,6 +3,7 @@
 import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 // Thèmes séparés light/dark pour éviter les problèmes de détection Tailwind
 // Dark mode: fond teinté + blobs subtils pour effet aurora
@@ -53,6 +54,13 @@ function getWeatherTheme(temperature: number | undefined): ThemeKey {
 export default function Background() {
   const { weather } = useLocalWeatherContext()
   const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null // Avoid hydration mismatch by waiting for client
 
   const themeKey = getWeatherTheme(weather?.temperature)
   const weatherTheme = WEATHER_THEMES[themeKey]

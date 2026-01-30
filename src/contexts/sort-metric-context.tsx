@@ -31,19 +31,27 @@ export function SortMetricProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams()
 
   const [sortMetric, setSortMetricState] = useState<SortMetric>(() => {
-    // Priority: URL param > localStorage > default
+    // Priority: URL param > default (localStorage must be checked in effect to avoid hydration mismatch)
     const urlParam = searchParams.get('sort')
     if (urlParam && isValidMetric(urlParam)) {
       return urlParam as SortMetric
     }
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored && isValidMetric(stored)) {
-        return stored as SortMetric
-      }
-    }
     return DEFAULT_METRIC
   })
+
+  // Sync from localStorage on mount (client-only)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    // If URL param exists, it takes precedence (handled in initializer + sync effect below)
+    const urlParam = searchParams.get('sort')
+    if (urlParam && isValidMetric(urlParam)) return
+
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored && isValidMetric(stored)) {
+      setSortMetricState(stored as SortMetric)
+    }
+  }, [searchParams])
 
   // Sync from URL on change
   useEffect(() => {

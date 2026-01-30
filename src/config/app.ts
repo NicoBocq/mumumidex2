@@ -1,8 +1,8 @@
 export const app = {
-  name: 'Mumumidex: who is the hottest?',
+  name: 'mmDex: who is the hottest?',
   description: 'Your cities ranked by humidex',
-  url: 'https://mumumidex.vercel.app',
-  shortName: 'MumuMidex',
+  url: 'https://mmdex.1h12.com',
+  shortName: 'mmDex',
   tagline: 'Who is the hottest?',
   login: {
     title: 'Login',
