@@ -13,6 +13,7 @@ export type LocalWeather = {
   windChill: number
   isDay: boolean
   weatherCode: number
+  locationName?: string
 }
 
 type LocalWeatherState = {
@@ -61,6 +62,8 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
     // Check cache first
     const cached = getStoredWeather()
     if (cached) {
+      // Very basic cache check - implies same location if invoked
+      // For more robustness, could store lat/lon in cache and compare distance
       setState((prev) => {
         if (prev.weather && prev.weather.temperature === cached.temperature) return prev
         return { weather: cached, loading: false, error: null }
@@ -70,7 +73,7 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
 
     setState((prev) => ({ ...prev, loading: true, error: null }))
 
-    const params = new URLSearchParams({
+    const weatherParams = new URLSearchParams({
       latitude: latitude.toString(),
       longitude: longitude.toString(),
       current:
@@ -78,27 +81,55 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
       timezone: 'auto',
     })
 
-    fetch(`https://api.open-meteo.com/v1/forecast?${params}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.current) {
+    const geocodingParams = new URLSearchParams({
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      localityLanguage: 'fr',
+    })
+
+    Promise.allSettled([
+      fetch(`https://api.open-meteo.com/v1/forecast?${weatherParams}`).then((res) => res.json()),
+      fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?${geocodingParams}`).then(
+        (res) => res.json()
+      ),
+    ])
+      .then(([weatherResult, geoResult]) => {
+        // Handle weather (critical)
+        if (weatherResult.status === 'rejected' || !weatherResult.value.current) {
           throw new Error('No weather data')
         }
+        const weatherData = weatherResult.value
+
+        // Handle location (optional)
+        const locationName =
+          geoResult.status === 'fulfilled'
+            ? geoResult.value.city || geoResult.value.locality
+            : undefined
+
         const weather: LocalWeather = {
-          temperature: data.current.temperature_2m,
-          apparentTemperature: data.current.apparent_temperature,
-          humidity: data.current.relative_humidity_2m,
-          windSpeed: data.current.wind_speed_10m,
-          dewPoint: data.current.dew_point_2m,
-          humidex: calculateHumidex(data.current.temperature_2m, data.current.dew_point_2m),
-          windChill: calculateWindChill(data.current.temperature_2m, data.current.wind_speed_10m),
-          isDay: data.current.is_day === 1,
-          weatherCode: data.current.weather_code,
+          temperature: weatherData.current.temperature_2m,
+          apparentTemperature: weatherData.current.apparent_temperature,
+          humidity: weatherData.current.relative_humidity_2m,
+          windSpeed: weatherData.current.wind_speed_10m,
+          dewPoint: weatherData.current.dew_point_2m,
+          humidex: calculateHumidex(
+            weatherData.current.temperature_2m,
+            weatherData.current.dew_point_2m
+          ),
+          windChill: calculateWindChill(
+            weatherData.current.temperature_2m,
+            weatherData.current.wind_speed_10m
+          ),
+          isDay: weatherData.current.is_day === 1,
+          weatherCode: weatherData.current.weather_code,
+          locationName,
         }
+        console.log(weather)
         storeWeather(weather)
         setState({ weather, loading: false, error: null })
       })
       .catch((err) => {
+        console.error('Weather fetch error:', err)
         setState({ weather: null, loading: false, error: err.message })
       })
   }, [latitude, longitude])

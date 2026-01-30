@@ -46,9 +46,7 @@ export default function ForecastKpi({
               {Math.round(data.current.apparent_temperature)}°
             </span>
           </div>
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-            Température
-          </div>
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Temp.</div>
         </div>
       </div>
 
@@ -76,7 +74,7 @@ export default function ForecastKpi({
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.relative_humidity_2m}%</div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-            Humidité
+            Humidity
           </div>
         </div>
       </div>
@@ -86,7 +84,7 @@ export default function ForecastKpi({
         <Gauge value={data.current.cloud_cover} className="scale-90" colorClass={textClass} />
         <div className="text-center">
           <div className="text-sm font-bold leading-none">{data.current.cloud_cover}%</div>
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Nuages</div>
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Clouds</div>
         </div>
       </div>
     </div>
