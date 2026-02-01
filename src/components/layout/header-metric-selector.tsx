@@ -61,6 +61,12 @@ export function HeaderMetricSelector() {
 
   const activeValue = getValue(sortMetric)
 
+  // Sync mounted state to avoid hydration mismatch for location name
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   /* Removed blocking states per user request */
 
   return (
@@ -150,7 +156,7 @@ export function HeaderMetricSelector() {
               {METRICS.find((m) => m.key === sortMetric) && (
                 <Icon name={METRICS.find((m) => m.key === sortMetric)!.icon} size="sm" />
               )}
-              {weather?.locationName && (
+              {mounted && weather?.locationName && (
                 <span className="text-sm font-semibold border-r border-white/20 pr-2 mr-2 max-w-[80px] sm:max-w-[150px] truncate">
                   {weather.locationName}
                 </span>
