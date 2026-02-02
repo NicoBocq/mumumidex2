@@ -1,13 +1,13 @@
-import { getForecast } from '@/actions/forecast'
-import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import React from 'react'
-
+import { deleteCity, updateCity } from '@/actions/city'
+import { getForecast } from '@/actions/forecast'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
 import { SkeletonForecastCard } from '@/components/forecast/card'
 import ForecastListClient from '@/components/forecast/forecast-list'
+import { auth } from '@/lib/auth'
 
 function SkeletonForecastList() {
   return (
@@ -32,7 +32,15 @@ async function ForecastList() {
     )
   }
 
-  return <ForecastListClient data={data} isAuthenticated={!!session} showAddCard={!!session} />
+  return (
+    <ForecastListClient
+      data={data}
+      isAuthenticated={!!session}
+      showAddCard={!!session}
+      updateCityAction={updateCity}
+      deleteCityAction={deleteCity}
+    />
+  )
 }
 
 export default async function Page() {

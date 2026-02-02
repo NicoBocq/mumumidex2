@@ -1,7 +1,7 @@
 'use client'
 
-import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 import { useEffect, useRef } from 'react'
+import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 
 export function AutoGeolocate() {
   const { requestLocation, permission } = useLocalWeatherContext()

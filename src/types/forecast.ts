@@ -13,6 +13,8 @@ export type Current = {
   precipitation: number
   cloud_cover: number
   weather_code: number
+  uv_index: number
+  european_aqi: number
   humidex: number
   windChill: number
 }
@@ -30,6 +32,8 @@ export type CurrentUnits = {
   precipitation: string
   cloud_cover: string
   weather_code: string
+  uv_index: string
+  european_aqi: string
 }
 
 export type Hourly = {
@@ -44,6 +48,22 @@ export type HourlyUnits = {
   precipitation: string
 }
 
+export type Daily = {
+  time: string[]
+  temperature_2m_max: number[]
+  temperature_2m_min: number[]
+  precipitation_probability_max: number[]
+  weather_code: number[]
+}
+
+export type DailyUnits = {
+  time: string
+  temperature_2m_max: string
+  temperature_2m_min: string
+  precipitation_probability_max: string
+  weather_code: string
+}
+
 export type Forecast = {
   latitude: number
   longitude: number
@@ -53,6 +73,8 @@ export type Forecast = {
   current_units: CurrentUnits
   hourly: Hourly
   hourly_units: HourlyUnits
+  daily: Daily
+  daily_units: DailyUnits
   city: City
 }
 

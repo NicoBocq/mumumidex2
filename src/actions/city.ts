@@ -1,12 +1,11 @@
 'use server'
 
-import { nanoidSchema } from '@/validation'
-import { apiCitySchema, citySchema, searchCitySchema } from '@/validation/city'
 import { Prisma } from '@prisma/client'
 import { cacheLife, cacheTag, revalidateTag } from 'next/cache'
-
 import prisma from '@/config/db'
 import { actionClient, authActionClient } from '@/lib/safe-action'
+import { nanoidSchema } from '@/validation'
+import { apiCitySchema, citySchema, searchCitySchema } from '@/validation/city'
 
 export const searchCity = actionClient
   .metadata({ actionName: 'searchCity' })

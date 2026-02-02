@@ -1,64 +1,37 @@
 'use client'
 
-import type { SortMetric } from '@/lib/weather-metrics'
-import type { Forecast } from '@/types/forecast'
-
-import { deleteCity, updateCity } from '@/actions/city'
+import * as React from 'react'
+import type { deleteCity, updateCity } from '@/actions/city'
 import Icon from '@/components/custom-ui/icon'
 import { Button } from '@/components/ui/button'
+import { useCityActions } from '@/hooks/use-city-actions'
 import { useSwipe } from '@/hooks/use-swipe'
-import { useOptimisticAction } from 'next-safe-action/hooks'
-import * as React from 'react'
-import { toast } from 'sonner'
+import type { SortMetric } from '@/lib/weather-metrics'
+import type { Forecast } from '@/types/forecast'
 import ForecastCard from './card'
 
 type SwipeableCardProps = {
   data: Forecast
   sortMetric?: SortMetric
+  updateCityAction: typeof updateCity
+  deleteCityAction: typeof deleteCity
 }
 
 const ACTION_WIDTH = 120
 
-export default function SwipeableCard({ data, sortMetric = 'apparent' }: SwipeableCardProps) {
+export default function SwipeableCard({
+  data,
+  sortMetric = 'apparent',
+  updateCityAction,
+  deleteCityAction,
+}: SwipeableCardProps) {
   const { translateX, handlers, close } = useSwipe({ actionWidth: ACTION_WIDTH })
   const containerRef = React.useRef<HTMLDivElement>(null)
 
-  const { execute: execUpdateCity, optimisticState } = useOptimisticAction(updateCity, {
-    currentState: { data },
-    updateFn: (state, newState) => ({
-      data: {
-        ...state.data,
-        city: {
-          ...state.data.city,
-          ...newState,
-        },
-      },
-    }),
-    onSuccess: ({ data }) => {
-      if (data?.error) {
-        toast.error(data.error)
-      } else if (data?.success) {
-        toast.success(data.success)
-      }
-    },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
-  })
-
-  const { execute: execDeleteCity } = useOptimisticAction(deleteCity, {
-    currentState: { data },
-    updateFn: (state) => state,
-    onSuccess: ({ data }) => {
-      if (data?.error) {
-        toast.error(data.error)
-      } else if (data?.success) {
-        toast.success(data.success)
-      }
-    },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
+  const { execUpdateCity, execDeleteCity, optimisticData } = useCityActions({
+    data,
+    updateCityAction,
+    deleteCityAction,
   })
 
   const handlePin = React.useCallback(() => {
@@ -101,7 +74,7 @@ export default function SwipeableCard({ data, sortMetric = 'apparent' }: Swipeab
           onClick={handlePin}
         >
           <Icon name="Pin" size="sm" />
-          <span className="text-xs">{optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}</span>
+          <span className="text-xs">{optimisticData.city.pinned ? 'Unpin' : 'Pin'}</span>
         </Button>
         <Button
           variant="ghost"
@@ -119,7 +92,13 @@ export default function SwipeableCard({ data, sortMetric = 'apparent' }: Swipeab
         className="relative transition-transform duration-200 ease-out"
         style={{ transform: `translateX(-${translateX}px)` }}
       >
-        <ForecastCard data={data} id={`card-${data.city.id}`} sortMetric={sortMetric} />
+        <ForecastCard
+          data={data}
+          id={`card-${data.city.id}`}
+          sortMetric={sortMetric}
+          updateCityAction={updateCityAction}
+          deleteCityAction={deleteCityAction}
+        />
       </div>
     </div>
   )

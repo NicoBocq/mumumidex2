@@ -1,20 +1,20 @@
 'use client'
 
-import type { SortMetric } from '@/lib/weather-metrics'
-import type { Forecast } from '@/types/forecast'
+import * as React from 'react'
 
-import { deleteCity, updateCity } from '@/actions/city'
+import type { deleteCity, updateCity } from '@/actions/city'
 import Icon from '@/components/custom-ui/icon'
 import { Button } from '@/components/ui/button'
+import { useCityActions } from '@/hooks/use-city-actions'
 import { cn, formatDateTime } from '@/lib/utils'
+import type { SortMetric } from '@/lib/weather-metrics'
 import { getDisplayValue, getMetricClass } from '@/lib/weather-metrics'
-import { useOptimisticAction } from 'next-safe-action/hooks'
-import * as React from 'react'
-import { toast } from 'sonner'
+import type { Forecast } from '@/types/forecast'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
 import WeatherIcon from '../weather/weather-icon'
 import Kpi from './kpi'
+import WeeklyForecast from './weekly-forecast'
 
 export function SkeletonForecastCard() {
   return <Skeleton className="h-60" />
@@ -26,6 +26,8 @@ type ForecastCardProps = {
   className?: string
   showActions?: boolean
   sortMetric?: SortMetric
+  updateCityAction: typeof updateCity
+  deleteCityAction: typeof deleteCity
 }
 
 export default function ForecastCard({
@@ -34,82 +36,69 @@ export default function ForecastCard({
   showActions = false,
   id,
   sortMetric = 'apparent',
+  updateCityAction,
+  deleteCityAction,
 }: ForecastCardProps) {
+  const [isExpanded, setIsExpanded] = React.useState(false)
+
   const displayValue = getDisplayValue(data.current, sortMetric)
   const cardClass = getMetricClass(displayValue, sortMetric, 'card')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
 
-  const { execute: execUpdateCity, optimisticState } = useOptimisticAction(updateCity, {
-    currentState: { data },
-    updateFn: (state, newState) => ({
-      data: {
-        ...state.data,
-        city: {
-          ...state.data.city,
-          ...newState,
-        },
-      },
-    }),
-    onSuccess: ({ data }) => {
-      if (data?.error) {
-        toast.error(data.error)
-      } else if (data?.success) {
-        toast.success(data.success)
-      }
-    },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
+  const { execUpdateCity, execDeleteCity, optimisticData } = useCityActions({
+    data,
+    updateCityAction,
+    deleteCityAction,
   })
 
-  const { execute: execDeleteCity } = useOptimisticAction(deleteCity, {
-    currentState: { data },
-    updateFn: (state) => state,
-    onSuccess: ({ data }) => {
-      if (data?.error) {
-        toast.error(data.error)
-      } else if (data?.success) {
-        toast.success(data.success)
-      }
+  const handlePin = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      execUpdateCity({
+        id: data.city.id,
+        pinned: !data.city.pinned,
+      })
     },
-    onError: () => {
-      toast.error('Something went wrong')
+    [execUpdateCity, data.city.id, data.city.pinned]
+  )
+
+  const handleDelete = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      execDeleteCity(data.city.id)
     },
-  })
+    [execDeleteCity, data.city.id]
+  )
 
-  const handlePin = React.useCallback(() => {
-    execUpdateCity({
-      id: data.city.id,
-      pinned: !data.city.pinned,
-    })
-  }, [execUpdateCity, data.city.id, data.city.pinned])
-
-  const handleDelete = React.useCallback(() => {
-    execDeleteCity(data.city.id)
-  }, [execDeleteCity, data.city.id])
+  const toggleExpand = React.useCallback(() => {
+    setIsExpanded((prev) => !prev)
+  }, [])
 
   return (
-    <div className="group flex items-stretch gap-2">
+    <div className="group flex items-start gap-2">
       <Card
         id={id}
+        onClick={toggleExpand}
         className={cn(
-          'glass relative flex-1 overflow-hidden rounded-xl active:scale-[0.98]',
+          'glass relative flex-1 cursor-pointer overflow-hidden rounded-xl transition-all hover:ring-2 hover:ring-primary/20 bg-background/60',
           cardClass,
           className
         )}
       >
         {/* Pinned indicator */}
-        {optimisticState.data.city.pinned && (
+        {optimisticData.city.pinned && (
           <Icon
             name="Bookmark"
             size="xs"
             className="absolute bottom-2 left-2 fill-current text-muted-foreground/30"
           />
         )}
+
         {/* Metadata: country + time */}
-        <span className="absolute bottom-2 right-3 text-[10px] text-muted-foreground/70">
+        <span className="absolute bottom-3 right-3 text-[10px] text-muted-foreground/70">
           {data.city.country_code} • {formatDateTime(data.current.time)}
         </span>
+
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className={cn('text-2xl font-bold tracking-tighter md:text-3xl', textClass)}>
             {data.city.name}
@@ -128,25 +117,52 @@ export default function ForecastCard({
             </div>
           </div>
         </CardHeader>
+
         <CardContent className="pt-0">
-          <Kpi data={data} sortMetric={sortMetric} />
+          <div className="mx-1 px-4">
+            <Kpi data={data} sortMetric={sortMetric} mode="minimal" />
+          </div>
+
+          <div
+            className={cn(
+              'grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+              isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+            )}
+          >
+            <div className="overflow-hidden">
+              <div className="m-1 rounded-xl p-4 bg-black/5">
+                <Kpi data={data} sortMetric={sortMetric} mode="extended" />
+                <div className="my-4 h-px w-full bg-border/50" />
+                <WeeklyForecast data={data.daily} />
+              </div>
+            </div>
+          </div>
         </CardContent>
+
+        {/* Expand Handle */}
+        <div className="flex w-full justify-center pb-2 pt-1 text-muted-foreground/20 transition-colors group-hover:text-muted-foreground/50">
+          <Icon
+            name="ChevronDown"
+            size="xs"
+            className={cn('transition-transform duration-300', isExpanded && 'rotate-180')}
+          />
+        </div>
       </Card>
 
       {/* Actions outside card */}
       {showActions && (
-        <div className="hidden w-0 flex-col justify-center gap-1 overflow-hidden opacity-0 transition-all duration-200 group-hover:w-10 group-hover:opacity-100 md:flex">
+        <div className="hidden w-0 flex-col justify-center gap-1 overflow-hidden opacity-0 transition-all duration-200 group-hover:w-10 group-hover:opacity-100 md:flex sticky top-4">
           <Button
             variant="ghost"
             size="icon"
             className="h-9 w-9 rounded-full bg-muted/80 backdrop-blur-sm hover:bg-muted"
             onClick={handlePin}
-            title={optimisticState.data.city.pinned ? 'Unpin' : 'Pin'}
+            title={optimisticData.city.pinned ? 'Unpin' : 'Pin'}
           >
             <Icon
               name="Bookmark"
               size="sm"
-              className={cn(optimisticState.data.city.pinned && 'fill-current')}
+              className={cn(optimisticData.city.pinned && 'fill-current')}
             />
           </Button>
           <Button

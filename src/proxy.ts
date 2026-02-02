@@ -1,7 +1,6 @@
+import { getSessionCookie } from 'better-auth/cookies'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-
-import { getSessionCookie } from 'better-auth/cookies'
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname

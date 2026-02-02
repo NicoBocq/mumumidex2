@@ -1,6 +1,6 @@
-import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+import { auth } from '@/lib/auth'
 
 import Icon from '../custom-ui/icon'
 import { Button } from '../ui/button'

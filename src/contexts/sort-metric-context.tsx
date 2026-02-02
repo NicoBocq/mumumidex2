@@ -1,8 +1,8 @@
 'use client'
 
-import type { SortMetric } from '@/lib/weather-metrics'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { type ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import type { SortMetric } from '@/lib/weather-metrics'
 
 const STORAGE_KEY = 'mumumidex-sort-preference'
 const USER_CHOICE_KEY = 'mumumidex-sort-user-choice'

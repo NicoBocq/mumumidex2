@@ -1,14 +1,10 @@
 'use client'
 
-import type { SearchCity } from '@/types/city'
-
-import { addCity, searchCity } from '@/actions/city'
-import { cn } from '@/lib/utils'
 import { useAction } from 'next-safe-action/hooks'
 import React from 'react'
 import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
-
+import { addCity, searchCity } from '@/actions/city'
 import {
   Drawer,
   DrawerContent,
@@ -16,6 +12,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { cn } from '@/lib/utils'
+import type { SearchCity } from '@/types/city'
 
 import Icon from '../custom-ui/icon'
 

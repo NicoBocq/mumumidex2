@@ -1,7 +1,7 @@
 'use client'
 
-import { type SortMetric, calculateHumidex, calculateWindChill } from '@/lib/weather-metrics'
 import { useEffect, useState } from 'react'
+import { calculateHumidex, calculateWindChill, type SortMetric } from '@/lib/weather-metrics'
 
 export type LocalWeather = {
   temperature: number

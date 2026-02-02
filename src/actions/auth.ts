@@ -1,6 +1,5 @@
-import { type LinkOAuthAccountInput, linkOAuthAccountSchema } from '@/validation/auth'
-
 import prisma from '@/config/db'
+import { type LinkOAuthAccountInput, linkOAuthAccountSchema } from '@/validation/auth'
 
 // export const linkOAuthAccount = actionClient
 // .schema(linkOAuthAccountSchema)

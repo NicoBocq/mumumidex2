@@ -1,7 +1,7 @@
-import { auth } from '@/lib/auth'
-import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action'
 import { headers } from 'next/headers'
+import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action'
 import { z } from 'zod'
+import { auth } from '@/lib/auth'
 
 class ActionError extends Error {}
 

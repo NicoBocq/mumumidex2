@@ -1,13 +1,13 @@
 'use client'
 
-import { useLocalWeatherContext } from '@/contexts/local-weather-context'
-import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { useLocalWeatherContext } from '@/contexts/local-weather-context'
+import { cn } from '@/lib/utils'
 
 // Thèmes séparés light/dark pour éviter les problèmes de détection Tailwind
 // Dark mode: fond teinté + blobs subtils pour effet aurora
-const WEATHER_THEMES = {
+export const WEATHER_THEMES = {
   extreme: {
     light: { bg: 'bg-red-50', blobs: ['bg-red-200', 'bg-orange-200', 'bg-rose-200'] },
     dark: { bg: 'bg-red-950', blobs: ['bg-red-500/15', 'bg-orange-500/15', 'bg-rose-500/15'] },

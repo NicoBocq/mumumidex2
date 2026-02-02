@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { type LucideProps, icons } from 'lucide-react'
+import { icons, type LucideProps } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 

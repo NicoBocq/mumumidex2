@@ -1,13 +1,13 @@
 'use client'
 
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import Icon from '@/components/custom-ui/icon'
 import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 import { useSortMetricContext } from '@/contexts/sort-metric-context'
 import { getSuggestedMetric } from '@/hooks/use-local-weather'
 import { cn } from '@/lib/utils'
 import type { SortMetric } from '@/lib/weather-metrics'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
 
 const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind' }[] = [
   { key: 'apparent', icon: 'Thermometer' },
@@ -161,7 +161,7 @@ export function HeaderMetricSelector() {
                   {weather.locationName}
                 </span>
               )}
-              {activeValue !== null && (
+              {activeValue !== null && mounted && (
                 <span className="text-sm font-bold min-w-[1.5em] text-center">{activeValue}°</span>
               )}
             </motion.div>

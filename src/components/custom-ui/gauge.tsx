@@ -47,7 +47,12 @@ export default function Gauge({
           className={cn('transition-all duration-1000 ease-out', colorClass)}
         />
       </svg>
-      {icon && <div className="absolute text-foreground/70">{icon}</div>}
+      {/* Icon placed absolutely in center, allowing custom styling via the icon prop */}
+      {icon && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {icon}
+        </div>
+      )}
     </div>
   )
 }

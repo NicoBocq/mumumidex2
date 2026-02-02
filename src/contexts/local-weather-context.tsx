@@ -1,8 +1,8 @@
 'use client'
 
+import { createContext, type ReactNode, useContext } from 'react'
 import { useGeolocation } from '@/hooks/use-geolocation'
 import { type LocalWeather, useLocalWeather } from '@/hooks/use-local-weather'
-import { type ReactNode, createContext, useContext } from 'react'
 
 type LocalWeatherContextValue = {
   weather: LocalWeather | null
