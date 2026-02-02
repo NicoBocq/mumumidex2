@@ -19,9 +19,15 @@ function SkeletonForecastList() {
   )
 }
 
-async function ForecastList() {
+async function ForecastList(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const { data, error } = await getForecast()
   const session = await auth.api.getSession({ headers: await headers() })
+
+  // Await searchParams for Next.js 15+ compatibility
+  const params = await props.searchParams
+  const sortMetric = (params?.sort as 'apparent' | 'humidex' | 'windchill') || 'apparent'
 
   if (error) {
     return (
@@ -39,14 +45,17 @@ async function ForecastList() {
       showAddCard={!!session}
       updateCityAction={updateCity}
       deleteCityAction={deleteCity}
+      sortMetric={sortMetric}
     />
   )
 }
 
-export default async function Page() {
+export default async function Page(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
-      <ForecastList />
+      <ForecastList {...props} />
     </React.Suspense>
   )
 }

@@ -11,6 +11,7 @@ type ForecastListProps = {
   showAddCard?: boolean
   updateCityAction: typeof updateCity
   deleteCityAction: typeof deleteCity
+  sortMetric?: 'apparent' | 'humidex' | 'windchill'
 }
 
 export default function ForecastList({
@@ -19,11 +20,11 @@ export default function ForecastList({
   showAddCard = false,
   updateCityAction,
   deleteCityAction,
+  sortMetric = 'apparent',
 }: ForecastListProps) {
-  // Server-side sort (default to 'apparent' as we don't have client context access here easily without cookies)
-  // If strict server component, we accept the data order or sort by default.
+  // Server-side sort based on prop
   const sortedData = [...data].sort(
-    (a, b) => getSortValue(b.current, 'apparent') - getSortValue(a.current, 'apparent')
+    (a, b) => getSortValue(b.current, sortMetric) - getSortValue(a.current, sortMetric)
   )
 
   const pinnedCities = sortedData.filter((item) => item.city.pinned)

@@ -31,9 +31,9 @@ export const METRIC_THRESHOLDS: Record<SortMetric, MetricThresholds> = {
 }
 
 export const METRIC_LABELS: Record<SortMetric, string> = {
-  apparent: 'Ressenti',
+  apparent: 'Feels like',
   humidex: 'Humidex',
-  windchill: 'Wind Chill',
+  windchill: 'Wind chill',
 }
 
 /**
@@ -97,6 +97,53 @@ export function getMetricClass(
 ): string {
   const level = getMetricLevel(value, metric)
 
+  if (metric === 'windchill') {
+    const classes = {
+      card: [
+        '',
+        'windchill-card-1',
+        'windchill-card-2',
+        'windchill-card-3',
+        'windchill-card-4',
+        'windchill-card-5',
+      ],
+      text: [
+        '',
+        'text-windchill-1',
+        'text-windchill-2',
+        'text-windchill-3',
+        'text-windchill-4',
+        'text-windchill-5',
+      ],
+      ring: [
+        '',
+        'ring-4 ring-windchill-1 ring-offset-2 ring-offset-background',
+        'ring-4 ring-windchill-2 ring-offset-2 ring-offset-background',
+        'ring-4 ring-windchill-3 ring-offset-2 ring-offset-background',
+        'ring-4 ring-windchill-4 ring-offset-2 ring-offset-background',
+        'ring-4 ring-windchill-5 ring-offset-2 ring-offset-background',
+      ],
+      stroke: [
+        '',
+        'stroke-windchill-1',
+        'stroke-windchill-2',
+        'stroke-windchill-3',
+        'stroke-windchill-4',
+        'stroke-windchill-5',
+      ],
+      bg: [
+        '',
+        'bg-windchill-1/30',
+        'bg-windchill-2/30',
+        'bg-windchill-3/30',
+        'bg-windchill-4/30',
+        'bg-windchill-5/30',
+      ],
+    }
+    return classes[type][level]
+  }
+
+  // Default (Apparent/Humidex)
   const classes = {
     card: ['', 'metric-card-1', 'metric-card-2', 'metric-card-3', 'metric-card-4', 'metric-card-5'],
     text: [

@@ -1,13 +1,12 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import Icon from '@/components/custom-ui/icon'
 import { useLocalWeatherContext } from '@/contexts/local-weather-context'
-import { useSortMetricContext } from '@/contexts/sort-metric-context'
-import { getSuggestedMetric } from '@/hooks/use-local-weather'
 import { cn } from '@/lib/utils'
-import type { SortMetric } from '@/lib/weather-metrics'
+import { METRIC_LABELS, type SortMetric } from '@/lib/weather-metrics'
 
 const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind' }[] = [
   { key: 'apparent', icon: 'Thermometer' },
@@ -15,21 +14,22 @@ const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind' }[] 
   { key: 'windchill', icon: 'Wind' },
 ]
 
-// Removed METRIC_COLORS as we are using a unified glass style
-
 export function HeaderMetricSelector() {
-  const { sortMetric, setSortMetric, setAutoMetric } = useSortMetricContext()
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { weather } = useLocalWeatherContext()
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Auto-select metric based on local weather
-  const temperature = weather?.temperature
-  useEffect(() => {
-    if (temperature !== undefined) {
-      setAutoMetric(getSuggestedMetric(temperature))
-    }
-  }, [temperature, setAutoMetric])
+  // Get active metric from URL or default to 'apparent'
+  const sortMetric = (searchParams.get('sort') as SortMetric) || 'apparent'
+
+  const setSortMetric = (metric: SortMetric) => {
+    const params = new URLSearchParams(searchParams)
+    params.set('sort', metric)
+    router.replace(`${pathname}?${params.toString()}`)
+  }
 
   // Handle click outside
   useEffect(() => {
@@ -74,7 +74,7 @@ export function HeaderMetricSelector() {
       <motion.div
         layout
         className={cn(
-          'flex items-center whitespace-nowrap',
+          'flex items-center whitespace-nowrap overflow-hidden',
           'bg-background/80 backdrop-blur-md border border-border/50 shadow-sm',
           'rounded-full cursor-pointer select-none',
           'hover:bg-accent/50 transition-colors duration-200',
@@ -83,11 +83,10 @@ export function HeaderMetricSelector() {
         )}
         initial={false}
         animate={{
-          width: isOpen ? 'auto' : 'auto',
           gap: isOpen ? '4px' : '0px',
           padding: isOpen ? '4px' : '0px',
         }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         onClick={() => !isOpen && setIsOpen(true)}
         onKeyDown={(e) => {
           if (!isOpen && (e.key === 'Enter' || e.key === ' ')) {
@@ -162,8 +161,15 @@ export function HeaderMetricSelector() {
                 </span>
               )}
               {activeValue !== null && mounted && (
-                <span className="text-sm font-bold min-w-[1.5em] text-center">{activeValue}°</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-bold min-w-[1.5em] text-center">
+                    {activeValue}°
+                  </span>
+                </div>
               )}
+              <span className="text-[9px] text-muted-foreground uppercase tracking-tighter">
+                {METRIC_LABELS[sortMetric]}
+              </span>
             </motion.div>
           )}
         </AnimatePresence>

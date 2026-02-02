@@ -22,7 +22,7 @@ export function Logo({ className, showTagline = false }: LogoProps) {
           mm<span className="text-muted-foreground">.dex</span>
         </span>
         {showTagline && (
-          <span className="text-[10px] text-muted-foreground">Compare cities by feel</span>
+          <span className="text-[10px] text-muted-foreground">Know the real feel</span>
         )}
       </div>
     </Link>

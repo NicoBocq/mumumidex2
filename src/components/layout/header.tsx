@@ -16,7 +16,7 @@ export default async function Header() {
       <nav aria-label="Global" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-2 sm:gap-4">
           {/* Logo */}
-          <Logo className="shrink-0" />
+          <Logo className="shrink-0" showTagline />
 
           {/* Right section: Metric selector + User */}
           <div className="flex shrink-0 items-center gap-2 overflow-visible">

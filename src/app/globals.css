@@ -52,6 +52,26 @@
   --color-humidex-5-foreground: hsl(var(--humidex-5-foreground));
   --color-humidex-5-darker: hsl(var(--humidex-5-darker));
 
+  --color-windchill-1: hsl(var(--windchill-1));
+  --color-windchill-1-foreground: hsl(var(--windchill-1-foreground));
+  --color-windchill-1-darker: hsl(var(--windchill-1-darker));
+
+  --color-windchill-2: hsl(var(--windchill-2));
+  --color-windchill-2-foreground: hsl(var(--windchill-2-foreground));
+  --color-windchill-2-darker: hsl(var(--windchill-2-darker));
+
+  --color-windchill-3: hsl(var(--windchill-3));
+  --color-windchill-3-foreground: hsl(var(--windchill-3-foreground));
+  --color-windchill-3-darker: hsl(var(--windchill-3-darker));
+
+  --color-windchill-4: hsl(var(--windchill-4));
+  --color-windchill-4-foreground: hsl(var(--windchill-4-foreground));
+  --color-windchill-4-darker: hsl(var(--windchill-4-darker));
+
+  --color-windchill-5: hsl(var(--windchill-5));
+  --color-windchill-5-foreground: hsl(var(--windchill-5-foreground));
+  --color-windchill-5-darker: hsl(var(--windchill-5-darker));
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -240,7 +260,33 @@
   /* Metric Level 5 - Extreme (Red) - red-500 */
   --humidex-5: 0 84% 60%;
   --humidex-5-darker: 0 72% 51%;
+  --humidex-5-darker: 0 72% 51%;
   --humidex-5-foreground: 0 86% 97%;
+
+  /* Wind Chill Level 1 - >5°C (Teal/Mild - Lightest) */
+  --windchill-1: 173 70% 45%;
+  --windchill-1-darker: 175 60% 30%;
+  --windchill-1-foreground: 0 0% 100%;
+
+  /* Wind Chill Level 2 - 0°C to 5°C (Sky Blue) */
+  --windchill-2: 199 80% 45%;
+  --windchill-2-darker: 201 80% 30%;
+  --windchill-2-foreground: 0 0% 100%;
+
+  /* Wind Chill Level 3 - -5°C to 0°C (True Blue) */
+  --windchill-3: 215 80% 40%;
+  --windchill-3-darker: 215 80% 25%;
+  --windchill-3-foreground: 0 0% 100%;
+
+  /* Wind Chill Level 4 - -15°C to -5°C (Indigo) */
+  --windchill-4: 230 70% 35%;
+  --windchill-4-darker: 230 70% 20%;
+  --windchill-4-foreground: 0 0% 100%;
+
+  /* Wind Chill Level 5 - <-15°C (Deep Navy - Darkest) */
+  --windchill-5: 240 60% 25%;
+  --windchill-5-darker: 240 60% 15%;
+  --windchill-5-foreground: 0 0% 100%;
 }
 
 .dark {
@@ -295,6 +341,28 @@
   --humidex-5: 0 84% 65%;
   --humidex-5-darker: 0 72% 55%;
   --humidex-5-foreground: 0 72% 10%;
+
+  /* Wind Chill Dark Mode */
+  /* Lighter start for visibility, darkening as it gets colder */
+  --windchill-1: 173 70% 60%;
+  --windchill-1-darker: 175 60% 45%;
+  --windchill-1-foreground: 173 58% 10%;
+
+  --windchill-2: 199 80% 55%;
+  --windchill-2-darker: 201 80% 40%;
+  --windchill-2-foreground: 199 89% 10%;
+
+  --windchill-3: 215 80% 50%;
+  --windchill-3-darker: 215 80% 35%;
+  --windchill-3-foreground: 221 83% 10%;
+
+  --windchill-4: 230 70% 45%;
+  --windchill-4-darker: 230 70% 30%;
+  --windchill-4-foreground: 244 55% 10%;
+
+  --windchill-5: 240 60% 40%;
+  --windchill-5-darker: 240 60% 25%;
+  --windchill-5-foreground: 222 50% 10%;
 }
 
 * {
@@ -343,6 +411,38 @@ body {
   }
 }
 
+/* Wind Chill Card Levels - Light Mode */
+.windchill-card-1 {
+  @apply border-windchill-1/30 transition-all duration-500;
+  &:hover {
+    @apply border-windchill-1 shadow-[0_0_30px_-5px_hsl(var(--windchill-1))];
+  }
+}
+.windchill-card-2 {
+  @apply border-windchill-2/30 transition-all duration-500;
+  &:hover {
+    @apply border-windchill-2 shadow-[0_0_30px_-5px_hsl(var(--windchill-2))];
+  }
+}
+.windchill-card-3 {
+  @apply border-windchill-3/30 transition-all duration-500;
+  &:hover {
+    @apply border-windchill-3 shadow-[0_0_30px_-5px_hsl(var(--windchill-3))];
+  }
+}
+.windchill-card-4 {
+  @apply border-windchill-4/30 transition-all duration-500;
+  &:hover {
+    @apply border-windchill-4 shadow-[0_0_30px_-5px_hsl(var(--windchill-4))];
+  }
+}
+.windchill-card-5 {
+  @apply border-windchill-5/30 transition-all duration-500;
+  &:hover {
+    @apply border-windchill-5 shadow-[0_0_30px_-5px_hsl(var(--windchill-5))];
+  }
+}
+
 /* Metric card levels - Dark mode (couleurs préservées, glow désactivé) */
 .dark .metric-card-1 {
   @apply border-humidex-1/20 shadow-none;
@@ -372,6 +472,38 @@ body {
   @apply border-humidex-5/20 shadow-none;
   &:hover {
     @apply border-humidex-5/50 shadow-none;
+  }
+}
+
+/* Wind Chill Card Levels - Dark Mode */
+.dark .windchill-card-1 {
+  @apply border-windchill-1/20 shadow-none;
+  &:hover {
+    @apply border-windchill-1/50 shadow-none;
+  }
+}
+.dark .windchill-card-2 {
+  @apply border-windchill-2/20 shadow-none;
+  &:hover {
+    @apply border-windchill-2/50 shadow-none;
+  }
+}
+.dark .windchill-card-3 {
+  @apply border-windchill-3/20 shadow-none;
+  &:hover {
+    @apply border-windchill-3/50 shadow-none;
+  }
+}
+.dark .windchill-card-4 {
+  @apply border-windchill-4/20 shadow-none;
+  &:hover {
+    @apply border-windchill-4/50 shadow-none;
+  }
+}
+.dark .windchill-card-5 {
+  @apply border-windchill-5/20 shadow-none;
+  &:hover {
+    @apply border-windchill-5/50 shadow-none;
   }
 }
 
