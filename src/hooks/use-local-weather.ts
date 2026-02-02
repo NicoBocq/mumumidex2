@@ -124,7 +124,6 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
           weatherCode: weatherData.current.weather_code,
           locationName,
         }
-        console.log(weather)
         storeWeather(weather)
         setState({ weather, loading: false, error: null })
       })
