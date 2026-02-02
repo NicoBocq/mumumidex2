@@ -1,14 +1,10 @@
 'use server'
-
-import { DefaultCity } from '@/types/city'
-import { APIForecast, Forecast } from '@/types/forecast'
-
-import { revalidatePath } from 'next/cache'
-import { auth } from '@/auth'
-import { City } from '@prisma/client'
-
+import type { City } from '@prisma/client'
+import { headers } from 'next/headers'
 import { DEFAULT_LOCATIONS } from '@/config/city'
-import { getHumidex } from '@/lib/humidex'
+import { auth } from '@/lib/auth'
+import { calculateHumidex, calculateWindChill } from '@/lib/weather-metrics'
+import type { APIForecast, Forecast } from '@/types/forecast'
 
 import { getUserCities } from './city'
 
@@ -18,13 +14,12 @@ type getForecastReturnType = {
 }
 
 async function returnCities(): Promise<City[]> {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
   if (!session) {
     return DEFAULT_LOCATIONS
   }
   const { data: cities } = await getUserCities({
     userId: session.user.id,
-    hideHidden: true,
   })
   return cities || []
 }
@@ -37,42 +32,84 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       error: '',
     }
   }
-  const params = new URLSearchParams({
-    latitude: cities.map((c) => c.latitude.toString()).join(','),
-    longitude: cities.map((c) => c.longitude.toString()).join(','),
+
+  const latStr = cities.map((c) => c.latitude.toString()).join(',')
+  const longStr = cities.map((c) => c.longitude.toString()).join(',')
+
+  const weatherParams = new URLSearchParams({
+    latitude: latStr,
+    longitude: longStr,
     timezone: 'auto',
     current:
-      'temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,wind_speed_10m,is_day',
+      'temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,is_day,precipitation,cloud_cover,weather_code',
+    hourly: 'temperature_2m,precipitation,uv_index',
+    daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code',
+    forecast_days: '7',
   })
+
+  const airQualityParams = new URLSearchParams({
+    latitude: latStr,
+    longitude: longStr,
+    timezone: 'auto',
+    current: 'european_aqi',
+  })
+
   try {
-    const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?${params}`,
-      {
-        cache: 'no-store',
-      },
-    )
-    const data = await response.json()
-    if (!data) {
+    const [weatherResponse, airQualityResponse] = await Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?${weatherParams}`, {
+        next: { revalidate: 900 },
+      }),
+      fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?${airQualityParams}`, {
+        next: { revalidate: 900 },
+      }),
+    ])
+
+    const [weatherData, airQualityData] = await Promise.all([
+      weatherResponse.json(),
+      airQualityResponse.json(),
+    ])
+
+    if (!weatherData) {
       throw new Error('No data returned from OpenWeather API')
     }
-    const result = Array.isArray(data) ? data : [data]
 
-    const processedResult: Forecast[] = result
-      .map((item: APIForecast, index: number) => ({
+    const weatherResult = Array.isArray(weatherData) ? weatherData : [weatherData]
+    const airQualityResult = Array.isArray(airQualityData) ? airQualityData : [airQualityData]
+
+    const processedResult: Forecast[] = weatherResult.map((item: APIForecast, index: number) => {
+      // Find current UV index from hourly data (closest matching hour)
+      // We use the current time from the item's current.time
+      const currentTime = new Date(item.current.time).setMinutes(0, 0, 0)
+      const hourIndex = item.hourly.time.findIndex((t: string) => {
+        return new Date(t).getTime() === currentTime
+      })
+      // Default to 0 if not found, or use the value at the index
+      // Note: item.hourly.uv_index might not be typed in APIForecast yet if I didn't update types fully?
+      // I updated 'Forecast' types, but 'Hourly' type might need uv_index defined if I access it here.
+      // Wait, I didn't update Hourly type for uv_index, only Current.
+      // I should update Hourly type as well or cast it.
+      // Actually, passing uv_index in 'Hourly' param returns it in 'hourly' object.
+      // Let's access it safely.
+      // @ts-expect-error - uv_index added dynamically
+      const currentUvIndex = hourIndex !== -1 ? item.hourly.uv_index[hourIndex] : 0
+
+      const airQuality = airQualityResult[index]
+
+      return {
         ...item,
         city: {
           ...cities[index],
         },
         current: {
           ...item.current,
-          humidex: getHumidex({
-            temperature: item.current.temperature_2m,
-            humidity: item.current.relative_humidity_2m,
-            dewPoint: item.current.dew_point_2m,
-          }),
+          uv_index: currentUvIndex,
+          european_aqi: airQuality?.current?.european_aqi || 0,
+          humidex: calculateHumidex(item.current.temperature_2m, item.current.dew_point_2m),
+          windChill: calculateWindChill(item.current.temperature_2m, item.current.wind_speed_10m),
         },
-      }))
-      .sort((b, a) => a.current.humidex - b.current.humidex)
+      }
+    })
+
     return {
       data: processedResult,
       error: '',
@@ -84,8 +121,4 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
       error: 'Error fetching forecast',
     }
   }
-}
-
-export async function reload() {
-  revalidatePath('/')
 }

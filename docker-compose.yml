@@ -1,0 +1,16 @@
+services:
+  postgres:
+    container_name: mumumidex-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mumumidex
+      POSTGRES_PASSWORD: mumumidex
+      POSTGRES_DB: mumumidex
+    ports:
+      - "5433:5432"  # Port 5433 pour éviter les conflits avec d'autres projets
+    volumes:
+      - mumumidex-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  mumumidex-postgres-data:

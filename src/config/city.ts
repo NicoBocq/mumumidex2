@@ -1,4 +1,4 @@
-import { City } from '@prisma/client'
+import type { City } from '@prisma/client'
 import { nanoid } from 'nanoid'
 
 export const DEFAULT_LOCATIONS: City[] = [
@@ -10,7 +10,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     longitude: -122.41942,
     country_code: 'US',
     country: 'United States',
-    hidden: false,
     admin1: 'California',
     pinned: false,
     userId: '',
@@ -23,7 +22,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     externalId: 2992166,
     country: 'France',
     country_code: 'FR',
-    hidden: false,
     admin1: 'Île-de-France',
     pinned: false,
     userId: '',
@@ -36,7 +34,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     externalId: 6447142,
     country: 'France',
     country_code: 'FR',
-    hidden: false,
     admin1: "Provence-Alpes-Côte d'Azur",
     pinned: false,
     userId: '',
@@ -49,7 +46,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     externalId: 4190434,
     country: 'United States',
     country_code: 'US',
-    hidden: false,
     admin1: 'Florida',
     pinned: false,
     userId: '',
@@ -63,7 +59,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     country_code: 'FR',
     country: 'France',
     admin1: 'Auvergne-Rhône-Alpes',
-    hidden: false,
     pinned: false,
     userId: '',
   },
@@ -76,7 +71,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     country_code: 'FR',
     country: 'France',
     admin1: 'Occitanie',
-    hidden: false,
     pinned: false,
     userId: '',
   },
@@ -89,7 +83,6 @@ export const DEFAULT_LOCATIONS: City[] = [
     country_code: 'FR',
     country: 'France',
     admin1: 'Auvergne-Rhône-Alpes',
-    hidden: false,
     pinned: false,
     userId: '',
   },

@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { icons, LucideProps } from 'lucide-react'
+import { icons, type LucideProps } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -12,13 +12,13 @@ export interface IconProps extends LucideProps {
 export const iconVariants = cva('', {
   variants: {
     size: {
-      xxs: 'h-3 w-3',
-      xs: 'h-4 w-4',
-      sm: 'h-6 w-6',
-      md: 'h-8 w-8',
-      lg: 'h-8 w-8',
-      xl: 'h-10 w-10',
-      hero: 'h-12 w-12',
+      xxs: 'h-2.5 w-2.5',
+      xs: 'h-3.5 w-3.5',
+      sm: 'h-4 w-4',
+      md: 'h-5 w-5',
+      lg: 'h-6 w-6',
+      xl: 'h-8 w-8',
+      hero: 'h-10 w-10',
       custom: '',
     },
     margin: {

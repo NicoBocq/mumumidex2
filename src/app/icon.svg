@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .letter { fill: #18181b; font-family: system-ui, -apple-system, sans-serif; font-weight: 900; }
+    .degree { fill: #71717a; font-family: system-ui, -apple-system, sans-serif; font-weight: 900; }
+    @media (prefers-color-scheme: dark) {
+      .letter { fill: #fafafa; }
+      .degree { fill: #a1a1aa; }
+    }
+  </style>
+  <text x="50%" y="72%" text-anchor="middle" font-size="20">
+    <tspan class="letter">m</tspan><tspan class="degree">&#176;</tspan>
+  </text>
+</svg>

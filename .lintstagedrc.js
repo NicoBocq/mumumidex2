@@ -1,13 +1,3 @@
-const path = require('path')
- 
-const buildEslintCommand = (filenames) =>
-  `next lint --fix --file ${filenames
-    .map((f) => path.relative(process.cwd(), f))
-    .join(' --file ')}`
- 
-const buildPrettierCommand = (filenames) =>
-  `prettier --write ${filenames.join(' ')} --no-cache`
-
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildPrettierCommand],
+  '*.{js,jsx,ts,tsx,json,css}': ['biome check --write --no-errors-on-unmatched'],
 }

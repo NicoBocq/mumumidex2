@@ -1,30 +1,35 @@
+import { headers } from 'next/headers'
 import React from 'react'
-import { getForecast, reload } from '@/actions/forecast'
-import { auth } from '@/auth'
-
-import { app } from '@/config/app'
-import { ButtonFormSubmit } from '@/components/custom-ui/button-form-submit'
+import { deleteCity, updateCity } from '@/actions/city'
+import { getForecast } from '@/actions/forecast'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
-import ForecastCard, { SkeletonForecastCard } from '@/components/forecast/card'
-import SearchCityPopover from '@/components/user/search-city-popover'
+import { SkeletonForecastCard } from '@/components/forecast/card'
+import ForecastListClient from '@/components/forecast/forecast-list'
+import { auth } from '@/lib/auth'
 
 function SkeletonForecastList() {
   return (
     <Grid>
-      {Array.from({ length: 5 }).map((_, index) => (
-        <SkeletonForecastCard key={index} />
+      {['s1', 's2', 's3', 's4', 's5'].map((id) => (
+        <SkeletonForecastCard key={id} />
       ))}
     </Grid>
   )
 }
 
-async function ForecastList({ standAlone }: { standAlone: boolean }) {
+async function ForecastList(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const { data, error } = await getForecast()
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: await headers() })
 
-  if (!!error) {
+  // Await searchParams for Next.js 15+ compatibility
+  const params = await props.searchParams
+  const sortMetric = (params?.sort as 'apparent' | 'humidex' | 'windchill') || 'apparent'
+
+  if (error) {
     return (
       <Section withoutCard className="text-muted-foreground">
         <Icon name="Frown" size="xl" />
@@ -33,63 +38,24 @@ async function ForecastList({ standAlone }: { standAlone: boolean }) {
     )
   }
 
-  if (data.length === 0) {
-    return (
-      <Section
-        title={app.emptyState.title}
-        description={app.emptyState.description}
-      >
-        <SearchCityPopover />
-      </Section>
-    )
-  }
-
-  const pinnedCities = data?.filter((item) => item.city.pinned)
-  const unpinnedCities = data?.filter((item) => !item.city.pinned)
-
   return (
-    <>
-      {standAlone && (
-        <form action={reload} className="mb-4 flex w-full">
-          <ButtonFormSubmit
-            size="icon"
-            icon="RefreshCw"
-            variant="ghostPrimary"
-            label="Refresh"
-            className="w-full"
-          />
-        </form>
-      )}
-      <Grid>
-        {pinnedCities?.map((item) => (
-          <ForecastCard
-            key={item.city.id}
-            data={item}
-            id={`card-${item.city.id}`}
-            showCardActions={!!session}
-          />
-        ))}
-        {unpinnedCities?.map((item) => (
-          <ForecastCard
-            key={item.city.id}
-            data={item}
-            id={`card-${item.city.id}`}
-            showCardActions={!!session}
-          />
-        ))}
-      </Grid>
-    </>
+    <ForecastListClient
+      data={data}
+      isAuthenticated={!!session}
+      showAddCard={!!session}
+      updateCityAction={updateCity}
+      deleteCityAction={deleteCity}
+      sortMetric={sortMetric}
+    />
   )
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { standalone: string }
+export default async function Page(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   return (
     <React.Suspense fallback={<SkeletonForecastList />}>
-      <ForecastList standAlone={searchParams.standalone === 'true'} />
+      <ForecastList {...props} />
     </React.Suspense>
   )
 }
