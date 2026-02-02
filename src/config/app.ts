@@ -1,16 +1,12 @@
 export const app = {
-  name: 'mmDex: who is the hottest?',
-  description: 'Your cities ranked by humidex',
+  name: 'mm.dex',
+  description: 'Cities ranked by real feel (humidex, windchill)',
   url: 'https://mmdex.1h12.com',
-  shortName: 'mmDex',
-  tagline: 'Who is the hottest?',
+  shortName: 'mm.dex',
+  tagline: 'Rank the real feel',
   login: {
     title: 'Login',
-    description: 'Login to save your cities',
-  },
-  emptyState: {
-    title: 'Add your first city',
-    description: 'Click on your picture if you want to add more',
+    description: 'Customize your list of cities',
   },
   color: {
     primary: '#d97706',

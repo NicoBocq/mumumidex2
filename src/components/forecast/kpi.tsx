@@ -59,9 +59,7 @@ export default function ForecastKpi({
                   {Math.round(data.current.apparent_temperature)}°
                 </span>
               </div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-                Temp.
-              </div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">Temp.</div>
             </div>
           </div>
 
@@ -81,9 +79,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {Math.round(data.current.wind_speed_10m)} km/h
               </div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-                Wind
-              </div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">Wind</div>
             </div>
           </div>
 
@@ -99,7 +95,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.relative_humidity_2m}%
               </div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
                 Humidity
               </div>
             </div>
@@ -121,7 +117,7 @@ export default function ForecastKpi({
             />
             <div className="text-center">
               <div className="text-sm font-bold leading-none">{data.current.cloud_cover}%</div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
                 Clouds
               </div>
             </div>
@@ -139,7 +135,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.uv_index?.toFixed(0) ?? 0}
               </div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
                 UV Index
               </div>
             </div>
@@ -157,9 +153,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.european_aqi?.toFixed(0) ?? 0}
               </div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground/70">
-                AQI
-              </div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">AQI</div>
             </div>
           </div>
         </>

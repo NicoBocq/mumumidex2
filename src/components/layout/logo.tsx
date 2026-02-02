@@ -1,5 +1,6 @@
 import { Outfit } from 'next/font/google'
 import Link from 'next/link'
+import { app } from '@/config/app'
 import { cn } from '@/lib/utils'
 
 const outfit = Outfit({ subsets: ['latin'] })
@@ -21,9 +22,7 @@ export function Logo({ className, showTagline = false }: LogoProps) {
         >
           mm<span className="text-muted-foreground">.dex</span>
         </span>
-        {showTagline && (
-          <span className="text-[10px] text-muted-foreground">Know the real feel</span>
-        )}
+        {showTagline && <span className="text-xxs text-muted-foreground">{app.tagline}</span>}
       </div>
     </Link>
   )

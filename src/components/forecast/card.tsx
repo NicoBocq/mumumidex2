@@ -95,7 +95,7 @@ export default function ForecastCard({
         )}
 
         {/* Metadata: country + time */}
-        <span className="absolute bottom-3 right-3 text-[10px] text-muted-foreground/70">
+        <span className="absolute bottom-3 right-3 text-xs text-muted-foreground/70">
           {data.city.country_code} • {formatDateTime(data.current.time)}
         </span>
 
