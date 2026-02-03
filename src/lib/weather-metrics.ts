@@ -93,7 +93,7 @@ export function getMetricLevel(value: number, metric: SortMetric): number {
 export function getMetricClass(
   value: number,
   metric: SortMetric,
-  type: 'card' | 'text' | 'ring' | 'stroke' | 'bg' = 'card'
+  type: 'card' | 'text' | 'ring' | 'stroke' | 'bg' | 'groupHoverText' = 'card'
 ): string {
   const level = getMetricLevel(value, metric)
 
@@ -139,6 +139,14 @@ export function getMetricClass(
         'bg-windchill-4/30',
         'bg-windchill-5/30',
       ],
+      groupHoverText: [
+        '',
+        'group-hover:text-windchill-1',
+        'group-hover:text-windchill-2',
+        'group-hover:text-windchill-3',
+        'group-hover:text-windchill-4',
+        'group-hover:text-windchill-5',
+      ],
     }
     return classes[type][level]
   }
@@ -177,6 +185,14 @@ export function getMetricClass(
       'bg-humidex-3/30',
       'bg-humidex-4/30',
       'bg-humidex-5/30',
+    ],
+    groupHoverText: [
+      '',
+      'group-hover:text-humidex-1',
+      'group-hover:text-humidex-2',
+      'group-hover:text-humidex-3',
+      'group-hover:text-humidex-4',
+      'group-hover:text-humidex-5',
     ],
   }
 

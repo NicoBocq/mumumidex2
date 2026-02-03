@@ -9,7 +9,7 @@ export const app = {
     description: 'Customize your list of cities',
   },
   color: {
-    primary: '#d97706',
-    primaryDarker: '#92400e',
+    primary: '#000000',
+    primaryDarker: '#000000',
   },
 }

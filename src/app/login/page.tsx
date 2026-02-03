@@ -14,7 +14,7 @@ export default async function Page() {
   if (session) redirect('/')
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 p-4">
-      <div className="flex flex-col gap-4 min-w-lg">
+      <div className="flex flex-col gap-4 w-full max-w-md">
         <Link
           href="/"
           className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'self-start')}
@@ -22,7 +22,7 @@ export default async function Page() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Link>
-        <Card className="w-full max-w-sm border-0 bg-primary/5">
+        <Card className="w-full max-w-md border-0 bg-primary/5">
           <CardHeader>
             <CardTitle className="text-primary">{app.login.title}</CardTitle>
             <CardDescription>{app.login.description}</CardDescription>

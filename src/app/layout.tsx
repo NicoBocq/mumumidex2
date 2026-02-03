@@ -70,7 +70,7 @@ export default function RootLayout({
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="53136dd2-b4f8-4b7e-9074-ccd2a7deb68a"
-          data-domains="mumumidex.1h12.com"
+          data-domains="mmdex.1h12.com"
         />
       </body>
     </html>
