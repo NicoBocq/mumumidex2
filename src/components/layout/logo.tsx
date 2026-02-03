@@ -22,7 +22,7 @@ export function Logo({ className, showTagline = false }: LogoProps) {
         >
           mm<span className="text-muted-foreground">.dex</span>
         </span>
-        {showTagline && <span className="text-xxs text-muted-foreground">{app.tagline}</span>}
+        {showTagline && <span className="text-xs text-muted-foreground">{app.tagline}</span>}
       </div>
     </Link>
   )

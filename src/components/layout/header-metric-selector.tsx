@@ -115,7 +115,7 @@ export function HeaderMetricSelector() {
                     setIsOpen(false)
                   }}
                   className={cn(
-                    'relative h-10 flex items-center justify-center gap-2 px-3 rounded-full text-sm font-medium transition-colors',
+                    'relative h-10 flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 rounded-full text-sm font-medium transition-colors',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     isActive
                       ? 'text-foreground'
@@ -145,7 +145,7 @@ export function HeaderMetricSelector() {
               layout
               key="collapsed-badge"
               className={cn(
-                'flex h-10 items-center gap-2 px-3 rounded-full',
+                'flex h-10 items-center gap-1 sm:gap-2 px-2 sm:px-3 rounded-full',
                 'bg-foreground/5 text-foreground' // Minimalist style
               )}
               initial={{ opacity: 0 }}
@@ -156,7 +156,7 @@ export function HeaderMetricSelector() {
                 <Icon name={METRICS.find((m) => m.key === sortMetric)!.icon} size="sm" />
               )}
               {mounted && weather?.locationName && (
-                <span className="text-sm font-semibold border-r border-white/20 pr-2 mr-2 max-w-[80px] sm:max-w-[150px] truncate">
+                <span className="text-sm font-semibold border-r border-white/20 pr-2 mr-2 max-w-[60px] sm:max-w-[150px] truncate">
                   {weather.locationName}
                 </span>
               )}

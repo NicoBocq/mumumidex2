@@ -22,7 +22,6 @@ export default function ForecastKpi({
   const displayValue = getDisplayValue(data.current, sortMetric)
   const strokeClass = getMetricClass(displayValue, sortMetric, 'stroke')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
-  const bgClass = getMetricClass(displayValue, sortMetric, 'bg')
 
   const isExtendedOnly = mode === 'extended'
   const isMinimal = mode === 'minimal'
@@ -39,27 +38,20 @@ export default function ForecastKpi({
       {showPrimary && (
         <>
           {/* 1. Temp Trend (Primary) */}
-          <div className="flex flex-col items-center justify-end gap-2">
+          <div className="flex flex-col items-center justify-end gap-1.5">
             <Sparkline
               data={next24hTemps}
               color={cn(strokeClass, 'opacity-90 stroke-2')}
               className="h-8 w-16"
+              showLabels={true}
             />
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-sm font-bold leading-none">
-                  {Math.round(data.current.temperature_2m)}°
-                </span>
-                <span
-                  className={cn(
-                    'rounded-sm flex items-center justify-center px-2 py-0.5 text-xs font-medium backdrop-blur-sm',
-                    bgClass
-                  )}
-                >
-                  {Math.round(data.current.apparent_temperature)}°
-                </span>
+            <div className="text-center mt-0.5">
+              <div className="text-lg font-bold leading-tight">
+                {Math.round(data.current.temperature_2m)}°
               </div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">Temp.</div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/50 font-medium">
+                Temp.
+              </div>
             </div>
           </div>
 
@@ -79,7 +71,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {Math.round(data.current.wind_speed_10m)} km/h
               </div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">Wind</div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">Wind</div>
             </div>
           </div>
 
@@ -95,7 +87,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.relative_humidity_2m}%
               </div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
                 Humidity
               </div>
             </div>
@@ -117,7 +109,7 @@ export default function ForecastKpi({
             />
             <div className="text-center">
               <div className="text-sm font-bold leading-none">{data.current.cloud_cover}%</div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
                 Clouds
               </div>
             </div>
@@ -135,7 +127,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.uv_index?.toFixed(0) ?? 0}
               </div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
                 UV Index
               </div>
             </div>
@@ -153,7 +145,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.european_aqi?.toFixed(0) ?? 0}
               </div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground/70">AQI</div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">AQI</div>
             </div>
           </div>
         </>

@@ -44,6 +44,7 @@ export default function ForecastCard({
   const displayValue = getDisplayValue(data.current, sortMetric)
   const cardClass = getMetricClass(displayValue, sortMetric, 'card')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
+  const groupHoverClass = getMetricClass(displayValue, sortMetric, 'groupHoverText')
 
   const { execUpdateCity, execDeleteCity, optimisticData } = useCityActions({
     data,
@@ -140,7 +141,12 @@ export default function ForecastCard({
         </CardContent>
 
         {/* Expand Handle */}
-        <div className="flex w-full justify-center pb-2 pt-1 text-muted-foreground/20 transition-colors group-hover:text-muted-foreground/50">
+        <div
+          className={cn(
+            'flex w-full justify-center pb-2 pt-1 text-primary/80 transition-colors',
+            groupHoverClass
+          )}
+        >
           <Icon
             name="ChevronDown"
             size="xs"
