@@ -40,7 +40,7 @@ export default function WeeklyForecast({ data }: { data: Daily }) {
               </div>
 
               {/* Min/Max Temp */}
-              <div className="flex w-24 items-center justify-end gap-2 font-medium">
+              <div className="flex w-24 text-xs items-center justify-end gap-2 font-medium">
                 <span className="text-muted-foreground">{minTemp}°</span>
                 <div className="h-1 w-8 rounded-full bg-gradient-to-r from-muted-foreground/20 to-foreground/20" />
                 <span>{maxTemp}°</span>

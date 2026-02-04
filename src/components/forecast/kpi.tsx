@@ -38,15 +38,15 @@ export default function ForecastKpi({
       {showPrimary && (
         <>
           {/* 1. Temp Trend (Primary) */}
-          <div className="flex flex-col items-center justify-end gap-1.5">
+          <div className="flex flex-col items-center justify-end gap-2">
             <Sparkline
               data={next24hTemps}
               color={cn(strokeClass, 'opacity-90 stroke-2')}
               className="h-8 w-16"
               showLabels={true}
             />
-            <div className="text-center mt-0.5">
-              <div className="text-lg font-bold leading-tight">
+            <div className="text-center">
+              <div className="text-sm font-bold leading-none">
                 {Math.round(data.current.temperature_2m)}°
               </div>
               <div className="text-xxs uppercase tracking-wider text-muted-foreground/50 font-medium">

@@ -131,7 +131,7 @@ export default function ForecastCard({
             )}
           >
             <div className="overflow-hidden">
-              <div className="m-1 rounded-xl p-4 bg-black/5">
+              <div className="m-1 rounded-xl p-4 border border-border/50">
                 <Kpi data={data} sortMetric={sortMetric} mode="extended" />
                 <div className="my-4 h-px w-full bg-border/50" />
                 <WeeklyForecast data={data.daily} />
