@@ -24,11 +24,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(app.url),
   title: app.name,
   description: app.description,
-  openGraph: {
-    title: app.name,
-    description: app.description,
-    images: '/og-image.png',
-  },
   verification: {
     google: 'SoTUK0J0yOG_ZDjwJrAWCUANoSOSzEMu3zSvqrwkZr0',
   },

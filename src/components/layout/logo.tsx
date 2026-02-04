@@ -20,7 +20,10 @@ export function Logo({ className, showTagline = false }: LogoProps) {
             outfit.className
           )}
         >
-          mm<span className="text-muted-foreground">.dex</span>
+          mm<span className="text-humidex-3">°</span>
+          <span className="bg-gradient-to-r from-humidex-3 to-humidex-4 bg-clip-text text-transparent">
+            dex
+          </span>
         </span>
         {showTagline && <span className="text-xs text-muted-foreground">{app.tagline}</span>}
       </div>
