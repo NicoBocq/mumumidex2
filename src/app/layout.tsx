@@ -18,7 +18,7 @@ import { LocalWeatherProvider } from '@/contexts/local-weather-context'
 import { SortMetricProvider } from '@/contexts/sort-metric-context'
 import { cn } from '@/lib/utils'
 
-export const rubik = Rubik({ subsets: ['latin'] })
+const rubik = Rubik({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(app.url),
@@ -40,8 +40,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressContentEditableWarning suppressHydrationWarning>
-      <body className={cn(rubik.className, 'flex min-h-screen flex-col font-sans antialiased')}>
+    <html
+      lang="en"
+      suppressContentEditableWarning
+      suppressHydrationWarning
+      className={cn(rubik.className)}
+    >
+      <body className="flex min-h-screen flex-col font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
