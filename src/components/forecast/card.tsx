@@ -6,7 +6,8 @@ import type { deleteCity, updateCity } from '@/actions/city'
 import Icon from '@/components/custom-ui/icon'
 import { Button } from '@/components/ui/button'
 import { useCityActions } from '@/hooks/use-city-actions'
-import { cn, formatDateTime } from '@/lib/utils'
+import { formatDateTime } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import type { SortMetric } from '@/lib/weather-metrics'
 import { getDisplayValue, getMetricClass } from '@/lib/weather-metrics'
 import type { Forecast } from '@/types/forecast'
@@ -76,7 +77,7 @@ export default function ForecastCard({
   }, [])
 
   return (
-    <div className="group flex items-start gap-2">
+    <div className="group flex items-start hover:gap-2">
       <Card
         id={id}
         onClick={toggleExpand}
@@ -161,7 +162,7 @@ export default function ForecastCard({
           <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 rounded-full bg-muted/80 backdrop-blur-sm hover:bg-muted"
+            className="h-9 w-9 rounded-full backdrop-blur-sm hover:bg-muted"
             onClick={handlePin}
             title={optimisticData.city.pinned ? 'Unpin' : 'Pin'}
           >
@@ -174,7 +175,7 @@ export default function ForecastCard({
           <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 rounded-full bg-muted/80 text-destructive backdrop-blur-sm hover:bg-destructive/10"
+            className="h-9 w-9 rounded-full text-destructive backdrop-blur-sm hover:bg-destructive/10"
             onClick={handleDelete}
             title="Delete"
           >

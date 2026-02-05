@@ -1,7 +1,7 @@
 'use server'
 
 import { Prisma } from '@prisma/client'
-import { cacheLife, cacheTag, revalidateTag } from 'next/cache'
+import { cacheLife, cacheTag, revalidatePath, revalidateTag } from 'next/cache'
 import prisma from '@/config/db'
 import { actionClient, authActionClient } from '@/lib/safe-action'
 import { nanoidSchema } from '@/validation'
@@ -74,6 +74,7 @@ export const addCity = authActionClient
         },
       })
       revalidateTag(`user-cities-${userId}`, 'max')
+      revalidatePath('/')
       return {
         success: 'City added',
       }
@@ -103,6 +104,7 @@ export const updateCity = authActionClient
         data: rest,
       })
       revalidateTag(`user-cities-${userId}`, 'max')
+      revalidatePath('/')
       return {
         success: 'City updated',
       }
@@ -125,6 +127,7 @@ export const deleteCity = authActionClient
         },
       })
       revalidateTag(`user-cities-${userId}`, 'max')
+      revalidatePath('/')
       return {
         success: 'City removed',
       }

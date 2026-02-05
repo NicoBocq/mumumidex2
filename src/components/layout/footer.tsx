@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -13,8 +15,8 @@ export default function Footer() {
             href="https://open-meteo.com/"
             target="_blank"
             className={buttonVariants({
-              variant: 'inline-link',
-              size: 'inline-link',
+              variant: 'link',
+              size: 'xs',
             })}
           >
             Open Meteo
@@ -29,8 +31,8 @@ export default function Footer() {
             target="_blank"
             className={cn(
               buttonVariants({
-                variant: 'inline-link',
-                size: 'inline-link',
+                variant: 'link',
+                size: 'xs',
               }),
               'text-xs'
             )}

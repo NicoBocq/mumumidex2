@@ -8,8 +8,8 @@ import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 import { cn } from '@/lib/utils'
 import { METRIC_LABELS, type SortMetric } from '@/lib/weather-metrics'
 
-const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind' }[] = [
-  { key: 'apparent', icon: 'Thermometer' },
+const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind'; suffix?: string }[] = [
+  { key: 'apparent', icon: 'Thermometer', suffix: '°' },
   { key: 'humidex', icon: 'Droplets' },
   { key: 'windchill', icon: 'Wind' },
 ]
@@ -101,7 +101,7 @@ export function HeaderMetricSelector() {
         <AnimatePresence mode="popLayout" initial={false}>
           {isOpen ? (
             // Expanded State: Show all options
-            METRICS.map(({ key, icon }) => {
+            METRICS.map(({ key, icon, suffix }) => {
               const isActive = sortMetric === key
               const value = getValue(key)
 
@@ -127,7 +127,12 @@ export function HeaderMetricSelector() {
                   transition={{ layout: { type: 'spring', bounce: 0.2, duration: 0.3 } }}
                 >
                   <Icon name={icon} size="sm" />
-                  {value !== null && <span className="text-xs font-semibold">{value}°</span>}
+                  {value !== null && (
+                    <span className="text-xs font-semibold">
+                      {value}
+                      {suffix}
+                    </span>
+                  )}
 
                   {isActive && (
                     <motion.span
@@ -152,9 +157,6 @@ export function HeaderMetricSelector() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              {METRICS.find((m) => m.key === sortMetric) && (
-                <Icon name={METRICS.find((m) => m.key === sortMetric)!.icon} size="sm" />
-              )}
               {mounted && weather?.locationName && (
                 <span className="text-sm font-semibold border-r border-white/20 pr-2 mr-2 max-w-[60px] sm:max-w-[150px] truncate">
                   {weather.locationName}
@@ -163,7 +165,7 @@ export function HeaderMetricSelector() {
               {activeValue !== null && mounted && (
                 <div className="flex items-center gap-1">
                   <span className="text-sm font-bold min-w-[1.5em] text-center">
-                    {activeValue}°
+                    {activeValue} {METRICS.find((m) => m.key === sortMetric)?.suffix}
                   </span>
                 </div>
               )}

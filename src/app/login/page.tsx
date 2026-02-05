@@ -13,7 +13,7 @@ export default async function Page() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (session) redirect('/')
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 p-4">
+    <div className="flex min-h-dvh justify-center items-start gap-4 p-4">
       <div className="flex flex-col gap-4 w-full max-w-md">
         <Link
           href="/"
