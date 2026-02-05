@@ -41,16 +41,13 @@ export default function UserMenu({ session }: { session: Session }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled className="gap-2 opacity-50">
-          <Icon name="Settings" size="sm" />
+          <Icon name="Settings" size="xs" />
           Settings
           <span className="ml-auto text-xs text-muted-foreground">Soon</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="gap-2 text-destructive focus:text-destructive cursor-pointer"
-          onClick={() => signOut()}
-        >
-          <Icon name="LogOut" size="sm" />
+        <DropdownMenuItem onClick={() => signOut()} className="gap-2">
+          <Icon name="LogOut" size="xs" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
