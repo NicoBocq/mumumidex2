@@ -9,13 +9,21 @@ export function AutoRefresh() {
   const router = useRouter()
 
   useEffect(() => {
+    const refresh = () => {
+      const lastRefresh = localStorage.getItem('lastRefresh')
+      if (!lastRefresh || Date.now() - Number(lastRefresh) > REFRESH_INTERVAL) {
+        router.refresh()
+        localStorage.setItem('lastRefresh', Date.now().toString())
+        window.dispatchEvent(new Event('mumumidex-refresh'))
+      }
+    }
+
+    // Refresh on mount if stale (PWA cold start)
+    refresh()
+
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        const lastRefresh = localStorage.getItem('lastRefresh')
-        if (!lastRefresh || Date.now() - Number(lastRefresh) > REFRESH_INTERVAL) {
-          router.refresh()
-          localStorage.setItem('lastRefresh', Date.now().toString())
-        }
+        refresh()
       }
     }
     document.addEventListener('visibilitychange', handleVisibility)

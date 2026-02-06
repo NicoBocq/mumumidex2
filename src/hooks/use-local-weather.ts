@@ -25,9 +25,15 @@ type LocalWeatherState = {
 const STORAGE_KEY = 'mumumidex-local-weather'
 const CACHE_DURATION = 15 * 60 * 1000 // 15 minutes
 
-type StoredWeather = LocalWeather & { timestamp: number }
+type StoredWeather = LocalWeather & {
+  timestamp: number
+  latitude: number
+  longitude: number
+}
 
-function getStoredWeather(): LocalWeather | null {
+const LOCATION_THRESHOLD = 0.01 // ~1km
+
+function getStoredWeather(latitude: number, longitude: number): LocalWeather | null {
   if (typeof window === 'undefined') return null
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -37,16 +43,26 @@ function getStoredWeather(): LocalWeather | null {
       localStorage.removeItem(STORAGE_KEY)
       return null
     }
-    const { timestamp: _, ...weather } = data
+    if (
+      Math.abs(data.latitude - latitude) > LOCATION_THRESHOLD ||
+      Math.abs(data.longitude - longitude) > LOCATION_THRESHOLD
+    ) {
+      localStorage.removeItem(STORAGE_KEY)
+      return null
+    }
+    const { timestamp: _, latitude: _lat, longitude: _lon, ...weather } = data
     return weather
   } catch {
     return null
   }
 }
 
-function storeWeather(weather: LocalWeather) {
+function storeWeather(weather: LocalWeather, latitude: number, longitude: number) {
   if (typeof window === 'undefined') return
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...weather, timestamp: Date.now() }))
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ ...weather, timestamp: Date.now(), latitude, longitude })
+  )
 }
 
 export function useLocalWeather(latitude: number | null, longitude: number | null) {
@@ -55,15 +71,23 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
     loading: false,
     error: null,
   })
+  const [refreshKey, setRefreshKey] = useState(0)
 
+  useEffect(() => {
+    const handleRefresh = () => {
+      localStorage.removeItem(STORAGE_KEY)
+      setRefreshKey((k) => k + 1)
+    }
+    window.addEventListener('mumumidex-refresh', handleRefresh)
+    return () => window.removeEventListener('mumumidex-refresh', handleRefresh)
+  }, [])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refreshKey forces re-fetch on auto-refresh
   useEffect(() => {
     if (latitude === null || longitude === null) return
 
-    // Check cache first
-    const cached = getStoredWeather()
+    const cached = getStoredWeather(latitude, longitude)
     if (cached) {
-      // Very basic cache check - implies same location if invoked
-      // For more robustness, could store lat/lon in cache and compare distance
       setState((prev) => {
         if (prev.weather && prev.weather.temperature === cached.temperature) return prev
         return { weather: cached, loading: false, error: null }
@@ -124,14 +148,14 @@ export function useLocalWeather(latitude: number | null, longitude: number | nul
           weatherCode: weatherData.current.weather_code,
           locationName,
         }
-        storeWeather(weather)
+        storeWeather(weather, latitude, longitude)
         setState({ weather, loading: false, error: null })
       })
       .catch((err) => {
         console.error('Weather fetch error:', err)
         setState({ weather: null, loading: false, error: err.message })
       })
-  }, [latitude, longitude])
+  }, [latitude, longitude, refreshKey])
 
   return state
 }
