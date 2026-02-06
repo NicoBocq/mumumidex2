@@ -2,21 +2,30 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'nodejs'
+const ACCENT = '#f59e0b'
 
-export const size = {
-  width: 32,
-  height: 32,
+export function renderIconSvg() {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .letter { fill: #09090b; font-family: system-ui, -apple-system, sans-serif; font-weight: 900; }
+    .degree { fill: ${ACCENT}; font-family: system-ui, -apple-system, sans-serif; font-weight: 900; }
+    @media (prefers-color-scheme: dark) {
+      .letter { fill: #ffffff; }
+    }
+  </style>
+  <text x="50%" y="72%" text-anchor="middle" font-size="20">
+    <tspan class="letter">m</tspan><tspan class="degree">&#176;</tspan>
+  </text>
+</svg>`
 }
-export const contentType = 'image/png'
 
-export default function Icon() {
+export function renderIcon(size: number) {
   const fontData = readFileSync(join(process.cwd(), 'public/fonts/Rubik-Bold.ttf'))
 
   return new ImageResponse(
     <div
       style={{
-        fontSize: 24,
+        fontSize: size * 0.65,
         background: 'linear-gradient(to bottom right, #09090b, #000000)',
         width: '100%',
         height: '100%',
@@ -26,7 +35,6 @@ export default function Icon() {
         fontWeight: 700,
         fontFamily: 'Rubik',
         color: 'white',
-        borderRadius: '20%', // Rounded square for icon
       }}
     >
       <div
@@ -34,15 +42,15 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: '-2px',
         }}
       >
         <span>m</span>
-        <span style={{ color: '#f59e0b' }}>°</span>
+        <span style={{ color: ACCENT }}>°</span>
       </div>
     </div>,
     {
-      ...size,
+      width: size,
+      height: size,
       fonts: [
         {
           name: 'Rubik',

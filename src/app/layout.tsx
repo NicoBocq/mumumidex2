@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(app.url),
   title: app.name,
   description: app.description,
+  icons: {
+    icon: { url: '/api/icon?format=svg', type: 'image/svg+xml' },
+    apple: '/api/icon?size=180',
+  },
   verification: {
     google: 'SoTUK0J0yOG_ZDjwJrAWCUANoSOSzEMu3zSvqrwkZr0',
   },
