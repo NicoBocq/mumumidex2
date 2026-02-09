@@ -43,7 +43,8 @@ export const getForecast = async (): Promise<getForecastReturnType> => {
     current:
       'temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,is_day,precipitation,cloud_cover,weather_code',
     hourly: 'temperature_2m,precipitation,uv_index',
-    daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code',
+    daily:
+      'temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,weather_code',
     forecast_days: '7',
   })
 

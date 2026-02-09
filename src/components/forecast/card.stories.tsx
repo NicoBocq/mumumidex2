@@ -44,6 +44,7 @@ const mockForecast: Forecast = {
       d.setDate(d.getDate() + i)
       return d.toISOString().split('T')[0]
     }),
+    wind_speed_10m_max: [12, 14, 16, 18, 20, 22, 24],
     temperature_2m_max: [26, 25, 27, 22, 21, 23, 24],
     temperature_2m_min: [15, 16, 15, 14, 13, 12, 14],
     precipitation_probability_max: [0, 10, 0, 40, 60, 20, 0],
@@ -72,6 +73,7 @@ const mockForecast: Forecast = {
   },
   daily_units: {
     time: 'iso8601',
+    wind_speed_10m_max: 'km/h',
     temperature_2m_max: '°C',
     temperature_2m_min: '°C',
     precipitation_probability_max: '%',
