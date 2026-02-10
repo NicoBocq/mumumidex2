@@ -32,10 +32,10 @@ export default function WeeklyForecast({ data }: { data: Daily }) {
           return (
             <div
               key={time}
-              className="grid grid-cols-[2.8rem_1.5rem_2.5rem_1fr_auto] items-center gap-2 sm:gap-4 rounded-md bg-transparent p-1 px-0 text-sm"
+              className="grid grid-cols-[2.8rem_1.5rem_2.5rem_1fr_auto] items-center gap-3 sm:gap-6 rounded-md bg-transparent p-1 px-0 text-sm"
             >
               {/* 1. Day Name */}
-              <span className="font-medium capitalize text-muted-foreground/80 text-[13px] sm:text-sm">
+              <span className="font-medium capitalize text-muted-foreground/80 text-xs sm:text-sm">
                 {dayName}
               </span>
 
@@ -45,14 +45,14 @@ export default function WeeklyForecast({ data }: { data: Daily }) {
               </div>
 
               {/* 3. Precip */}
-              <div className="flex items-center gap-0.5 text-[10px] sm:text-xs text-muted-foreground/60">
-                <Droplets className="h-3 w-3 text-primary/30" />
+              <div className="flex items-center gap-0.5 text-xxs sm:text-xs text-muted-foreground/60">
+                <Droplets className="size-3 md:size-4 text-primary/30" />
                 <span>{precipProb}%</span>
               </div>
 
               {/* 4. Wind Speed */}
-              <div className="flex items-center gap-0.5 text-[10px] sm:text-xs text-muted-foreground/60">
-                <Wind className="h-3 w-3 text-primary/30" />
+              <div className="flex items-center gap-0.5 text-xxs sm:text-xs text-muted-foreground/60">
+                <Wind className="size-3 md:size-4 text-primary/30" />
                 <span>{windSpeed}</span>
                 <span className="hidden sm:inline opacity-70 ml-0.5 font-light">km/h</span>
               </div>
@@ -62,7 +62,7 @@ export default function WeeklyForecast({ data }: { data: Daily }) {
                 <span className="text-muted-foreground w-6 text-right group-hover:text-foreground/70 transition-colors">
                   {minTemp}°
                 </span>
-                <div className="h-1 w-2 sm:w-6 rounded-full bg-gradient-to-r from-muted-foreground/20 to-foreground/20" />
+                <div className="h-1 w-6 rounded-full bg-gradient-to-r from-muted-foreground/20 to-foreground/20" />
                 <span className="w-6 text-left">{maxTemp}°</span>
               </div>
             </div>
