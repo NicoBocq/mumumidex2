@@ -87,6 +87,20 @@ export function getMetricLevel(value: number, metric: SortMetric): number {
   return 5
 }
 
+const METRIC_LEVEL_LABELS: Record<SortMetric, string[]> = {
+  apparent: ['', 'Cold', 'Mild', 'Warm', 'Hot', 'Extreme'],
+  humidex: ['', 'Comfortable', 'Mild', 'Warm', 'Hot', 'Extreme'],
+  windchill: ['', 'Comfortable', 'Cool', 'Cold', 'Very cold', 'Extreme'],
+}
+
+/**
+ * Get a human-readable label for the metric level (e.g. "Warm", "Cold")
+ */
+export function getMetricLevelLabel(value: number, metric: SortMetric): string {
+  const level = getMetricLevel(value, metric)
+  return METRIC_LEVEL_LABELS[metric][level]
+}
+
 /**
  * Get CSS classes for the metric level
  */

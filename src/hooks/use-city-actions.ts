@@ -1,6 +1,7 @@
 'use client'
 
-import { useOptimisticAction } from 'next-safe-action/hooks'
+import { useAction, useOptimisticAction } from 'next-safe-action/hooks'
+import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import type { deleteCity, updateCity } from '@/actions/city'
 import type { Forecast } from '@/types/forecast'
@@ -12,6 +13,8 @@ type UseCityActionsProps = {
 }
 
 export function useCityActions({ data, updateCityAction, deleteCityAction }: UseCityActionsProps) {
+  const [isDeleted, setIsDeleted] = useState(false)
+
   const { execute: execUpdateCity, optimisticState: updateOptimisticState } = useOptimisticAction(
     updateCityAction,
     {
@@ -38,29 +41,58 @@ export function useCityActions({ data, updateCityAction, deleteCityAction }: Use
     }
   )
 
-  const { execute: execDeleteCity } = useOptimisticAction(deleteCityAction, {
-    currentState: { data },
-    updateFn: (state) => state,
+  const { execute: executeDelete } = useAction(deleteCityAction, {
     onSuccess: ({ data }) => {
       if (data?.error) {
+        setIsDeleted(false)
         toast.error(data.error)
       } else if (data?.success) {
         toast.success(data.success)
       }
     },
     onError: () => {
+      setIsDeleted(false)
       toast.error('Something went wrong')
     },
   })
 
-  // Merge optimistic states - if delete is active, technically data is gone, but we just return state
-  // We prioritize the update state for modifications
+  const deleteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const execDeleteCity = useCallback(
+    (id: string) => {
+      setIsDeleted(true)
+      toast(`${data.city.name} removed`, {
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            if (deleteTimerRef.current) {
+              clearTimeout(deleteTimerRef.current)
+              deleteTimerRef.current = null
+            }
+            setIsDeleted(false)
+          },
+        },
+        duration: 4000,
+        onDismiss: () => {
+          if (deleteTimerRef.current) {
+            clearTimeout(deleteTimerRef.current)
+          }
+          executeDelete(id)
+        },
+        onAutoClose: () => {
+          executeDelete(id)
+        },
+      })
+    },
+    [executeDelete, data.city.name]
+  )
+
   const optimisticData = updateOptimisticState.data
 
   return {
     execUpdateCity,
     execDeleteCity,
     optimisticData,
-    // also return distinct states if needed, but optimisticData is usually what we want for rendering
+    isDeleted,
   }
 }

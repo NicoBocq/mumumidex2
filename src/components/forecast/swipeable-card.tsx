@@ -13,6 +13,7 @@ import ForecastCard from './card'
 type SwipeableCardProps = {
   data: Forecast
   sortMetric?: SortMetric
+  showSwipeHint?: boolean
   updateCityAction: typeof updateCity
   deleteCityAction: typeof deleteCity
 }
@@ -22,13 +23,28 @@ const ACTION_WIDTH = 120
 export default function SwipeableCard({
   data,
   sortMetric = 'apparent',
+  showSwipeHint = false,
   updateCityAction,
   deleteCityAction,
 }: SwipeableCardProps) {
   const { translateX, handlers, close } = useSwipe({ actionWidth: ACTION_WIDTH })
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const [hintVisible, setHintVisible] = React.useState(showSwipeHint)
 
-  const { execUpdateCity, execDeleteCity, optimisticData } = useCityActions({
+  // Dismiss hint after first swipe or after 4 seconds
+  React.useEffect(() => {
+    if (!hintVisible) return
+    const timer = setTimeout(() => setHintVisible(false), 4000)
+    return () => clearTimeout(timer)
+  }, [hintVisible])
+
+  React.useEffect(() => {
+    if (hintVisible && translateX > 0) {
+      setHintVisible(false)
+    }
+  }, [hintVisible, translateX])
+
+  const { execUpdateCity, execDeleteCity, optimisticData, isDeleted } = useCityActions({
     data,
     updateCityAction,
     deleteCityAction,
@@ -56,6 +72,8 @@ export default function SwipeableCard({
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [close])
+
+  if (isDeleted) return null
 
   return (
     <div ref={containerRef} className="relative overflow-hidden rounded-xl">
@@ -99,6 +117,13 @@ export default function SwipeableCard({
           updateCityAction={updateCityAction}
           deleteCityAction={deleteCityAction}
         />
+
+        {/* Swipe hint indicator */}
+        {hintVisible && (
+          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center animate-[swipe-hint_1.5s_ease-in-out_infinite]">
+            <Icon name="ChevronsLeft" size="sm" className="text-muted-foreground/50" />
+          </div>
+        )}
       </div>
     </div>
   )

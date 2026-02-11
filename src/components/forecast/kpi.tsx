@@ -49,7 +49,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {Math.round(data.current.temperature_2m)}°
               </div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/50 font-medium">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground font-medium">
                 Temp.
               </div>
             </div>
@@ -59,6 +59,7 @@ export default function ForecastKpi({
           <div className="flex flex-col items-center justify-end gap-2">
             <Gauge
               value={Math.min(data.current.wind_speed_10m, 100)}
+              label={`Wind: ${Math.round(data.current.wind_speed_10m)} km/h`}
               colorClass={textClass}
               icon={
                 <ArrowUp
@@ -71,7 +72,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {Math.round(data.current.wind_speed_10m)} km/h
               </div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">Wind</div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground">Wind</div>
             </div>
           </div>
 
@@ -80,6 +81,7 @@ export default function ForecastKpi({
             <Gauge
               value={data.current.relative_humidity_2m}
               max={100}
+              label={`Humidity: ${data.current.relative_humidity_2m}%`}
               colorClass={textClass}
               icon={<Droplets className="h-5 w-5 text-muted-foreground/25" />}
             />
@@ -87,7 +89,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.relative_humidity_2m}%
               </div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground">
                 Humidity
               </div>
             </div>
@@ -103,15 +105,14 @@ export default function ForecastKpi({
             <Gauge
               value={data.current.cloud_cover}
               max={100}
+              label={`Cloud cover: ${data.current.cloud_cover}%`}
               className="scale-90"
               colorClass={textClass}
               icon={<Cloud className="h-5 w-5 text-muted-foreground/25" />}
             />
             <div className="text-center">
               <div className="text-sm font-bold leading-none">{data.current.cloud_cover}%</div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
-                Clouds
-              </div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground">Clouds</div>
             </div>
           </div>
 
@@ -120,6 +121,7 @@ export default function ForecastKpi({
             <Gauge
               value={data.current.uv_index}
               max={11}
+              label={`UV Index: ${data.current.uv_index?.toFixed(0) ?? 0}`}
               colorClass={textClass}
               icon={<Sun className="h-5 w-5 text-muted-foreground/25" />}
             />
@@ -127,7 +129,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.uv_index?.toFixed(0) ?? 0}
               </div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground">
                 UV Index
               </div>
             </div>
@@ -138,6 +140,7 @@ export default function ForecastKpi({
             <Gauge
               value={data.current.european_aqi}
               max={100}
+              label={`Air Quality Index: ${data.current.european_aqi?.toFixed(0) ?? 0}`}
               colorClass={textClass}
               icon={<Wind className="h-5 w-5 text-muted-foreground/25" />}
             />
@@ -145,7 +148,7 @@ export default function ForecastKpi({
               <div className="text-sm font-bold leading-none">
                 {data.current.european_aqi?.toFixed(0) ?? 0}
               </div>
-              <div className="text-xxs uppercase tracking-wider text-muted-foreground/70">AQI</div>
+              <div className="text-xxs uppercase tracking-wider text-muted-foreground">AQI</div>
             </div>
           </div>
         </>

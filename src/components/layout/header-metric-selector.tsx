@@ -8,10 +8,15 @@ import { useLocalWeatherContext } from '@/contexts/local-weather-context'
 import { cn } from '@/lib/utils'
 import { METRIC_LABELS, type SortMetric } from '@/lib/weather-metrics'
 
-const METRICS: { key: SortMetric; icon: 'Thermometer' | 'Droplets' | 'Wind'; suffix?: string }[] = [
-  { key: 'apparent', icon: 'Thermometer', suffix: '°' },
-  { key: 'humidex', icon: 'Droplets' },
-  { key: 'windchill', icon: 'Wind' },
+const METRICS: {
+  key: SortMetric
+  icon: 'Thermometer' | 'Droplets' | 'Wind'
+  suffix?: string
+  description: string
+}[] = [
+  { key: 'apparent', icon: 'Thermometer', suffix: '°', description: 'Perceived temperature' },
+  { key: 'humidex', icon: 'Droplets', description: 'Heat + humidity index' },
+  { key: 'windchill', icon: 'Wind', description: 'Cold + wind index' },
 ]
 
 export function HeaderMetricSelector() {
@@ -101,7 +106,7 @@ export function HeaderMetricSelector() {
         <AnimatePresence mode="popLayout" initial={false}>
           {isOpen ? (
             // Expanded State: Show all options
-            METRICS.map(({ key, icon, suffix }) => {
+            METRICS.map(({ key, icon, suffix, description }) => {
               const isActive = sortMetric === key
               const value = getValue(key)
 
@@ -114,6 +119,7 @@ export function HeaderMetricSelector() {
                     setSortMetric(key)
                     setIsOpen(false)
                   }}
+                  title={description}
                   className={cn(
                     'relative h-10 flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 rounded-full text-sm font-medium transition-colors',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
@@ -158,7 +164,7 @@ export function HeaderMetricSelector() {
               exit={{ opacity: 0 }}
             >
               {mounted && weather?.locationName && (
-                <span className="text-sm font-semibold border-r border-white/20 pr-2 mr-2 max-w-[60px] sm:max-w-[150px] truncate">
+                <span className="text-sm font-semibold border-r border-border/30 pr-2 mr-2 max-w-[60px] sm:max-w-[150px] truncate">
                   {weather.locationName}
                 </span>
               )}
@@ -169,7 +175,7 @@ export function HeaderMetricSelector() {
                   </span>
                 </div>
               )}
-              <span className="text-[9px] text-muted-foreground uppercase tracking-tighter">
+              <span className="text-xxs text-muted-foreground uppercase tracking-tighter">
                 {METRIC_LABELS[sortMetric]}
               </span>
             </motion.div>

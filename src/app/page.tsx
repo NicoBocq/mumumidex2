@@ -32,8 +32,9 @@ async function ForecastList(props: {
   if (error) {
     return (
       <Section withoutCard className="text-muted-foreground">
-        <Icon name="Frown" size="xl" />
-        <p>Sad noise</p>
+        <Icon name="CloudOff" size="xl" />
+        <p className="text-lg font-medium">Unable to load weather data</p>
+        <p className="text-sm">Please check your connection and try again.</p>
       </Section>
     )
   }

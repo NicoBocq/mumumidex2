@@ -3,13 +3,14 @@ import { cn } from '@/lib/utils'
 export default function Gauge({
   value,
   max = 100,
-
+  label,
   icon,
   className,
   colorClass = 'text-sky-400',
 }: {
   value: number
   max?: number
+  label?: string
   icon?: React.ReactNode
   className?: string
   colorClass?: string
@@ -22,7 +23,7 @@ export default function Gauge({
   return (
     <div className={cn('relative flex items-center justify-center', className)}>
       <svg className="h-10 w-10 -rotate-90 transform" viewBox="0 0 40 40">
-        <title>Gauge</title>
+        <title>{label || 'Gauge'}</title>
         {/* Background Circle */}
         <circle
           cx="20"

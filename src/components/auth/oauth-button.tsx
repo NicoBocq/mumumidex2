@@ -16,7 +16,7 @@ const handleSignIn = async () => {
 export default function OAuthButton() {
   return (
     <Button onClick={handleSignIn} className="w-full">
-      Connect with Google
+      Sign in with Google
     </Button>
   )
 }

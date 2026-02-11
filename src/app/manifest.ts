@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: app.description,
     start_url: '/',
     display: 'standalone',
-    background_color: '#fff',
+    background_color: '#000',
     theme_color: app.color.primary,
     icons: [
       {
@@ -21,6 +21,12 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/api/icon?size=512',
         sizes: '512x512',
         type: 'image/png',
+      },
+      {
+        src: '/api/icon?size=512',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
       },
     ],
   }

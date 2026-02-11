@@ -18,17 +18,12 @@ export default function UserMenu({ session }: { session: Session }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          className="rounded-full transition-transform active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-        >
-          <Avatar>
-            <AvatarImage src={session.user.image || ''} />
-            <AvatarFallback className="bg-primary text-primary-foreground">
-              {session.user.name?.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-        </button>
+        <Avatar>
+          <AvatarImage src={session.user.image || ''} />
+          <AvatarFallback className="bg-primary text-primary-foreground">
+            {session.user.name?.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={8} className="w-56 glass border-white/20">
         <DropdownMenuGroup>
@@ -39,12 +34,6 @@ export default function UserMenu({ session }: { session: Session }) {
             </div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem disabled className="gap-2 opacity-50">
-          <Icon name="Settings" size="xs" />
-          Settings
-          <span className="ml-auto text-xs text-muted-foreground">Soon</span>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()} className="gap-2">
           <Icon name="LogOut" size="xs" />

@@ -9,7 +9,7 @@ import { useCityActions } from '@/hooks/use-city-actions'
 import { formatDateTime } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { SortMetric } from '@/lib/weather-metrics'
-import { getDisplayValue, getMetricClass } from '@/lib/weather-metrics'
+import { getDisplayValue, getMetricClass, getMetricLevelLabel } from '@/lib/weather-metrics'
 import type { Forecast } from '@/types/forecast'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
@@ -47,7 +47,7 @@ export default function ForecastCard({
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
   const groupHoverClass = getMetricClass(displayValue, sortMetric, 'groupHoverText')
 
-  const { execUpdateCity, execDeleteCity, optimisticData } = useCityActions({
+  const { execUpdateCity, execDeleteCity, optimisticData, isDeleted } = useCityActions({
     data,
     updateCityAction,
     deleteCityAction,
@@ -76,11 +76,22 @@ export default function ForecastCard({
     setIsExpanded((prev) => !prev)
   }, [])
 
+  if (showActions && isDeleted) return null
+
   return (
     <div className="group flex items-start hover:gap-2">
       <Card
         id={id}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isExpanded}
         onClick={toggleExpand}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            toggleExpand()
+          }
+        }}
         className={cn(
           'glass relative flex-1 cursor-pointer overflow-hidden rounded-xl transition-all hover:ring-2 hover:ring-primary/20 bg-background/60',
           cardClass,
@@ -111,11 +122,20 @@ export default function ForecastCard({
               isDay={data.current.is_day}
               className="h-8 w-8 md:h-10 md:w-10"
             />
-            <div>
+            <div className="text-right">
               <span className={cn('text-4xl font-black tracking-tighter md:text-5xl', textClass)}>
                 {displayValue}
                 {sortMetric === 'apparent' && '°'}
               </span>
+              {/* <div
+                className={cn(
+                  'text-xxs font-medium uppercase tracking-wider',
+                  textClass,
+                  'opacity-70'
+                )}
+              >
+                {getMetricLevelLabel(displayValue, sortMetric)}
+              </div> */}
             </div>
           </div>
         </CardHeader>
@@ -164,7 +184,7 @@ export default function ForecastCard({
             size="icon"
             className="h-9 w-9 rounded-full backdrop-blur-sm hover:bg-muted"
             onClick={handlePin}
-            title={optimisticData.city.pinned ? 'Unpin' : 'Pin'}
+            aria-label={optimisticData.city.pinned ? 'Unpin' : 'Pin'}
           >
             <Icon
               name="Bookmark"
@@ -177,7 +197,7 @@ export default function ForecastCard({
             size="icon"
             className="h-9 w-9 rounded-full text-destructive backdrop-blur-sm hover:bg-destructive/10"
             onClick={handleDelete}
-            title="Delete"
+            aria-label="Delete"
           >
             <Icon name="Trash2" size="sm" />
           </Button>

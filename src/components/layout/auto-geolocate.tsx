@@ -8,11 +8,11 @@ export function AutoGeolocate() {
   const hasRequested = useRef(false)
 
   useEffect(() => {
-    // Only request once on mount if not already denied
-    // We want to trigger the browser prompt immediately
     if (!hasRequested.current && permission !== 'denied' && permission !== 'granted') {
       hasRequested.current = true
-      requestLocation()
+      // Delay to let the user see the app before the browser prompt
+      const timer = setTimeout(() => requestLocation(), 3000)
+      return () => clearTimeout(timer)
     }
   }, [permission, requestLocation])
 

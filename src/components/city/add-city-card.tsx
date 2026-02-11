@@ -50,7 +50,10 @@ export default function AddCityCard() {
     }
   }
 
+  const [isPending, setIsPending] = React.useState(false)
+
   const handleSearch = useDebouncedCallback((search: string) => {
+    setIsPending(false)
     if (search.length >= 2) {
       execute(search)
     }
@@ -64,7 +67,7 @@ export default function AddCityCard() {
     [executeAdd]
   )
 
-  const isSearching = status === 'executing'
+  const isSearching = status === 'executing' || isPending
   const hasResults = result?.data?.results && result.data.results.length > 0
   const showEmpty = query.length >= 2 && !isSearching && !hasResults
 
@@ -86,7 +89,7 @@ export default function AddCityCard() {
       </Button>
 
       <CommandDialog open={open} onOpenChange={handleOpenChange}>
-        <div className="visiting:hidden hidden">
+        <div className="sr-only">
           <DialogTitle>Add a city</DialogTitle>
           <DialogDescription>Search for a city to add to your dashboard</DialogDescription>
         </div>
@@ -95,6 +98,7 @@ export default function AddCityCard() {
           value={query}
           onValueChange={(value) => {
             setQuery(value)
+            if (value.length >= 2) setIsPending(true)
             handleSearch(value)
           }}
         />
