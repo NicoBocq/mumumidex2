@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 
 import './globals.css'
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { AutoGeolocate } from '@/components/layout/auto-geolocate'
 import { AutoRefresh } from '@/components/layout/auto-refresh'
 import Background from '@/components/layout/background'
@@ -75,6 +76,7 @@ export default function RootLayout({
             </Suspense>
           </LocalWeatherProvider>
         </ThemeProvider>
+        <SpeedInsights />
         <Script
           defer
           src="https://cloud.umami.is/script.js"
