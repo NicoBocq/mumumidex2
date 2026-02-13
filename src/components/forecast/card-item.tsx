@@ -58,14 +58,17 @@ export default function ForecastCardItem({
               />
             </div>
           )}
-          <div className="pointer-events-none absolute -right-12 top-12 z-20 hidden -translate-y-1/2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 md:flex">
-            <ForecastCardActions
-              cityId={data.city.id}
-              pinned={isPinned}
-              onPinnedChange={setIsPinned}
-              onDeleted={() => setIsDeleted(true)}
-              orientation="vertical"
-            />
+          <div className="pointer-events-none absolute -right-12 top-3 z-20 hidden opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 md:flex">
+            <div className="relative">
+              <div className="absolute inset-y-0 -left-4 w-4" aria-hidden />
+              <ForecastCardActions
+                cityId={data.city.id}
+                pinned={isPinned}
+                onPinnedChange={setIsPinned}
+                onDeleted={() => setIsDeleted(true)}
+                orientation="vertical"
+              />
+            </div>
           </div>
         </>
       )}
