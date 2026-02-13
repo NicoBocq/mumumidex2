@@ -80,5 +80,50 @@ export type Forecast = {
   city: City
 }
 
+export type ForecastDetails = {
+  current: Pick<Current, 'cloud_cover' | 'uv_index' | 'european_aqi'>
+  daily: Daily
+}
+
+export type ForecastActionResult = {
+  data: Forecast[]
+  error: string
+}
+
+export type ForecastDetailsActionParams = {
+  latitude: number
+  longitude: number
+}
+
+export type ForecastDetailsActionResult = {
+  data: ForecastDetails | null
+  error: string
+}
+
+export type APIForecastBase = {
+  latitude: number
+  longitude: number
+  timezone: string
+  utc_offset_seconds: number
+  current: {
+    time: string
+    interval: number
+    temperature_2m: number
+    relative_humidity_2m: number
+    dew_point_2m: number
+    apparent_temperature: number
+    wind_speed_10m: number
+    wind_direction_10m: number
+    is_day: number
+    weather_code: number
+  }
+  current_units: Partial<Forecast['current_units']>
+  hourly: {
+    time: string[]
+    temperature_2m: number[]
+  }
+  hourly_units: Partial<Forecast['hourly_units']>
+}
+
 export type APICurrent = Omit<Current, 'humidex' | 'windChill'>
 export type APIForecast = Omit<Forecast, 'city' | 'current'> & { current: APICurrent }

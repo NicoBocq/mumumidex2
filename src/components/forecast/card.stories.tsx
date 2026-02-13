@@ -97,17 +97,9 @@ const meta: Meta<typeof ForecastCard> = {
 export default meta
 type Story = StoryObj<typeof ForecastCard>
 
-import type { deleteCity, updateCity } from '@/actions/city'
-
-// Mock actions
-const mockUpdateAction = { execute: async () => ({}) } as unknown as typeof updateCity
-const mockDeleteAction = { execute: async () => ({}) } as unknown as typeof deleteCity
-
 export const Default: Story = {
   args: {
     data: mockForecast,
-    updateCityAction: mockUpdateAction,
-    deleteCityAction: mockDeleteAction,
   },
   decorators: [
     (Story) => (
@@ -148,11 +140,7 @@ export const BackgroundGallery: Story = {
                 <div className={`relative overflow-hidden rounded-xl border p-8 ${theme.light.bg}`}>
                   {/* Simulate Blobs manually or simpy use bg */}
                   <div className="relative z-10 mx-auto max-w-sm">
-                    <ForecastCard
-                      data={mockForecast}
-                      updateCityAction={mockUpdateAction}
-                      deleteCityAction={mockDeleteAction}
-                    />
+                    <ForecastCard data={mockForecast} sortMetric="apparent" />
                   </div>
                 </div>
               </div>
@@ -172,11 +160,7 @@ export const BackgroundGallery: Story = {
                   {/* Note: In a real app 'dark' class usually goes on html/body. 
                        Here we try to apply it locally. */}
                   <div className="relative z-10 mx-auto max-w-sm">
-                    <ForecastCard
-                      data={mockForecast}
-                      updateCityAction={mockUpdateAction}
-                      deleteCityAction={mockDeleteAction}
-                    />
+                    <ForecastCard data={mockForecast} sortMetric="apparent" />
                   </div>
                 </div>
               </div>
@@ -214,12 +198,7 @@ export const List: Story = {
         <h1 className="mb-6 text-2xl font-bold">My Cities</h1>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {cities.map((cityData) => (
-            <ForecastCard
-              key={cityData.city.name}
-              data={cityData}
-              updateCityAction={mockUpdateAction}
-              deleteCityAction={mockDeleteAction}
-            />
+            <ForecastCard key={cityData.city.name} data={cityData} sortMetric="apparent" />
           ))}
         </div>
       </div>

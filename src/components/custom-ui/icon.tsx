@@ -1,10 +1,52 @@
 import { cva } from 'class-variance-authority'
-import { icons, type LucideProps } from 'lucide-react'
+import {
+  Ban,
+  Bookmark,
+  Check,
+  ChevronDown,
+  ChevronsLeft,
+  CircleDashed,
+  CloudOff,
+  Droplets,
+  Loader,
+  LoaderCircle,
+  LogOut,
+  type LucideProps,
+  MapPin,
+  Pin,
+  Plus,
+  Thermometer,
+  Trash2,
+  User,
+  Wind,
+  X,
+} from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+const ICONS = {
+  Ban,
+  Bookmark,
+  Check,
+  ChevronDown,
+  ChevronsLeft,
+  CloudOff,
+  Droplets,
+  Loader,
+  LoaderCircle,
+  LogOut,
+  MapPin,
+  Pin,
+  Plus,
+  Thermometer,
+  Trash2,
+  User,
+  Wind,
+  X,
+} as const
+
 export interface IconProps extends LucideProps {
-  name: keyof typeof icons
+  name: keyof typeof ICONS
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'custom'
   margin?: 'left' | 'right'
 }
@@ -34,7 +76,7 @@ export const iconVariants = cva('', {
 })
 
 const Icon = ({ name, className, size, margin, ...props }: IconProps) => {
-  const LucideIcon = icons[name] ?? icons.CircleDashed
+  const LucideIcon = ICONS[name] ?? CircleDashed
 
   return (
     <LucideIcon

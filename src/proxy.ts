@@ -3,8 +3,14 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 export async function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
   const sessionCookie = getSessionCookie(request)
-  if (!sessionCookie) {
+
+  if (pathname.startsWith('/user') && !sessionCookie) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
+  if (pathname === '/login' && sessionCookie) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
@@ -12,5 +18,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/user/:path*'],
+  matcher: ['/user/:path*', '/login'],
 }

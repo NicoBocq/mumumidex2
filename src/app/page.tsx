@@ -1,13 +1,13 @@
-import { headers } from 'next/headers'
 import React from 'react'
-import { deleteCity, updateCity } from '@/actions/city'
 import { getForecast } from '@/actions/forecast'
 import Grid from '@/components/custom-ui/grid'
 import Icon from '@/components/custom-ui/icon'
 import Section from '@/components/custom-ui/section'
-import { SkeletonForecastCard } from '@/components/forecast/card'
-import ForecastListClient from '@/components/forecast/forecast-list'
-import { auth } from '@/lib/auth'
+import { SkeletonForecastCard } from '@/components/forecast/card-skeleton'
+import ForecastListServer from '@/components/forecast/forecast-list-server'
+import HomeClientShell from '@/components/home/home-client-shell'
+import { getServerSession } from '@/lib/server-session'
+import { getSortValue } from '@/lib/weather-metrics'
 
 function SkeletonForecastList() {
   return (
@@ -22,8 +22,9 @@ function SkeletonForecastList() {
 async function ForecastList(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const { data, error } = await getForecast()
-  const session = await auth.api.getSession({ headers: await headers() })
+  const forecastPromise = getForecast()
+  const sessionPromise = getServerSession()
+  const [{ data, error }, session] = await Promise.all([forecastPromise, sessionPromise])
 
   // Await searchParams for Next.js 15+ compatibility
   const params = await props.searchParams
@@ -39,13 +40,17 @@ async function ForecastList(props: {
     )
   }
 
+  const sortedData = [...data].sort(
+    (a, b) => getSortValue(b.current, sortMetric) - getSortValue(a.current, sortMetric)
+  )
+  const pinnedCities = sortedData.filter((item) => item.city.pinned)
+  const unpinnedCities = sortedData.filter((item) => !item.city.pinned)
+
   return (
-    <ForecastListClient
-      data={data}
+    <ForecastListServer
+      pinnedCities={pinnedCities}
+      unpinnedCities={unpinnedCities}
       isAuthenticated={!!session}
-      showAddCard={!!session}
-      updateCityAction={updateCity}
-      deleteCityAction={deleteCity}
       sortMetric={sortMetric}
     />
   )
@@ -55,8 +60,11 @@ export default async function Page(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   return (
-    <React.Suspense fallback={<SkeletonForecastList />}>
-      <ForecastList {...props} />
-    </React.Suspense>
+    <>
+      <HomeClientShell />
+      <React.Suspense fallback={<SkeletonForecastList />}>
+        <ForecastList {...props} />
+      </React.Suspense>
+    </>
   )
 }

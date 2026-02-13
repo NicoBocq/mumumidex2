@@ -1,87 +1,105 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import * as React from 'react'
-
-import type { deleteCity, updateCity } from '@/actions/city'
+import { getForecastDetails } from '@/actions/forecast'
 import Icon from '@/components/custom-ui/icon'
 import { Button } from '@/components/ui/button'
-import { useCityActions } from '@/hooks/use-city-actions'
 import { formatDateTime } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { SortMetric } from '@/lib/weather-metrics'
 import { getDisplayValue, getMetricClass } from '@/lib/weather-metrics'
-import type { Forecast } from '@/types/forecast'
+import type { Forecast, ForecastDetails } from '@/types/forecast'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
 import WeatherIcon from '../weather/weather-icon'
 import Kpi from './kpi'
 import WeeklyForecast from './weekly-forecast'
 
-export function SkeletonForecastCard() {
-  return <Skeleton className="h-60" />
-}
-
 type ForecastCardProps = {
   data: Forecast
-  id?: string
   className?: string
-  showActions?: boolean
   sortMetric?: SortMetric
-  updateCityAction: typeof updateCity
-  deleteCityAction: typeof deleteCity
+  index?: number
+  onExpandedChange?: (expanded: boolean) => void
 }
 
 export default function ForecastCard({
   data,
   className,
-  showActions = false,
-  id,
   sortMetric = 'apparent',
-  updateCityAction,
-  deleteCityAction,
+  index = 0,
+  onExpandedChange,
 }: ForecastCardProps) {
   const [isExpanded, setIsExpanded] = React.useState(false)
+  const [details, setDetails] = React.useState<ForecastDetails | null>(null)
+  const [detailsLoading, setDetailsLoading] = React.useState(false)
+  const [detailsError, setDetailsError] = React.useState<string | null>(null)
 
   const displayValue = getDisplayValue(data.current, sortMetric)
   const cardClass = getMetricClass(displayValue, sortMetric, 'card')
   const textClass = getMetricClass(displayValue, sortMetric, 'text')
   const groupHoverClass = getMetricClass(displayValue, sortMetric, 'groupHoverText')
+  const hasServerDetails = data.daily.time.length > 0
 
-  const { execUpdateCity, execDeleteCity, optimisticData, isDeleted } = useCityActions({
-    data,
-    updateCityAction,
-    deleteCityAction,
-  })
+  const loadDetails = React.useCallback(async () => {
+    if (hasServerDetails || detailsLoading) return
 
-  const handlePin = React.useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation()
-      execUpdateCity({
-        id: data.city.id,
-        pinned: !data.city.pinned,
+    setDetailsLoading(true)
+    setDetailsError(null)
+    try {
+      const result = await getForecastDetails({
+        latitude: data.latitude,
+        longitude: data.longitude,
       })
-    },
-    [execUpdateCity, data.city.id, data.city.pinned]
-  )
+      if (!result.data || result.error) {
+        throw new Error(result.error || 'Failed to fetch details')
+      }
+      setDetails(result.data)
+    } catch (_error) {
+      setDetailsError('Unable to load detailed forecast')
+    } finally {
+      setDetailsLoading(false)
+    }
+  }, [data.latitude, data.longitude, detailsLoading, hasServerDetails])
 
-  const handleDelete = React.useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation()
-      execDeleteCity(data.city.id)
-    },
-    [execDeleteCity, data.city.id]
-  )
+  React.useEffect(() => {
+    if (!isExpanded || hasServerDetails || details || detailsLoading || detailsError) return
+    void loadDetails()
+  }, [details, detailsError, detailsLoading, hasServerDetails, isExpanded, loadDetails])
+
+  const expandedData = React.useMemo(() => {
+    if (hasServerDetails || !details) return data
+    return {
+      ...data,
+      current: {
+        ...data.current,
+        ...details.current,
+      },
+      daily: details.daily,
+    }
+  }, [data, details, hasServerDetails])
 
   const toggleExpand = React.useCallback(() => {
     setIsExpanded((prev) => !prev)
   }, [])
 
-  if (showActions && isDeleted) return null
+  React.useEffect(() => {
+    onExpandedChange?.(isExpanded)
+  }, [isExpanded, onExpandedChange])
 
   return (
-    <div className="group flex items-start hover:gap-2">
+    <motion.div
+      className="w-full"
+      initial={{ opacity: 0, y: 12, scale: 0.985 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.24,
+        delay: Math.min(index * 0.05, 0.3),
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+    >
       <Card
-        id={id}
         role="button"
         tabIndex={0}
         aria-expanded={isExpanded}
@@ -93,13 +111,12 @@ export default function ForecastCard({
           }
         }}
         className={cn(
-          'glass relative flex-1 cursor-pointer overflow-hidden rounded-xl transition-all hover:ring-2 hover:ring-primary/20 bg-background/60',
+          'glass group relative cursor-pointer overflow-hidden rounded-xl bg-background/60 transition-all hover:ring-2 hover:ring-primary/20',
           cardClass,
           className
         )}
       >
-        {/* Pinned indicator */}
-        {optimisticData.city.pinned && (
+        {data.city.pinned && (
           <Icon
             name="Bookmark"
             size="xs"
@@ -107,7 +124,6 @@ export default function ForecastCard({
           />
         )}
 
-        {/* Metadata: country + time */}
         <span className="absolute bottom-3 right-3 text-xs text-muted-foreground/70">
           {data.city.country_code} • {formatDateTime(data.current.time)}
         </span>
@@ -127,23 +143,12 @@ export default function ForecastCard({
                 {displayValue}
                 {sortMetric === 'apparent' && '°'}
               </span>
-              {/* <div
-                className={cn(
-                  'text-xxs font-medium uppercase tracking-wider',
-                  textClass,
-                  'opacity-70'
-                )}
-              >
-                {getMetricLevelLabel(displayValue, sortMetric)}
-              </div> */}
             </div>
           </div>
         </CardHeader>
 
         <CardContent className="pt-0">
-          <div className="">
-            <Kpi data={data} sortMetric={sortMetric} mode="minimal" />
-          </div>
+          <Kpi data={data} sortMetric={sortMetric} mode="minimal" />
 
           <div
             className={cn(
@@ -152,21 +157,39 @@ export default function ForecastCard({
             )}
           >
             <div className="overflow-hidden">
-              <div className="">
-                <Kpi data={data} sortMetric={sortMetric} mode="extended" />
-                <div className="my-4 h-px w-full bg-border/50" />
-                <WeeklyForecast data={data.daily} />
-              </div>
+              {detailsLoading ? (
+                <div className="space-y-3 py-2">
+                  <Skeleton className="h-24" />
+                  <Skeleton className="h-28" />
+                </div>
+              ) : detailsError ? (
+                <div className="py-4 text-center">
+                  <p className="text-sm text-muted-foreground">{detailsError}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-3"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      void loadDetails()
+                    }}
+                  >
+                    Retry
+                  </Button>
+                </div>
+              ) : (
+                <div className="pt-2">
+                  <Kpi data={expandedData} sortMetric={sortMetric} mode="extended" />
+                  <div className="my-4 h-px w-full bg-border/50" />
+                  <WeeklyForecast data={expandedData.daily} />
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
 
-        {/* Expand Handle */}
         <div
-          className={cn(
-            'flex w-full justify-center pb-2 pt-1 text-primary/80 transition-colors',
-            groupHoverClass
-          )}
+          className={cn('flex w-full justify-center pb-2 pt-1 text-primary/80', groupHoverClass)}
         >
           <Icon
             name="ChevronDown"
@@ -175,34 +198,6 @@ export default function ForecastCard({
           />
         </div>
       </Card>
-
-      {/* Actions outside card */}
-      {showActions && (
-        <div className="hidden w-0 flex-col justify-center gap-1 overflow-hidden opacity-0 transition-all duration-200 group-hover:w-10 group-hover:opacity-100 md:flex sticky top-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-full backdrop-blur-sm hover:bg-muted"
-            onClick={handlePin}
-            aria-label={optimisticData.city.pinned ? 'Unpin' : 'Pin'}
-          >
-            <Icon
-              name="Bookmark"
-              size="sm"
-              className={cn(optimisticData.city.pinned && 'fill-current')}
-            />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-full text-destructive backdrop-blur-sm hover:bg-destructive/10"
-            onClick={handleDelete}
-            aria-label="Delete"
-          >
-            <Icon name="Trash2" size="sm" />
-          </Button>
-        </div>
-      )}
-    </div>
+    </motion.div>
   )
 }

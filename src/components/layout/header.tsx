@@ -1,16 +1,18 @@
-import { headers } from 'next/headers'
-import Link from 'next/link'
-import { auth } from '@/lib/auth'
-
-import Icon from '../custom-ui/icon'
-import { Button } from '../ui/button'
+import { Suspense } from 'react'
+import { Skeleton } from '../ui/skeleton'
 import UserMenu from '../user/menu'
 import { HeaderMetricSelector } from './header-metric-selector'
 import { Logo } from './logo'
 
-export default async function Header() {
-  const session = await auth.api.getSession({ headers: await headers() })
+function HeaderMetricSelectorFallback() {
+  return <Skeleton className="h-10 w-28 rounded-full" aria-hidden />
+}
 
+function UserMenuFallback() {
+  return <Skeleton className="h-10 w-10 rounded-full" aria-hidden />
+}
+
+export default function Header() {
   return (
     <header className="w-full">
       <nav aria-label="Global" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -18,23 +20,14 @@ export default async function Header() {
           {/* Logo */}
           <Logo className="shrink-0" showTagline />
 
-          {/* Right section: Metric selector + User */}
+          {/* Right section: User */}
           <div className="flex shrink-0 items-center gap-2 overflow-visible">
-            <HeaderMetricSelector />
-            {!session ? (
-              <Link href="/login">
-                <Button
-                  variant="default"
-                  size="icon"
-                  className="h-10 w-10 rounded-full transition-transform active:scale-[0.98]"
-                  aria-label="Sign in"
-                >
-                  <Icon name="User" size="sm" />
-                </Button>
-              </Link>
-            ) : (
-              <UserMenu session={session} />
-            )}
+            <Suspense fallback={<HeaderMetricSelectorFallback />}>
+              <HeaderMetricSelector />
+            </Suspense>
+            <Suspense fallback={<UserMenuFallback />}>
+              <UserMenu />
+            </Suspense>
           </div>
         </div>
       </nav>

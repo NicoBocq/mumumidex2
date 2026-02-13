@@ -1,17 +1,12 @@
 import { ArrowLeft } from 'lucide-react'
-import { headers } from 'next/headers'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import OAuthButton from '@/components/auth/oauth-button'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { app } from '@/config/app'
-import { auth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 
-export default async function Page() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (session) redirect('/')
+export default function Page() {
   return (
     <div className="flex min-h-dvh justify-center items-start gap-4 p-4">
       <div className="flex flex-col gap-4 w-full max-w-md">
